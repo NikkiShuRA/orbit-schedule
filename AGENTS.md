@@ -24,7 +24,9 @@
 
 - публикация по расписанию: раз в час в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)).
 
-Чего ещё нет: нарезки данных для приложения ([#9](https://github.com/NikkiShuRA/orbit-schedule/issues/9)), коннектора СПК, приложения. Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
+- нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`).
+
+Чего ещё нет: коннектора СПК, приложения. Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
 
 Правила для кода:
 
@@ -53,15 +55,16 @@ go run ./cmd/orbit fetch sieup --out data --date 2026-11-09
 go run ./cmd/orbit fetch sieup --out data --weeks 2   # эта и следующая недели; неизменившиеся файлы не перезаписываются
 go run ./cmd/orbit fetch sieup --out data --base https://example.org/api   # свой адрес API вместо встроенных
 go run ./cmd/orbit validate data/sieup/*.json    # проверить документы
+go run ./cmd/orbit slice --in data --out site    # нарезка для приложения: site/index.json, site/<источник>/catalog.json, groups/, teachers/
 ```
 
 Коды выхода `orbit`: 0 — успех, 1 — ошибка, 2 — неверные аргументы, 3 — ни одна из запрошенных недель ещё не опубликована. После успешного `fetch` рядом с документами лежит `status.json` — когда источник проверяли и что вышло с каждой неделей.
 
-Структура: `cmd/orbit` — CLI; `internal/standard` — типы документа и валидатор (схема + ссылки); `internal/sieup` — коннектор СИЭУиП; `standard/schema/embed.go` встраивает схему в Go.
+Структура: `cmd/orbit` — CLI; `internal/standard` — типы документа и валидатор (схема + ссылки); `internal/sieup` — коннектор СИЭУиП; `internal/slice` — нарезка недель на группы и преподавателей и оглавление; `standard/schema/embed.go` встраивает схему в Go.
 
 CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck).
 
-Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` раз в час запускает `orbit fetch`, коммитит изменения в ветку `data` и выкладывает данные на Pages (`https://nikkishura.github.io/orbit-schedule/data/`). Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
+Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` раз в час запускает `orbit fetch`, коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages (`https://nikkishura.github.io/orbit-schedule/data/`). Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
 
 ## Принципы, которые нельзя нарушать
 
@@ -76,7 +79,10 @@ CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go
 ## Документация и решения
 
 - **Журнал изменений** — [CHANGELOG.md](CHANGELOG.md). Каждый PR с изменением, заметным пользователю или разработчику, добавляет строку в раздел «Не выпущено» — простым языком, что появилось или изменилось, со ссылкой на PR.
-- **Задачи** — в GitHub Issues, с метками области (`standard`, `connector`, `app`, `infra`) и источника (`source:sieup`, `source:spk`). Новую работу сначала оформи как issue; PR закрывает его строкой `Closes #N`. Ход работы виден на доске GitHub Projects «Orbit».
+- **Задачи** — в GitHub Issues, с метками области (`standard`, `connector`, `app`, `infra`) и источника (`source:sieup`, `source:spk`). Новую работу сначала оформи как issue; PR закрывает его строкой `Closes #N`. Ход работы виден на доске GitHub Projects «Orbit», и её нужно вести:
+  - взял задачу — её карточка в «In progress», задача назначена на исполнителя;
+  - открыл PR — карточки PR и задачи в «In review». Новые PR попадают на доску сами, но в «Backlog»: перенеси их. PR, открытый не в `main` (поверх другого PR), GitHub с задачей не связывает, пока тот не перенацелится на `main`;
+  - после слияния карточки уходят в «Done» сами.
 - Проектные решения фиксируй в `docs/decisions/` как короткие ADR (см. [шаблон](docs/decisions/README.md)), чтобы следующий агент не переоткрывал уже принятые вопросы.
 - Стандарт данных — в `docs/standard/`. Начни с [требований](docs/standard/requirements.md): там перечислены реальные странности источников, которые стандарт обязан выразить. Пример из источника перед изменением схемы важнее догадок.
 
