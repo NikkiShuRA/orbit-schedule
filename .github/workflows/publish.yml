@@ -78,7 +78,9 @@ jobs:
         run: |
           mkdir -p _site
           rsync -a --exclude='.git*' data/ _site/data/
-          find _site -type f | sort
+          "$RUNNER_TEMP/orbit" slice --in data --out _site/data
+          find _site -maxdepth 3 -type f | sort
+          echo "$(find _site -type f | wc -l) files, $(du -sh _site | cut -f1)"
 
       - uses: actions/upload-pages-artifact@v3
         if: env.PUBLISH == 'true'

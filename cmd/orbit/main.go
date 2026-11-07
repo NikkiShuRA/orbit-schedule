@@ -5,6 +5,7 @@
 // standard documents.
 //
 //	orbit fetch sieup --out data [--date 2026-11-09] [--weeks 2]
+//	orbit slice --in data --out site/data
 //	orbit validate file.json...
 //
 // Exit codes: 0 ok, 1 error, 2 bad usage, 3 none of the requested weeks
@@ -50,6 +51,8 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	switch args[0] {
 	case "fetch":
 		return fetch(ctx, args[1:], stdout, stderr)
+	case "slice":
+		return sliceCmd(args[1:], stdout, stderr)
 	case "validate":
 		return validate(args[1:], stdout, stderr)
 	default:
@@ -61,6 +64,7 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 func usage(w io.Writer) {
 	fmt.Fprintln(w, "usage:")
 	fmt.Fprintln(w, "  orbit fetch sieup --out DIR [--date YYYY-MM-DD] [--weeks N] [--base URL]...")
+	fmt.Fprintln(w, "  orbit slice --in DIR --out DIR [--from YYYY-MM-DD]")
 	fmt.Fprintln(w, "  orbit validate FILE...")
 }
 

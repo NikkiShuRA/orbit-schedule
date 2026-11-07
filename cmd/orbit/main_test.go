@@ -192,3 +192,69 @@ func TestBadWeeks(t *testing.T) {
 		}
 	}
 }
+
+func TestSliceWritesAppFiles(t *testing.T) {
+	api, data, site := fakeSIEUiP(t), t.TempDir(), t.TempDir()
+	if code, log := orbit(t, "fetch", "sieup", "--out", data, "--base", api, "--date", "2026-11-11"); code != 0 {
+		t.Fatalf("fetch: exit %d:\n%s", code, log)
+	}
+	if code, log := orbit(t, "slice", "--in", data, "--out", site, "--from", "2026-11-01"); code != 0 {
+		t.Fatalf("slice: exit %d:\n%s", code, log)
+	}
+
+	var index Index
+	readJSON(t, filepath.Join(site, "index.json"), &index)
+	if len(index.Sources) != 1 || index.Sources[0].Catalog != "sieup/catalog.json" || index.Sources[0].Status != "sieup/status.json" {
+		t.Errorf("index = %+v, want sieup with its catalog and status", index)
+	}
+
+	var cat struct {
+		Weeks  []struct{ File string }
+		Groups []struct{ ID string }
+	}
+	readJSON(t, filepath.Join(site, "sieup", "catalog.json"), &cat)
+	if len(cat.Weeks) != 1 || cat.Weeks[0].File != "2026-11-09.json" || len(cat.Groups) == 0 {
+		t.Fatalf("catalog = %+v, want one week and its groups", cat)
+	}
+
+	// Every group in the catalog has a valid file for the week.
+	for _, g := range cat.Groups {
+		path := filepath.Join(site, "sieup", "groups", g.ID, "2026-11-09.json")
+		if code, log := orbit(t, "validate", path); code != 0 {
+			t.Errorf("group %s: %s", g.ID, log)
+		}
+	}
+	teachers, err := filepath.Glob(filepath.Join(site, "sieup", "teachers", "*", "2026-11-09.json"))
+	if err != nil || len(teachers) == 0 {
+		t.Errorf("no teacher files (err %v)", err)
+	}
+
+	// Slicing twice into the same place would mix in stale files.
+	if code, _ := orbit(t, "slice", "--in", data, "--out", site, "--from", "2026-11-01"); code != exitError {
+		t.Errorf("second slice into the same directory: exit %d, want %d", code, exitError)
+	}
+}
+
+func TestSliceSkipsOldWeeks(t *testing.T) {
+	api, data, site := fakeSIEUiP(t), t.TempDir(), t.TempDir()
+	if code, log := orbit(t, "fetch", "sieup", "--out", data, "--base", api, "--date", "2026-11-11"); code != 0 {
+		t.Fatalf("fetch: exit %d:\n%s", code, log)
+	}
+	if code, log := orbit(t, "slice", "--in", data, "--out", site, "--from", "2026-12-01"); code != 0 {
+		t.Fatalf("slice: exit %d:\n%s", code, log)
+	}
+	if _, err := os.Stat(filepath.Join(site, "sieup", "groups")); !os.IsNotExist(err) {
+		t.Error("a week that ended before --from was sliced")
+	}
+}
+
+func readJSON(t *testing.T, path string, v any) {
+	t.Helper()
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal(data, v); err != nil {
+		t.Fatal(err)
+	}
+}
