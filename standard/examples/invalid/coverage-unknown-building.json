@@ -1,0 +1,60 @@
+{
+  "x-invalidBecause": "Охват ссылается на корпус, которого нет в справочнике.",
+  "standardVersion": "0.1.0",
+  "institution": {
+    "id": "example-college",
+    "name": "Колледж «Пример»",
+    "timeZone": "Asia/Yekaterinburg"
+  },
+  "publication": {
+    "period": {
+      "start": "2026-11-09",
+      "end": "2026-11-15"
+    },
+    "coverage": {
+      "buildingIds": [
+        "b-404"
+      ]
+    }
+  },
+  "provenance": {
+    "connector": {
+      "name": "example-connector",
+      "version": "0.0.1"
+    },
+    "source": {
+      "name": "Вымышленный источник"
+    },
+    "retrievedAt": "2026-11-08T12:00:00+05:00"
+  },
+  "groups": [
+    {
+      "id": "g-a",
+      "name": "ИС-25/9"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "r-101",
+      "name": "Каб. 101"
+    }
+  ],
+  "lessons": [
+    {
+      "date": "2026-11-09",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "groups": [
+        {
+          "groupId": "g-a"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "r-101"
+        }
+      ]
+    }
+  ]
+}
