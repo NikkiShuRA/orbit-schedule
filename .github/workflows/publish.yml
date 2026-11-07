@@ -77,7 +77,7 @@ jobs:
       - name: Assemble the site
         run: |
           mkdir -p _site
-          rsync -a --exclude=.git data/ _site/data/
+          rsync -a --exclude='.git*' data/ _site/data/
           find _site -type f | sort
 
       - uses: actions/upload-pages-artifact@v3
