@@ -1,0 +1,26 @@
+# Dependabot keeps dependencies and pinned GitHub Actions up to date.
+# Security fixes come as soon as an advisory appears; regular version
+# bumps come weekly and grouped, to keep the PR count low.
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      gomod:
+        patterns: ["*"]
+  - package-ecosystem: npm
+    directory: /standard
+    schedule:
+      interval: weekly
+    groups:
+      npm:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]

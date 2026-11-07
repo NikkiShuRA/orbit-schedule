@@ -1,0 +1,13 @@
+[
+  {
+    "_id": "wk",
+    "id": "wk-11",
+    "number": 11,
+    "year": 2026,
+    "version": 2,
+    "dateStart": "2026-11-09T00:00:00.000Z",
+    "dateEnd": "2026-11-15T00:00:00.000Z",
+    "count": 11,
+    "semester": 1
+  }
+]
