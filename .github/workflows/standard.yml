@@ -1,0 +1,27 @@
+name: Standard
+
+on:
+  push:
+    branches: [main]
+    paths: ["standard/**", ".github/workflows/standard.yml"]
+  pull_request:
+    paths: ["standard/**", ".github/workflows/standard.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: standard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: standard/package-lock.json
+      - run: npm ci
+      - run: npm test

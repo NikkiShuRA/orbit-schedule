@@ -1,0 +1,313 @@
+{
+  "$schema": "../../schema/schedule.schema.json",
+  "standardVersion": "0.1.0",
+  "x-comment": "Вымышленные данные. Показывают реальные странности источников: разное время у одного номера пары, пересечение пар, подгруппы, «ВАКАНСИЯ», пара без предмета, примечание, охват только одного корпуса.",
+  "institution": {
+    "id": "example-college",
+    "name": "Колледж «Пример»",
+    "shortName": "КП",
+    "timeZone": "Asia/Yekaterinburg"
+  },
+  "publication": {
+    "period": {
+      "start": "2026-11-02",
+      "end": "2026-11-08"
+    },
+    "coverage": {
+      "buildingIds": [
+        "b-1"
+      ]
+    }
+  },
+  "provenance": {
+    "connector": {
+      "name": "example-connector",
+      "version": "0.0.1"
+    },
+    "source": {
+      "name": "Вымышленный API расписания",
+      "url": "https://schedule.example.org/api"
+    },
+    "retrievedAt": "2026-11-08T09:30:00+05:00",
+    "sourceRevision": "1"
+  },
+  "buildings": [
+    {
+      "id": "b-1",
+      "name": "№1, ул. Примерная, 1",
+      "shortName": "№1",
+      "address": "ул. Примерная, 1"
+    },
+    {
+      "id": "b-2",
+      "name": "№2, ул. Образцовая, 2",
+      "shortName": "№2"
+    }
+  ],
+  "departments": [
+    {
+      "id": "dep-it",
+      "name": "Отделение информационных технологий",
+      "shortName": "ОИТ"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "r-101",
+      "name": "Каб. 101",
+      "code": "П-101",
+      "buildingId": "b-1"
+    },
+    {
+      "id": "r-102",
+      "name": "Каб. 102",
+      "code": "П-102",
+      "buildingId": "b-1"
+    },
+    {
+      "id": "r-gym",
+      "name": "Спортзал",
+      "buildingId": "b-1"
+    }
+  ],
+  "groups": [
+    {
+      "id": "g-a",
+      "name": "ИС-25/9",
+      "course": 2,
+      "buildingId": "b-1",
+      "departmentId": "dep-it"
+    },
+    {
+      "id": "g-b",
+      "name": "БД-24/11",
+      "course": 3,
+      "buildingId": "b-1",
+      "departmentId": "dep-it"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t-1",
+      "name": "Иванова Анна Петровна",
+      "shortName": "Иванова А.П."
+    },
+    {
+      "id": "t-2",
+      "name": "Петров Борис Сергеевич",
+      "shortName": "Петров Б.С."
+    },
+    {
+      "id": "t-3",
+      "name": "Сидорова Вера Олеговна"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "s-math",
+      "name": "Математика",
+      "shortName": "Мат"
+    },
+    {
+      "id": "s-eng",
+      "name": "Иностранный язык",
+      "shortName": "ИнЯз"
+    },
+    {
+      "id": "s-pe",
+      "name": "Физическая культура"
+    }
+  ],
+  "lessonTypes": [
+    {
+      "id": "lt-lec",
+      "name": "Лекция"
+    },
+    {
+      "id": "lt-prac",
+      "name": "Практическая работа"
+    }
+  ],
+  "bellSchedules": [
+    {
+      "id": "bells-1",
+      "name": "Основное расписание звонков",
+      "buildingIds": [
+        "b-1"
+      ],
+      "periods": [
+        {
+          "period": 1,
+          "start": "08:30",
+          "end": "09:50"
+        },
+        {
+          "period": 6,
+          "start": "16:50",
+          "end": "18:10"
+        },
+        {
+          "period": 7,
+          "start": "18:20",
+          "end": "19:40"
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-1",
+      "date": "2026-11-02",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "groups": [
+        {
+          "groupId": "g-a"
+        }
+      ],
+      "subjectId": "s-math",
+      "teachers": [
+        {
+          "teacherId": "t-1"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "r-101"
+        }
+      ],
+      "lessonTypeId": "lt-lec"
+    },
+    {
+      "id": "l-2",
+      "date": "2026-11-02",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "groups": [
+        {
+          "groupId": "g-a",
+          "subgroup": 1
+        }
+      ],
+      "subjectId": "s-eng",
+      "teachers": [
+        {
+          "teacherId": "t-2"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "r-101"
+        }
+      ],
+      "lessonTypeId": "lt-prac"
+    },
+    {
+      "id": "l-3",
+      "date": "2026-11-02",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "groups": [
+        {
+          "groupId": "g-a",
+          "subgroup": 2
+        }
+      ],
+      "subjectId": "s-pe",
+      "teachers": [
+        {
+          "placeholder": "unassigned",
+          "sourceText": "ВАКАНСИЯ"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "r-gym"
+        }
+      ]
+    },
+    {
+      "id": "l-4",
+      "date": "2026-11-02",
+      "period": 6,
+      "start": "16:50",
+      "end": "18:10",
+      "groups": [
+        {
+          "groupId": "g-b"
+        }
+      ],
+      "teachers": [
+        {
+          "teacherId": "t-3"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "r-102"
+        }
+      ],
+      "x-comment": "Предмет в источнике не указан — поля subjectId нет."
+    },
+    {
+      "id": "l-5",
+      "date": "2026-11-02",
+      "period": 7,
+      "start": "18:00",
+      "end": "19:20",
+      "groups": [
+        {
+          "groupId": "g-b"
+        }
+      ],
+      "subjectId": "s-math",
+      "teachers": [
+        {
+          "teacherId": "t-1"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "r-101"
+        }
+      ],
+      "note": "Перенос с 05.11",
+      "x-comment": "7-я пара в 18:00, хотя по сетке звонков 18:20, и пересекается с 6-й на 10 минут. Стандарт хранит как в источнике."
+    },
+    {
+      "id": "l-6",
+      "date": "2026-11-03",
+      "period": 7,
+      "start": "18:20",
+      "end": "19:40",
+      "groups": [
+        {
+          "groupId": "g-a"
+        },
+        {
+          "groupId": "g-b"
+        }
+      ],
+      "subjectId": "s-math",
+      "teachers": [
+        {
+          "teacherId": "t-1"
+        },
+        {
+          "teacherId": "t-2"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "r-101"
+        },
+        {
+          "roomId": "r-102"
+        }
+      ]
+    }
+  ]
+}
