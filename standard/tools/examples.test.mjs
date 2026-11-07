@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Every file in examples/valid must pass validation, every file in
 // examples/invalid must fail it. Run with: npm test
 import { test } from "node:test";

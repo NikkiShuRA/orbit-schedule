@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Validates Orbit schedule documents: JSON Schema first, then the rules
 // JSON Schema cannot express (unique ids, references, date ranges).
 //
