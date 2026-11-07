@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Orbit contributors
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Package sieup is the connector for the SIEUiP schedule API (a REST API
 // over 1C). It fetches one week and converts it to the Orbit standard.
 package sieup

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Orbit contributors
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Command orbit fetches schedules from sources and writes them as Orbit
 // standard documents.
 //

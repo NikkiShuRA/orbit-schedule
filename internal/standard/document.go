@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2026 Orbit contributors
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // Package standard holds Go types for documents of the Orbit schedule
 // standard (standard/schema/schedule.schema.json) and their validation.
 //
