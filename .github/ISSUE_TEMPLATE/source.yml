@@ -1,0 +1,35 @@
+name: Новый источник расписания
+description: Учебное заведение, расписание которого стоит подключить
+labels: [connector]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Orbit показывает только то, что учебное заведение опубликовало само. Нужен публичный источник: сайт, API или файлы.
+        Не прикладывайте данные, доступные только после входа, и ничего с личными данными студентов.
+  - type: input
+    id: institution
+    attributes:
+      label: Учебное заведение
+      placeholder: Полное название и город
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Где опубликовано расписание
+      placeholder: https://...
+    validations:
+      required: true
+  - type: dropdown
+    id: format
+    attributes:
+      label: Формат
+      options: [API (JSON), Таблицы (xlsx), PDF, Страница сайта, Другое]
+    validations:
+      required: true
+  - type: textarea
+    id: quirks
+    attributes:
+      label: Особенности
+      description: Замены, подгруппы, чётные и нечётные недели, несколько корпусов — всё, что заметили.
