@@ -40,6 +40,7 @@ npm run validate -- examples/valid/college-week.json   # проверить од
 go test ./...                                    # все тесты, включая общие примеры стандарта
 go run ./cmd/orbit fetch sieup --out data        # текущая неделя СИЭУиП → data/sieup/<понедельник>.json
 go run ./cmd/orbit fetch sieup --out data --date 2026-11-09
+go run ./cmd/orbit fetch sieup --out data --base https://example.org/api   # свой адрес API вместо встроенных
 go run ./cmd/orbit validate data/sieup/*.json    # проверить документы
 ```
 

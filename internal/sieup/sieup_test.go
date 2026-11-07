@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -53,8 +54,14 @@ func fakeAPI(t *testing.T) *httptest.Server {
 	return srv
 }
 
-func testClient(bases ...string) *Client {
-	return &Client{Bases: bases, HTTP: &http.Client{Timeout: 5 * time.Second}}
+func testClient(urls ...string) *Client {
+	bases := make([]Base, len(urls))
+	for i, u := range urls {
+		bases[i] = Base{URL: u, Name: fmt.Sprintf("test base %d", i)}
+	}
+	c := NewClient(bases...)
+	c.HTTP.Timeout = 5 * time.Second
+	return c
 }
 
 func fetchFixture(t *testing.T) *standard.Document {
@@ -165,11 +172,16 @@ func TestFallsBackToMirrorAndRemembersIt(t *testing.T) {
 	mirror := fakeAPI(t)
 
 	c := testClient(dead.URL, mirror.URL)
-	if _, err := Fetch(context.Background(), c, "2026-11-11"); err != nil {
+	doc, err := Fetch(context.Background(), c, "2026-11-11")
+	if err != nil {
 		t.Fatal(err)
 	}
-	if c.Base() != mirror.URL {
-		t.Errorf("base = %q, want the mirror", c.Base())
+	if c.Base().URL != mirror.URL {
+		t.Errorf("base = %q, want the mirror", c.Base().URL)
+	}
+	// Provenance must say the data came from the mirror, not the main API.
+	if got := doc.Provenance.Source; got.URL != mirror.URL || got.Name != "test base 1" {
+		t.Errorf("provenance source = %+v, want the mirror", got)
 	}
 	if deadHits != 1 {
 		t.Errorf("dead base was tried %d times, want once per run", deadHits)

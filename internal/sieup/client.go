@@ -6,70 +6,101 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"time"
 )
 
-// DefaultBases are the API addresses, tried in order. The second one is
-// an official mirror with the same data and ids.
-//
-// Since November 2026 the main address is down together with the
-// institute's hosting; the institute serves its site from a temporary
-// mirror (sieup.ru, no schedule API there) and the schedule from
-// timetable.sieup.ru. The main address stays first so the connector
-// switches back by itself once it returns.
-var DefaultBases = []string{
-	"https://sielom.ru/schedule/api",
-	"https://timetable.sieup.ru/api",
+// Base is one address of the API and how provenance should name it.
+type Base struct {
+	URL  string
+	Name string
 }
+
+// DefaultBases are the API addresses, tried in order.
+//
+// The main address is the institute's own. Since November 2026 it is down
+// together with the institute's hosting, and the institute raised a
+// temporary backup mirror in a hurry. The mirror is a stopgap, not a
+// second home of the API: it may lag behind, change or disappear once
+// the main site is back. So:
+//   - the main address always stays first, and the connector switches
+//     back to it by itself as soon as it answers;
+//   - data from the mirror is named as such in provenance, so the app and
+//     the git history show where every file came from;
+//   - addresses can be replaced with --base without changing code.
+var DefaultBases = []Base{
+	{URL: "https://sielom.ru/schedule/api", Name: "API расписания СИЭУиП"},
+	{URL: "https://timetable.sieup.ru/api", Name: "API расписания СИЭУиП, временное резервное зеркало"},
+}
+
+// CustomBaseName names an address given by hand (orbit fetch --base) in
+// provenance: Orbit cannot vouch for it, so it says only that much.
+const CustomBaseName = "API расписания СИЭУиП (адрес задан вручную)"
 
 // UserAgent identifies Orbit to the source.
 const UserAgent = "OrbitSchedule (+https://github.com/NikkiShuRA/orbit-schedule)"
 
-// Client talks to the SIEUiP API. The zero value is not usable; use
-// NewClient.
+// Client talks to the SIEUiP API. Create it with NewClient.
 type Client struct {
-	Bases []string
+	Bases []Base
 	HTTP  *http.Client
 
-	base string // the base that answered last; tried first next time
+	last int // index of the base that answered last, or -1
 }
 
-// NewClient returns a client with the default addresses and a timeout
-// long enough for a slow API but short enough to give up on a dead one.
-func NewClient() *Client {
+// NewClient returns a client for the given addresses, or DefaultBases if
+// none are given.
+//
+// Timeouts: connecting must succeed within 5 seconds, so a dead address
+// (it does not answer at all) is given up quickly; a live but slow API
+// still has 20 seconds for the whole request.
+func NewClient(bases ...Base) *Client {
+	if len(bases) == 0 {
+		bases = DefaultBases
+	}
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.DialContext = (&net.Dialer{Timeout: 5 * time.Second}).DialContext
+	transport.TLSHandshakeTimeout = 5 * time.Second
 	return &Client{
-		Bases: DefaultBases,
-		HTTP:  &http.Client{Timeout: 20 * time.Second},
+		Bases: bases,
+		HTTP:  &http.Client{Timeout: 20 * time.Second, Transport: transport},
+		last:  -1,
 	}
 }
 
 // Base returns the address that answered the last request.
-func (c *Client) Base() string { return c.base }
+func (c *Client) Base() Base {
+	if c.last < 0 {
+		return Base{}
+	}
+	return c.Bases[c.last]
+}
 
 // get fetches path from the first base that answers and decodes JSON
-// into out. Once a base answers, it is tried first for later requests,
-// so a dead base costs one timeout per run, not one per request.
+// into out. The base that answered is tried first for the next requests
+// of this run, so a dead base costs one timeout per run, not one per
+// request. Every new run starts from the main address again.
 func (c *Client) get(ctx context.Context, path string, out any) error {
-	order := make([]string, 0, len(c.Bases))
-	if c.base != "" {
-		order = append(order, c.base)
+	order := make([]int, 0, len(c.Bases))
+	if c.last >= 0 {
+		order = append(order, c.last)
 	}
-	for _, b := range c.Bases {
-		if b != c.base {
-			order = append(order, b)
+	for i := range c.Bases {
+		if i != c.last {
+			order = append(order, i)
 		}
 	}
 
 	var errs []error
-	for _, base := range order {
-		err := c.getFrom(ctx, base+path, out)
+	for _, i := range order {
+		err := c.getFrom(ctx, c.Bases[i].URL+path, out)
 		if err == nil {
-			c.base = base
+			c.last = i
 			return nil
 		}
-		errs = append(errs, fmt.Errorf("%s: %w", base, err))
+		errs = append(errs, fmt.Errorf("%s: %w", c.Bases[i].URL, err))
 		if ctx.Err() != nil {
 			break // cancelled: other bases will not help
 		}

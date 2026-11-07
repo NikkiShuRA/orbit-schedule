@@ -76,7 +76,7 @@ func sourceDate(s string) (string, error) {
 
 // convert is the pure part of the connector: source data in, document
 // out. It is separate from Fetch so tests can run it on fixtures.
-func convert(w week, divs []division, byDivision map[string][]lesson, base string, now time.Time) (*standard.Document, error) {
+func convert(w week, divs []division, byDivision map[string][]lesson, base Base, now time.Time) (*standard.Document, error) {
 	start, err := sourceDate(w.DateStart)
 	if err != nil {
 		return nil, err
@@ -150,7 +150,7 @@ func convert(w week, divs []division, byDivision map[string][]lesson, base strin
 		},
 		Provenance: standard.Provenance{
 			Connector:      standard.Connector{Name: Name, Version: Version},
-			Source:         standard.Source{Name: "API расписания СИЭУиП", URL: base},
+			Source:         standard.Source{Name: base.Name, URL: base.URL},
 			RetrievedAt:    now.In(loc).Format(time.RFC3339),
 			SourceRevision: strconv.Itoa(w.Version),
 		},

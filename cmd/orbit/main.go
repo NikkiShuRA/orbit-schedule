@@ -14,9 +14,11 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"time"
 	_ "time/tzdata" // embed time zones: the binary must work where the OS has none (Windows, minimal containers)
 
@@ -56,7 +58,7 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 
 func usage(w io.Writer) {
 	fmt.Fprintln(w, "usage:")
-	fmt.Fprintln(w, "  orbit fetch sieup --out DIR [--date YYYY-MM-DD]")
+	fmt.Fprintln(w, "  orbit fetch sieup --out DIR [--date YYYY-MM-DD] [--base URL]...")
 	fmt.Fprintln(w, "  orbit validate FILE...")
 }
 
@@ -69,6 +71,17 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	fs.SetOutput(stderr)
 	out := fs.String("out", "", "output directory (required)")
 	date := fs.String("date", "", "any date of the week to fetch, YYYY-MM-DD (default: today in the institution's time zone)")
+	// --base may be given several times; the addresses are tried in
+	// order. flag.Func calls the function once per occurrence.
+	var bases []sieup.Base
+	fs.Func("base", "API address to use instead of the built-in ones; repeat to give fallbacks", func(s string) error {
+		u, err := url.Parse(s)
+		if err != nil || (u.Scheme != "https" && u.Scheme != "http") || u.Host == "" {
+			return fmt.Errorf("want an http(s) URL, got %q", s)
+		}
+		bases = append(bases, sieup.Base{URL: strings.TrimRight(s, "/"), Name: sieup.CustomBaseName})
+		return nil
+	})
 	if err := fs.Parse(args[1:]); err != nil {
 		return exitUsage
 	}
@@ -88,7 +101,7 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		return exitUsage
 	}
 
-	doc, err := sieup.Fetch(ctx, sieup.NewClient(), *date)
+	doc, err := sieup.Fetch(ctx, sieup.NewClient(bases...), *date)
 	if errors.Is(err, sieup.ErrNotPublished) {
 		fmt.Fprintln(stderr, err)
 		return exitNotPublished
