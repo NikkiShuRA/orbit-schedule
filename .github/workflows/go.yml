@@ -1,0 +1,34 @@
+name: Go
+
+on:
+  push:
+    branches: [main]
+    paths: ["**.go", "go.mod", "go.sum", "internal/**", "cmd/**", "standard/**", ".github/workflows/go.yml"]
+  pull_request:
+    paths: ["**.go", "go.mod", "go.sum", "internal/**", "cmd/**", "standard/**", ".github/workflows/go.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then echo "Run gofmt on:"; echo "$unformatted"; exit 1; fi
+      - run: go vet ./...
+      - run: go test -race ./...
+      - run: go build ./cmd/orbit
+
+  vulncheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: golang/govulncheck-action@v1
+        with:
+          go-version-file: go.mod
