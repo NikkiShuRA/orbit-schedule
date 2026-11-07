@@ -61,6 +61,12 @@ function checkSemantics(doc) {
   if (period.end < period.start) errors.push("/publication/period end is before start");
   coverage.buildingIds?.forEach((id, i) => ref("buildings", id, `/publication/coverage/buildingIds/${i}`));
   coverage.groupIds?.forEach((id, i) => ref("groups", id, `/publication/coverage/groupIds/${i}`));
+  coverage.teacherIds?.forEach((id, i) => ref("teachers", id, `/publication/coverage/teacherIds/${i}`));
+  const inCoverage = {
+    buildings: coverage.buildingIds && new Set(coverage.buildingIds),
+    groups: coverage.groupIds && new Set(coverage.groupIds),
+    teachers: coverage.teacherIds && new Set(coverage.teacherIds),
+  };
 
   doc.rooms?.forEach((r, i) => r.buildingId && ref("buildings", r.buildingId, `/rooms/${i}/buildingId`));
   doc.groups?.forEach((g, i) => {
@@ -81,6 +87,19 @@ function checkSemantics(doc) {
 
     if (l.date < period.start || l.date > period.end) warnings.push(`${at}/date ${l.date} is outside the publication period`);
     if (l.start && l.end <= l.start) warnings.push(`${at} ends (${l.end}) not after it starts (${l.start})`);
+
+    // Coverage fields narrow each other, so a lesson must match every one
+    // that is present. Only what the lesson states can be checked: a
+    // lesson with no building says nothing about coverage by building.
+    if (inCoverage.buildings && l.buildingId && !inCoverage.buildings.has(l.buildingId)) {
+      warnings.push(`${at} building "${l.buildingId}" is outside the coverage`);
+    }
+    if (inCoverage.groups && !l.groups.some((g) => inCoverage.groups.has(g.groupId))) {
+      warnings.push(`${at} has no group from the coverage`);
+    }
+    if (inCoverage.teachers && !l.teachers?.some((t) => inCoverage.teachers.has(t.teacherId))) {
+      warnings.push(`${at} has no teacher from the coverage`);
+    }
   });
 
   return { errors, warnings };

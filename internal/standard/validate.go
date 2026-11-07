@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"sort"
 	"sync"
 
@@ -159,9 +160,15 @@ func checkSemantics(d *Document) Result {
 	for i, id := range d.Publication.Coverage.BuildingIDs {
 		ref(buildings, "buildings", id, fmt.Sprintf("/publication/coverage/buildingIds/%d", i))
 	}
-	for i, id := range d.Publication.Coverage.GroupIDs {
+	cov := d.Publication.Coverage
+	for i, id := range cov.GroupIDs {
 		ref(groups, "groups", id, fmt.Sprintf("/publication/coverage/groupIds/%d", i))
 	}
+	for i, id := range cov.TeacherIDs {
+		ref(teachers, "teachers", id, fmt.Sprintf("/publication/coverage/teacherIds/%d", i))
+	}
+	// A nil set means the coverage does not limit by that field.
+	covBuildings, covGroups, covTeachers := set(cov.BuildingIDs), set(cov.GroupIDs), set(cov.TeacherIDs)
 	for i, x := range d.Rooms {
 		ref(buildings, "buildings", x.BuildingID, fmt.Sprintf("/rooms/%d/buildingId", i))
 	}
@@ -195,6 +202,31 @@ func checkSemantics(d *Document) Result {
 		if l.Start != "" && l.End <= l.Start {
 			warnf("%s ends (%s) not after it starts (%s)", at, l.End, l.Start)
 		}
+
+		// Coverage fields narrow each other, so a lesson must match every
+		// one that is present. Only what the lesson states can be checked:
+		// a lesson with no building says nothing about coverage by building.
+		if covBuildings != nil && l.BuildingID != "" && !covBuildings[l.BuildingID] {
+			warnf("%s building %q is outside the coverage", at, l.BuildingID)
+		}
+		if covGroups != nil && !slices.ContainsFunc(l.Groups, func(g LessonGroup) bool { return covGroups[g.GroupID] }) {
+			warnf("%s has no group from the coverage", at)
+		}
+		if covTeachers != nil && !slices.ContainsFunc(l.Teachers, func(t TeacherRef) bool { return covTeachers[t.TeacherID] }) {
+			warnf("%s has no teacher from the coverage", at)
+		}
 	}
 	return r
+}
+
+// set returns the ids as a set, or nil for no ids.
+func set(ids []string) map[string]bool {
+	if len(ids) == 0 {
+		return nil
+	}
+	m := make(map[string]bool, len(ids))
+	for _, id := range ids {
+		m[id] = true
+	}
+	return m
 }

@@ -1,6 +1,6 @@
 {
   "name": "@orbit-schedule/standard",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Orbit schedule data standard: JSON Schema, examples and validator",
   "license": "AGPL-3.0-or-later",
