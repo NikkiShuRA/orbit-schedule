@@ -34,7 +34,21 @@ npm test                                 # все примеры: valid/ про�
 npm run validate -- examples/valid/college-week.json   # проверить один документ
 ```
 
-CI (`.github/workflows/standard.yml`) запускает `npm test` при изменениях в `standard/`.
+Коннекторы (Go 1.25+, модуль в корне репозитория):
+
+```bash
+go test ./...                                    # все тесты, включая общие примеры стандарта
+go run ./cmd/orbit fetch sieup --out data        # текущая неделя СИЭУиП → data/sieup/<понедельник>.json
+go run ./cmd/orbit fetch sieup --out data --date 2026-11-09
+go run ./cmd/orbit fetch sieup --out data --base https://example.org/api   # свой адрес API вместо встроенных
+go run ./cmd/orbit validate data/sieup/*.json    # проверить документы
+```
+
+Коды выхода `orbit`: 0 — успех, 1 — ошибка, 2 — неверные аргументы, 3 — расписание ещё не опубликовано.
+
+Структура: `cmd/orbit` — CLI; `internal/standard` — типы документа и валидатор (схема + ссылки); `internal/sieup` — коннектор СИЭУиП; `standard/schema/embed.go` встраивает схему в Go.
+
+CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck).
 
 ## Принципы, которые нельзя нарушать
 
