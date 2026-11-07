@@ -13,6 +13,12 @@ import (
 
 // DefaultBases are the API addresses, tried in order. The second one is
 // an official mirror with the same data and ids.
+//
+// Since November 2026 the main address is down together with the
+// institute's hosting; the institute serves its site from a temporary
+// mirror (sieup.ru, no schedule API there) and the schedule from
+// timetable.sieup.ru. The main address stays first so the connector
+// switches back by itself once it returns.
 var DefaultBases = []string{
 	"https://sielom.ru/schedule/api",
 	"https://timetable.sieup.ru/api",

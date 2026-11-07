@@ -20,8 +20,13 @@ const (
 	Version = "0.1.0"
 )
 
-// TimeZone of the institution. All times in the source are local.
-const TimeZone = "Asia/Yekaterinburg"
+// The institution and its time zone (Surgut, UTC+5). All times in the
+// source are local.
+const (
+	InstitutionName      = "Сургутский институт экономики, управления и права"
+	InstitutionShortName = "СИЭУиП"
+	TimeZone             = "Asia/Yekaterinburg"
+)
 
 // ErrNotPublished means the source has no schedule for the requested
 // week yet. It is not a failure of the connector.
@@ -134,9 +139,10 @@ func convert(w week, divs []division, byDivision map[string][]lesson, base strin
 	doc := &standard.Document{
 		StandardVersion: standard.Version,
 		Institution: standard.Institution{
-			ID:       "sieup",
-			Name:     "СИЭУиП",
-			TimeZone: TimeZone,
+			ID:        "sieup",
+			Name:      InstitutionName,
+			ShortName: InstitutionShortName,
+			TimeZone:  TimeZone,
 		},
 		Publication: standard.Publication{
 			Period:   standard.Period{Start: start, End: end},
