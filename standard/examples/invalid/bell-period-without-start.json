@@ -1,0 +1,239 @@
+{
+  "x-invalidBecause": "В сетке звонков у пары нет времени начала.",
+  "standardVersion": "0.1.0",
+  "institution": {
+    "id": "example-polytech",
+    "name": "Политехнический колледж «Пример»",
+    "timeZone": "Asia/Yekaterinburg"
+  },
+  "publication": {
+    "period": {
+      "start": "2026-11-09",
+      "end": "2026-11-14"
+    },
+    "coverage": {
+      "institution": true
+    }
+  },
+  "provenance": {
+    "connector": {
+      "name": "example-connector",
+      "version": "0.0.1"
+    },
+    "source": {
+      "name": "Вымышленный сайт колледжа"
+    },
+    "retrievedAt": "2026-11-08T20:00:00+05:00"
+  },
+  "buildings": [
+    {
+      "id": "terr-1",
+      "name": "(П-1) Отделение общего образования"
+    },
+    {
+      "id": "terr-2",
+      "name": "(П-2) Строительное отделение"
+    }
+  ],
+  "departments": [
+    {
+      "id": "div-1",
+      "name": "(П-1) Отделение общего образования"
+    },
+    {
+      "id": "div-2",
+      "name": "(П-2) Строительное отделение"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "aud-23",
+      "name": "Кабинет №23",
+      "code": "23"
+    },
+    {
+      "id": "aud-gym",
+      "name": "Спортивный зал",
+      "code": "сз1"
+    }
+  ],
+  "groups": [
+    {
+      "id": "g-101",
+      "name": "101",
+      "course": 1,
+      "departmentId": "div-1"
+    },
+    {
+      "id": "g-102",
+      "name": "102",
+      "course": 1,
+      "departmentId": "div-1"
+    },
+    {
+      "id": "g-301",
+      "name": "301",
+      "course": 4,
+      "departmentId": "div-2"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t-1",
+      "name": "Кузнецова Дарья Игоревна"
+    },
+    {
+      "id": "t-2",
+      "name": "Орлов Глеб Андреевич"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "s-hist",
+      "name": "История"
+    },
+    {
+      "id": "s-mdk",
+      "name": "МДК 01.01 Проектирование зданий и сооружений"
+    }
+  ],
+  "lessonTypes": [
+    {
+      "id": "lt-lec",
+      "name": "Лекция"
+    },
+    {
+      "id": "lt-practice",
+      "name": "Учебная практика"
+    },
+    {
+      "id": "lt-exam",
+      "name": "Экзамен"
+    }
+  ],
+  "bellSchedules": [
+    {
+      "id": "bells",
+      "periods": [
+        {
+          "period": 1
+        },
+        {
+          "period": 2,
+          "start": "10:00"
+        },
+        {
+          "period": 3,
+          "start": "12:00"
+        },
+        {
+          "period": 4,
+          "start": "13:30"
+        },
+        {
+          "period": 5,
+          "start": "15:00"
+        },
+        {
+          "period": 6,
+          "start": "16:30"
+        },
+        {
+          "period": 7,
+          "start": "18:00"
+        },
+        {
+          "period": 8,
+          "start": "19:30"
+        }
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "date": "2026-11-09",
+      "period": 1,
+      "buildingId": "terr-1",
+      "groups": [
+        {
+          "groupId": "g-101"
+        }
+      ],
+      "subjectId": "s-hist",
+      "lessonTypeId": "lt-lec",
+      "teachers": [
+        {
+          "teacherId": "t-1"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "aud-23"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "period": 1,
+      "buildingId": "terr-1",
+      "groups": [
+        {
+          "groupId": "g-102"
+        }
+      ],
+      "subjectId": "s-hist",
+      "lessonTypeId": "lt-lec",
+      "teachers": [
+        {
+          "teacherId": "t-1"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "aud-23"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "period": 2,
+      "buildingId": "terr-2",
+      "groups": [
+        {
+          "groupId": "g-301",
+          "subgroup": 1
+        }
+      ],
+      "subjectId": "s-mdk",
+      "lessonTypeId": "lt-practice",
+      "teachers": [
+        {
+          "teacherId": "t-2"
+        }
+      ],
+      "x-comment": "Аудитория в источнике не указана (пустой GUID) — поля rooms нет."
+    },
+    {
+      "date": "2026-11-10",
+      "period": 3,
+      "buildingId": "terr-2",
+      "groups": [
+        {
+          "groupId": "g-301"
+        }
+      ],
+      "subjectId": "s-mdk",
+      "lessonTypeId": "lt-exam",
+      "teachers": [
+        {
+          "teacherId": "t-2"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "aud-23"
+        }
+      ]
+    }
+  ]
+}

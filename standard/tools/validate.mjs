@@ -32,7 +32,9 @@ export async function createValidator() {
   };
 }
 
-const LISTS = ["buildings", "rooms", "groups", "teachers", "subjects", "bellSchedules", "lessons"];
+const LISTS = [
+  "buildings", "departments", "rooms", "groups", "teachers", "subjects", "lessonTypes", "bellSchedules", "lessons",
+];
 
 function checkSemantics(doc) {
   const errors = [];
@@ -58,14 +60,19 @@ function checkSemantics(doc) {
   coverage.groupIds?.forEach((id, i) => ref("groups", id, `/publication/coverage/groupIds/${i}`));
 
   doc.rooms?.forEach((r, i) => r.buildingId && ref("buildings", r.buildingId, `/rooms/${i}/buildingId`));
-  doc.groups?.forEach((g, i) => g.buildingId && ref("buildings", g.buildingId, `/groups/${i}/buildingId`));
+  doc.groups?.forEach((g, i) => {
+    if (g.buildingId) ref("buildings", g.buildingId, `/groups/${i}/buildingId`);
+    if (g.departmentId) ref("departments", g.departmentId, `/groups/${i}/departmentId`);
+  });
   doc.bellSchedules?.forEach((b, i) =>
     b.buildingIds?.forEach((id, j) => ref("buildings", id, `/bellSchedules/${i}/buildingIds/${j}`)));
 
   doc.lessons.forEach((l, i) => {
     const at = `/lessons/${i}`;
     l.groups.forEach((g, j) => ref("groups", g.groupId, `${at}/groups/${j}/groupId`));
+    if (l.buildingId) ref("buildings", l.buildingId, `${at}/buildingId`);
     if (l.subjectId) ref("subjects", l.subjectId, `${at}/subjectId`);
+    if (l.lessonTypeId) ref("lessonTypes", l.lessonTypeId, `${at}/lessonTypeId`);
     l.teachers?.forEach((t, j) => t.teacherId && ref("teachers", t.teacherId, `${at}/teachers/${j}/teacherId`));
     l.rooms?.forEach((r, j) => r.roomId && ref("rooms", r.roomId, `${at}/rooms/${j}/roomId`));
 

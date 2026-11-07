@@ -4,39 +4,111 @@
   "title": "Orbit Schedule",
   "description": "Документ публикации расписания учебного заведения за диапазон дат. Стандарт Orbit, версия 0.1.",
   "type": "object",
-  "required": ["standardVersion", "institution", "publication", "provenance", "lessons"],
+  "required": [
+    "standardVersion",
+    "institution",
+    "publication",
+    "provenance",
+    "lessons"
+  ],
   "properties": {
-    "$schema": { "type": "string", "description": "Необязательная ссылка на эту схему." },
+    "$schema": {
+      "type": "string",
+      "description": "Необязательная ссылка на эту схему."
+    },
     "standardVersion": {
       "type": "string",
       "pattern": "^0\\.1\\.(0|[1-9][0-9]*)$",
       "description": "Версия стандарта, по которой записан документ (семантическое версионирование)."
     },
-    "institution": { "$ref": "#/$defs/institution" },
-    "publication": { "$ref": "#/$defs/publication" },
-    "provenance": { "$ref": "#/$defs/provenance" },
-    "buildings": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/building" } },
-    "rooms": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/room" } },
-    "groups": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/group" } },
-    "teachers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/teacher" } },
-    "subjects": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/subject" } },
-    "bellSchedules": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/bellSchedule" } },
+    "institution": {
+      "$ref": "#/$defs/institution"
+    },
+    "publication": {
+      "$ref": "#/$defs/publication"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "buildings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/building"
+      }
+    },
+    "departments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/department"
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/room"
+      }
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    },
+    "teachers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/teacher"
+      }
+    },
+    "subjects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/subject"
+      }
+    },
+    "lessonTypes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/lessonType"
+      }
+    },
+    "bellSchedules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/bellSchedule"
+      }
+    },
     "lessons": {
       "type": "array",
-      "items": { "$ref": "#/$defs/lesson" },
+      "items": {
+        "$ref": "#/$defs/lesson"
+      },
       "description": "Пары. Пустой список означает, что в охвате публикации за весь период пар нет."
     }
   },
-  "patternProperties": { "^x-": true },
+  "patternProperties": {
+    "^x-": true
+  },
   "additionalProperties": false,
-
   "$defs": {
     "id": {
       "type": "string",
       "minLength": 1,
       "description": "Идентификатор источника (например, GUID из 1С). Без формата, уникален внутри своего списка."
     },
-    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
     "date": {
       "type": "string",
       "format": "date",
@@ -52,51 +124,82 @@
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/id" }
+      "items": {
+        "$ref": "#/$defs/id"
+      }
     },
     "placeholder": {
       "type": "object",
       "description": "Явная заглушка из источника вместо значения. Исходный текст сохраняется.",
-      "required": ["placeholder", "sourceText"],
+      "required": [
+        "placeholder",
+        "sourceText"
+      ],
       "properties": {
         "placeholder": {
-          "enum": ["unassigned"],
+          "enum": [
+            "unassigned"
+          ],
           "description": "unassigned — источник явно сообщает, что значение не назначено (например, «ВАКАНСИЯ»)."
         },
-        "sourceText": { "$ref": "#/$defs/text" }
+        "sourceText": {
+          "$ref": "#/$defs/text"
+        }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "institution": {
       "type": "object",
-      "required": ["id", "name", "timeZone"],
+      "required": [
+        "id",
+        "name",
+        "timeZone"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "$ref": "#/$defs/text" },
-        "shortName": { "$ref": "#/$defs/text" },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "shortName": {
+          "$ref": "#/$defs/text"
+        },
         "timeZone": {
           "type": "string",
           "pattern": "^(UTC|[A-Za-z_]+(/[A-Za-z0-9_+-]+)+)$",
           "description": "Часовой пояс из базы IANA, например Asia/Yekaterinburg. В нём записаны все времена документа."
         }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "publication": {
       "type": "object",
-      "required": ["period", "coverage"],
+      "required": [
+        "period",
+        "coverage"
+      ],
       "properties": {
         "period": {
           "type": "object",
           "description": "Период публикации, обе даты включительно.",
-          "required": ["start", "end"],
+          "required": [
+            "start",
+            "end"
+          ],
           "properties": {
-            "start": { "$ref": "#/$defs/date" },
-            "end": { "$ref": "#/$defs/date" }
+            "start": {
+              "$ref": "#/$defs/date"
+            },
+            "end": {
+              "$ref": "#/$defs/date"
+            }
           },
           "additionalProperties": false
         },
@@ -105,20 +208,38 @@
           "oneOf": [
             {
               "type": "object",
-              "required": ["institution"],
-              "properties": { "institution": { "const": true } },
+              "required": [
+                "institution"
+              ],
+              "properties": {
+                "institution": {
+                  "const": true
+                }
+              },
               "additionalProperties": false
             },
             {
               "type": "object",
-              "required": ["buildingIds"],
-              "properties": { "buildingIds": { "$ref": "#/$defs/idList" } },
+              "required": [
+                "buildingIds"
+              ],
+              "properties": {
+                "buildingIds": {
+                  "$ref": "#/$defs/idList"
+                }
+              },
               "additionalProperties": false
             },
             {
               "type": "object",
-              "required": ["groupIds"],
-              "properties": { "groupIds": { "$ref": "#/$defs/idList" } },
+              "required": [
+                "groupIds"
+              ],
+              "properties": {
+                "groupIds": {
+                  "$ref": "#/$defs/idList"
+                }
+              },
               "additionalProperties": false
             }
           ]
@@ -129,40 +250,67 @@
           "description": "Нерабочие дни, только если источник явно о них сообщает. Отсутствие пар само по себе нерабочим днём не считается.",
           "items": {
             "type": "object",
-            "required": ["date"],
+            "required": [
+              "date"
+            ],
             "properties": {
-              "date": { "$ref": "#/$defs/date" },
-              "note": { "$ref": "#/$defs/text" }
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "note": {
+                "$ref": "#/$defs/text"
+              }
             },
-            "patternProperties": { "^x-": true },
+            "patternProperties": {
+              "^x-": true
+            },
             "additionalProperties": false
           }
         }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "provenance": {
       "type": "object",
       "description": "Откуда и когда получены данные.",
-      "required": ["connector", "source", "retrievedAt"],
+      "required": [
+        "connector",
+        "source",
+        "retrievedAt"
+      ],
       "properties": {
         "connector": {
           "type": "object",
-          "required": ["name", "version"],
+          "required": [
+            "name",
+            "version"
+          ],
           "properties": {
-            "name": { "$ref": "#/$defs/text" },
-            "version": { "$ref": "#/$defs/text" }
+            "name": {
+              "$ref": "#/$defs/text"
+            },
+            "version": {
+              "$ref": "#/$defs/text"
+            }
           },
           "additionalProperties": false
         },
         "source": {
           "type": "object",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "properties": {
-            "name": { "$ref": "#/$defs/text" },
-            "url": { "type": "string", "format": "uri" }
+            "name": {
+              "$ref": "#/$defs/text"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            }
           },
           "additionalProperties": false
         },
@@ -176,122 +324,276 @@
           "description": "Версия или редакция публикации в источнике, если источник её сообщает."
         }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "building": {
       "type": "object",
       "description": "Корпус: здание или площадка с одним адресом.",
-      "required": ["id", "name"],
+      "required": [
+        "id",
+        "name"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "$ref": "#/$defs/text" },
-        "shortName": { "$ref": "#/$defs/text" },
-        "address": { "$ref": "#/$defs/text" }
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "shortName": {
+          "$ref": "#/$defs/text"
+        },
+        "address": {
+          "$ref": "#/$defs/text"
+        }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
+    "department": {
+      "type": "object",
+      "description": "Структурное подразделение, к которому относятся группы: отделение, факультет, институт. Не здание.",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "shortName": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "patternProperties": {
+        "^x-": true
+      },
+      "additionalProperties": false
+    },
     "room": {
       "type": "object",
       "description": "Аудитория или другое место проведения пары.",
-      "required": ["id", "name"],
+      "required": [
+        "id",
+        "name"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "$ref": "#/$defs/text" },
-        "code": { "$ref": "#/$defs/text", "description": "Короткий код аудитории, как в источнике." },
-        "buildingId": { "$ref": "#/$defs/id" }
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "code": {
+          "$ref": "#/$defs/text",
+          "description": "Короткий код аудитории, как в источнике."
+        },
+        "buildingId": {
+          "$ref": "#/$defs/id"
+        }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "group": {
       "type": "object",
-      "required": ["id", "name"],
+      "required": [
+        "id",
+        "name"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "$ref": "#/$defs/text" },
-        "course": { "type": "integer", "minimum": 1 },
-        "buildingId": { "$ref": "#/$defs/id" }
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "course": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "buildingId": {
+          "$ref": "#/$defs/id"
+        },
+        "departmentId": {
+          "$ref": "#/$defs/id"
+        }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "teacher": {
       "type": "object",
       "description": "Преподаватель. Только то, что нужно для расписания.",
-      "required": ["id", "name"],
+      "required": [
+        "id",
+        "name"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "$ref": "#/$defs/text", "description": "Полное имя, как опубликовано." },
-        "shortName": { "$ref": "#/$defs/text", "description": "Сокращение, как опубликовано в источнике. Своих сокращений стандарт не вводит." }
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text",
+          "description": "Полное имя, как опубликовано."
+        },
+        "shortName": {
+          "$ref": "#/$defs/text",
+          "description": "Сокращение, как опубликовано в источнике. Своих сокращений стандарт не вводит."
+        }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "subject": {
       "type": "object",
-      "required": ["id", "name"],
+      "required": [
+        "id",
+        "name"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "$ref": "#/$defs/text" },
-        "shortName": { "$ref": "#/$defs/text" }
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "shortName": {
+          "$ref": "#/$defs/text"
+        }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
+    "lessonType": {
+      "type": "object",
+      "description": "Вид занятия, как его называет источник: лекция, практическая работа, экзамен и т. п. Стандарт не вводит свой список видов.",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "shortName": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "patternProperties": {
+        "^x-": true
+      },
+      "additionalProperties": false
+    },
     "bellSchedule": {
       "type": "object",
       "description": "Сетка звонков, если учебное заведение её публикует. Справочный факт: время пары берётся из самой пары, а не отсюда.",
-      "required": ["id", "periods"],
+      "required": [
+        "id",
+        "periods"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "$ref": "#/$defs/text" },
-        "buildingIds": { "$ref": "#/$defs/idList" },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "buildingIds": {
+          "$ref": "#/$defs/idList"
+        },
         "periods": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["period", "start", "end"],
+            "required": [
+              "period",
+              "start"
+            ],
             "properties": {
-              "period": { "type": "integer", "minimum": 0 },
-              "start": { "$ref": "#/$defs/time" },
-              "end": { "$ref": "#/$defs/time" }
+              "period": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "start": {
+                "$ref": "#/$defs/time"
+              },
+              "end": {
+                "$ref": "#/$defs/time",
+                "description": "Конец пары, если источник его публикует."
+              }
             },
             "additionalProperties": false
           }
         }
       },
-      "patternProperties": { "^x-": true },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     },
-
     "lesson": {
       "type": "object",
       "description": "Одно занятие. Отсутствующее поле значит «источник не сообщил».",
-      "required": ["date", "groups"],
+      "required": [
+        "date",
+        "groups"
+      ],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "date": { "$ref": "#/$defs/date" },
-        "period": { "type": "integer", "minimum": 0, "description": "Номер пары, как в источнике." },
-        "start": { "$ref": "#/$defs/time" },
-        "end": { "$ref": "#/$defs/time" },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "period": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Номер пары, как в источнике."
+        },
+        "start": {
+          "$ref": "#/$defs/time"
+        },
+        "end": {
+          "$ref": "#/$defs/time"
+        },
+        "buildingId": {
+          "$ref": "#/$defs/id",
+          "description": "Корпус, где проходит пара, если источник указывает его у пары."
+        },
         "groups": {
           "type": "array",
           "minItems": 1,
           "description": "Группы на занятии. Несколько — например, лекция на поток.",
           "items": {
             "type": "object",
-            "required": ["groupId"],
+            "required": [
+              "groupId"
+            ],
             "properties": {
-              "groupId": { "$ref": "#/$defs/id" },
+              "groupId": {
+                "$ref": "#/$defs/id"
+              },
               "subgroup": {
                 "type": "integer",
                 "minimum": 1,
@@ -301,7 +603,12 @@
             "additionalProperties": false
           }
         },
-        "subjectId": { "$ref": "#/$defs/id" },
+        "subjectId": {
+          "$ref": "#/$defs/id"
+        },
+        "lessonTypeId": {
+          "$ref": "#/$defs/id"
+        },
         "teachers": {
           "type": "array",
           "minItems": 1,
@@ -309,11 +616,19 @@
             "oneOf": [
               {
                 "type": "object",
-                "required": ["teacherId"],
-                "properties": { "teacherId": { "$ref": "#/$defs/id" } },
+                "required": [
+                  "teacherId"
+                ],
+                "properties": {
+                  "teacherId": {
+                    "$ref": "#/$defs/id"
+                  }
+                },
                 "additionalProperties": false
               },
-              { "$ref": "#/$defs/placeholder" }
+              {
+                "$ref": "#/$defs/placeholder"
+              }
             ]
           }
         },
@@ -324,19 +639,50 @@
             "oneOf": [
               {
                 "type": "object",
-                "required": ["roomId"],
-                "properties": { "roomId": { "$ref": "#/$defs/id" } },
+                "required": [
+                  "roomId"
+                ],
+                "properties": {
+                  "roomId": {
+                    "$ref": "#/$defs/id"
+                  }
+                },
                 "additionalProperties": false
               },
-              { "$ref": "#/$defs/placeholder" }
+              {
+                "$ref": "#/$defs/placeholder"
+              }
             ]
           }
         },
-        "note": { "$ref": "#/$defs/text", "description": "Примечание источника как есть: переносы, замены и т. п." }
+        "note": {
+          "$ref": "#/$defs/text",
+          "description": "Примечание источника как есть: переносы, замены и т. п."
+        }
       },
-      "anyOf": [{ "required": ["period"] }, { "required": ["start"] }],
-      "dependentRequired": { "start": ["end"], "end": ["start"] },
-      "patternProperties": { "^x-": true },
+      "anyOf": [
+        {
+          "required": [
+            "period"
+          ]
+        },
+        {
+          "required": [
+            "start"
+          ]
+        }
+      ],
+      "dependentRequired": {
+        "start": [
+          "end"
+        ],
+        "end": [
+          "start"
+        ]
+      },
+      "patternProperties": {
+        "^x-": true
+      },
       "additionalProperties": false
     }
   }
