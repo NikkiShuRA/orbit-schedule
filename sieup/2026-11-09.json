@@ -1,5 +1,5 @@
 {
-  "standardVersion": "0.1.0",
+  "standardVersion": "0.2.0",
   "institution": {
     "id": "sieup",
     "name": "Сургутский институт экономики, управления и права",
@@ -29,7 +29,7 @@
       "name": "API расписания СИЭУиП, временное резервное зеркало",
       "url": "https://timetable.sieup.ru/api"
     },
-    "retrievedAt": "2026-11-08T04:13:42+05:00",
+    "retrievedAt": "2026-11-08T04:58:20+05:00",
     "sourceRevision": "1"
   },
   "buildings": [
