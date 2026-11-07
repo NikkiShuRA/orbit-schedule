@@ -1,0 +1,37 @@
+name: Source probe
+
+# Checks whether schedule sources are reachable from GitHub-hosted runners.
+# Informational only: it never fails, results go to the job summary.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: [".github/workflows/source-probe.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe sources
+        env:
+          USER_AGENT: "OrbitSchedule-probe (+https://github.com/NikkiShuRA/orbit-schedule)"
+        run: |
+          probe() {
+            name="$1"; url="$2"
+            result=$(curl -sS -o /dev/null -m 30 -A "$USER_AGENT" \
+              -w '%{http_code} %{time_total} %{size_download}' "$url" 2>&1) || true
+            echo "| $name | \`$url\` | $result |" >> "$GITHUB_STEP_SUMMARY"
+            echo "$name: $result"
+          }
+          {
+            echo "### Source reachability from a GitHub-hosted runner"
+            echo
+            echo "| Source | URL | HTTP code, seconds, bytes |"
+            echo "|---|---|---|"
+          } >> "$GITHUB_STEP_SUMMARY"
+          probe "SIEUiP main"   "https://sielom.ru/schedule/api/divisions"
+          probe "SIEUiP mirror" "https://timetable.sieup.ru/api/divisions"
+          probe "SPK site"      "https://schedule.surpk.ru/week/"
+          probe "SPK API"       "https://surpk.ru/api/schedule/index"
