@@ -4,16 +4,15 @@
 // Command orbit fetches schedules from sources and writes them as Orbit
 // standard documents.
 //
-//	orbit fetch sieup --out data [--date 2026-11-09]
+//	orbit fetch sieup --out data [--date 2026-11-09] [--weeks 2]
 //	orbit validate file.json...
 //
-// Exit codes: 0 ok, 1 error, 2 bad usage, 3 schedule not published yet.
+// Exit codes: 0 ok, 1 error, 2 bad usage, 3 none of the requested weeks
+// is published yet.
 package main
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -61,7 +60,7 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 
 func usage(w io.Writer) {
 	fmt.Fprintln(w, "usage:")
-	fmt.Fprintln(w, "  orbit fetch sieup --out DIR [--date YYYY-MM-DD] [--base URL]...")
+	fmt.Fprintln(w, "  orbit fetch sieup --out DIR [--date YYYY-MM-DD] [--weeks N] [--base URL]...")
 	fmt.Fprintln(w, "  orbit validate FILE...")
 }
 
@@ -73,7 +72,8 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	fs := flag.NewFlagSet("fetch", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	out := fs.String("out", "", "output directory (required)")
-	date := fs.String("date", "", "any date of the week to fetch, YYYY-MM-DD (default: today in the institution's time zone)")
+	date := fs.String("date", "", "any date of the first week to fetch, YYYY-MM-DD (default: today in the institution's time zone)")
+	weeks := fs.Int("weeks", 1, "how many weeks to fetch, starting from --date (1-4)")
 	// --base may be given several times; the addresses are tried in
 	// order. flag.Func calls the function once per occurrence.
 	var bases []sieup.Base
@@ -92,60 +92,52 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintln(stderr, "--out is required")
 		return exitUsage
 	}
-	if *date == "" {
-		loc, err := time.LoadLocation(sieup.TimeZone)
-		if err != nil {
-			fmt.Fprintln(stderr, err)
-			return exitError
-		}
-		*date = time.Now().In(loc).Format(time.DateOnly)
-	} else if _, err := time.Parse(time.DateOnly, *date); err != nil {
-		fmt.Fprintf(stderr, "--date: want YYYY-MM-DD, got %q\n", *date)
+	if *weeks < 1 || *weeks > 4 {
+		fmt.Fprintf(stderr, "--weeks: want 1 to 4, got %d\n", *weeks)
 		return exitUsage
 	}
-
-	doc, err := sieup.Fetch(ctx, sieup.NewClient(bases...), *date)
-	if errors.Is(err, sieup.ErrNotPublished) {
+	loc, err := time.LoadLocation(sieup.TimeZone)
+	if err != nil {
 		fmt.Fprintln(stderr, err)
+		return exitError
+	}
+	first := time.Now().In(loc)
+	if *date != "" {
+		if first, err = time.ParseInLocation(time.DateOnly, *date, loc); err != nil {
+			fmt.Fprintf(stderr, "--date: want YYYY-MM-DD, got %q\n", *date)
+			return exitUsage
+		}
+	}
+
+	// One client for all weeks: it remembers which address answered.
+	client := sieup.NewClient(bases...)
+	dir := filepath.Join(*out, sieup.Name)
+	st := status{Source: sieup.Name}
+	published := 0
+	for i := range *weeks {
+		day := first.AddDate(0, 0, 7*i).Format(time.DateOnly)
+		res, err := fetchWeek(ctx, client, dir, day, stdout, stderr)
+		if err != nil {
+			// Stop without writing the status: a failed run must not look
+			// like a fresh check. Files already written are complete and
+			// valid, so they may stay.
+			fmt.Fprintf(stderr, "week of %s: %v\n", day, err)
+			return exitError
+		}
+		if res.Result != resultNotPublished {
+			published++
+		}
+		st.Weeks = append(st.Weeks, res)
+	}
+
+	st.CheckedAt = time.Now().In(loc).Format(time.RFC3339)
+	if err := writeJSON(filepath.Join(dir, statusFile), st); err != nil {
+		fmt.Fprintln(stderr, err)
+		return exitError
+	}
+	if published == 0 {
 		return exitNotPublished
 	}
-	if err != nil {
-		fmt.Fprintln(stderr, "fetch:", err)
-		return exitError
-	}
-
-	data, err := json.MarshalIndent(doc, "", "  ")
-	if err != nil {
-		fmt.Fprintln(stderr, err)
-		return exitError
-	}
-	data = append(data, '\n')
-
-	// Never publish a document that does not pass the standard: the last
-	// good file stays in place instead.
-	res, err := standard.Validate(data)
-	if err != nil {
-		fmt.Fprintln(stderr, "validate:", err)
-		return exitError
-	}
-	for _, w := range res.Warnings {
-		fmt.Fprintln(stderr, "warning:", w)
-	}
-	if !res.OK() {
-		for _, e := range res.Errors {
-			fmt.Fprintln(stderr, "error:", e)
-		}
-		fmt.Fprintln(stderr, "document is invalid; nothing written")
-		return exitError
-	}
-
-	path := filepath.Join(*out, sieup.Name, doc.Publication.Period.Start+".json")
-	if err := writeFileAtomic(path, data); err != nil {
-		fmt.Fprintln(stderr, err)
-		return exitError
-	}
-	fmt.Fprintf(stdout, "%s: %d lessons, %d of %d buildings published\n",
-		path, len(doc.Lessons), len(doc.Publication.Coverage.BuildingIDs), len(doc.Buildings))
 	return 0
 }
 
