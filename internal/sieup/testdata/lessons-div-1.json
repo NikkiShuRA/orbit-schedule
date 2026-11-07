@@ -1,0 +1,146 @@
+[
+  {
+    "week_id": "wk-11",
+    "division": {
+      "name": "№1, ул. Примерная, 1",
+      "abb_name": "№1,",
+      "id_1c": "div-1"
+    },
+    "group": {
+      "name": "ИС-25/9",
+      "id_1c": "grp-is",
+      "course": "2",
+      "divisionId": "div-1"
+    },
+    "_id": "l3",
+    "id": "l3",
+    "date": "2026-11-09",
+    "lessonNumber": 2,
+    "timeStart": "10:05",
+    "timeEnd": "11:25",
+    "subgroup": 2,
+    "note": null,
+    "cabinet": {
+      "name": "Спортзал",
+      "number": "101-6",
+      "id_1c": "cab-gym"
+    },
+    "subject": {
+      "name": "Физическая культура",
+      "abb_name": "Физ-ра",
+      "id_1c": "sub-pe"
+    },
+    "teacher": {
+      "name": "ВАКАНСИЯ",
+      "abb_name": "ВАКАНСИЯ",
+      "id_1c": "t-vac"
+    }
+  },
+  {
+    "week_id": "wk-11",
+    "division": {
+      "name": "№1, ул. Примерная, 1",
+      "abb_name": "№1,",
+      "id_1c": "div-1"
+    },
+    "group": {
+      "name": "ИС-25/9",
+      "id_1c": "grp-is",
+      "course": "2",
+      "divisionId": "div-1"
+    },
+    "_id": "l1",
+    "id": "l1",
+    "date": "2026-11-09",
+    "lessonNumber": 1,
+    "timeStart": "08:30",
+    "timeEnd": "09:50",
+    "subgroup": 0,
+    "note": "  Перенос   с 12.11 ",
+    "cabinet": {
+      "name": "Каб. 101",
+      "number": "П-101",
+      "id_1c": "cab-101"
+    },
+    "subject": {
+      "name": "Математика ",
+      "abb_name": "Мат",
+      "id_1c": "sub-math"
+    },
+    "teacher": {
+      "name": "Иванова  Анна Петровна",
+      "abb_name": "Иванова А.П.",
+      "id_1c": "t-1"
+    }
+  },
+  {
+    "week_id": "wk-11",
+    "division": {
+      "name": "№1, ул. Примерная, 1",
+      "abb_name": "№1,",
+      "id_1c": "div-1"
+    },
+    "group": {
+      "name": "ИС-25/9",
+      "id_1c": "grp-is",
+      "course": "2",
+      "divisionId": "div-1"
+    },
+    "_id": "l2",
+    "id": "l2",
+    "date": "2026-11-09",
+    "lessonNumber": 2,
+    "timeStart": "10:05",
+    "timeEnd": "11:25",
+    "subgroup": 1,
+    "note": null,
+    "cabinet": null,
+    "subject": {
+      "name": "",
+      "abb_name": "",
+      "id_1c": "sub-empty"
+    },
+    "teacher": {
+      "name": "Петров Борис Сергеевич",
+      "abb_name": "Петров Б.С.",
+      "id_1c": "t-2"
+    }
+  },
+  {
+    "week_id": "wk-11",
+    "division": {
+      "name": "№1, ул. Примерная, 1",
+      "abb_name": "№1,",
+      "id_1c": "div-1"
+    },
+    "group": {
+      "name": "ИС-25/9",
+      "id_1c": "grp-is",
+      "course": "2",
+      "divisionId": "div-1"
+    },
+    "_id": "l4",
+    "id": "l4",
+    "date": "2026-11-10",
+    "lessonNumber": 7,
+    "timeStart": "18:00",
+    "timeEnd": "19:20",
+    "subgroup": 0,
+    "note": null,
+    "cabinet": {
+      "name": "Каб. 101",
+      "number": "П-101",
+      "id_1c": "cab-101"
+    },
+    "subject": {
+      "name": "Математика",
+      "abb_name": "Мат",
+      "id_1c": "sub-math"
+    },
+    "teacher": {
+      "name": "Иванова Анна Петровна",
+      "abb_name": "Иванова А.П.",
+      "id_1c": "t-1"
+    }
+  }
+]
