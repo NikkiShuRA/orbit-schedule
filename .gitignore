@@ -1,0 +1,28 @@
+# ОС и редакторы
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Окружение и секреты
+.env
+.env.*
+!.env.example
+
+# Зависимости и сборка
+node_modules/
+dist/
+build/
+coverage/
+__pycache__/
+.venv/
+
+# Логи
+*.log
+
+# Claude Code: локальные настройки и рабочие копии
+.claude/settings.local.json
+.claude/worktrees/
+CLAUDE.local.md
