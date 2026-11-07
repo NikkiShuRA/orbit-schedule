@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Orbit contributors
+// SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 // Package standard holds Go types for documents of the Orbit schedule
