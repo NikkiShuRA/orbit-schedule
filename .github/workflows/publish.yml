@@ -75,7 +75,10 @@ jobs:
           git push
 
       - name: Assemble the site
-        run: rsync -a --exclude=.git data/ _site/data/
+        run: |
+          mkdir -p _site
+          rsync -a --exclude=.git data/ _site/data/
+          find _site -type f | sort
 
       - uses: actions/upload-pages-artifact@v3
         if: env.PUBLISH == 'true'
