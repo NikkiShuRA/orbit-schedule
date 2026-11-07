@@ -48,15 +48,18 @@ npm run validate -- examples/valid/college-week.json   # проверить од
 go test ./...                                    # все тесты, включая общие примеры стандарта
 go run ./cmd/orbit fetch sieup --out data        # текущая неделя СИЭУиП → data/sieup/<понедельник>.json
 go run ./cmd/orbit fetch sieup --out data --date 2026-11-09
+go run ./cmd/orbit fetch sieup --out data --weeks 2   # эта и следующая недели; неизменившиеся файлы не перезаписываются
 go run ./cmd/orbit fetch sieup --out data --base https://example.org/api   # свой адрес API вместо встроенных
 go run ./cmd/orbit validate data/sieup/*.json    # проверить документы
 ```
 
-Коды выхода `orbit`: 0 — успех, 1 — ошибка, 2 — неверные аргументы, 3 — расписание ещё не опубликовано.
+Коды выхода `orbit`: 0 — успех, 1 — ошибка, 2 — неверные аргументы, 3 — ни одна из запрошенных недель ещё не опубликована. После успешного `fetch` рядом с документами лежит `status.json` — когда источник проверяли и что вышло с каждой неделей.
 
 Структура: `cmd/orbit` — CLI; `internal/standard` — типы документа и валидатор (схема + ссылки); `internal/sieup` — коннектор СИЭУиП; `standard/schema/embed.go` встраивает схему в Go.
 
 CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck).
+
+Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` раз в час запускает `orbit fetch`, коммитит изменения в ветку `data` и выкладывает данные на Pages (`https://nikkishura.github.io/orbit-schedule/data/`). Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
 
 ## Принципы, которые нельзя нарушать
 

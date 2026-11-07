@@ -1,0 +1,115 @@
+# Fetches schedules on a timer, commits real changes to the data branch
+# and publishes the data to GitHub Pages. See ADR 0004.
+#
+# This file is a thin wrapper around `orbit fetch`: all logic lives in
+# the CLI, so the same thing can run on any server with cron.
+name: Publish
+
+on:
+  schedule:
+    - cron: "17 * * * *" # hourly; :17 avoids the busy top of the hour
+    - cron: "43 2 * * 1" # weekly keepalive, see the keepalive job
+  workflow_dispatch:
+  pull_request:
+    paths: [".github/workflows/publish.yml"]
+
+# Nothing by default; each job asks for what it needs.
+permissions: {}
+
+# Never run two publishes at once: both would push to the data branch.
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    # Only main publishes. Runs from other branches and PRs are dry runs:
+    # they fetch and validate, but push and deploy nothing.
+    if: github.event_name != 'schedule' || github.event.schedule == '17 * * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # push to the data branch
+    env:
+      PUBLISH: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: code
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data
+          persist-credentials: ${{ github.ref == 'refs/heads/main' }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: code/go.mod
+          cache-dependency-path: code/go.sum
+
+      - name: Build orbit
+        working-directory: code
+        run: go build -trimpath -o "$RUNNER_TEMP/orbit" ./cmd/orbit
+
+      - name: Fetch SIEUiP
+        run: |
+          set +e
+          "$RUNNER_TEMP/orbit" fetch sieup --out data --weeks 2
+          code=$?
+          # 3 means nothing is published yet: not a failure.
+          if [ "$code" -ne 0 ] && [ "$code" -ne 3 ]; then exit "$code"; fi
+
+      - name: Commit changes
+        if: env.PUBLISH == 'true'
+        working-directory: data
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No schedule changes."
+            exit 0
+          fi
+          changes="$(git diff --cached --name-status)"
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898283+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Update schedules" -m "$changes"
+          git push
+
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          rsync -a --exclude='.git*' data/ _site/data/
+          find _site -type f | sort
+
+      - uses: actions/upload-pages-artifact@v3
+        if: env.PUBLISH == 'true'
+        with:
+          path: _site
+
+  deploy:
+    needs: fetch
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  # GitHub turns off scheduled workflows in a repository with no activity
+  # for 60 days, which would happen every summer break. Re-enabling the
+  # workflow through the API resets that timer without dummy commits.
+  keepalive:
+    if: github.event_name == 'schedule' && github.event.schedule == '43 2 * * 1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/publish.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
