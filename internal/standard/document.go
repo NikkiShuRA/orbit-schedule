@@ -9,7 +9,7 @@
 package standard
 
 // Version is the version of the standard these types implement.
-const Version = "0.1.0"
+const Version = "0.2.0"
 
 // Document is one publication: the schedule of an institution for a
 // date range.
@@ -50,11 +50,15 @@ type Period struct {
 	End   string `json:"end"`
 }
 
-// Coverage says what the publication is for. Exactly one field is set.
+// Coverage says what the publication is for: either the whole
+// institution, or any mix of the id lists. The lists narrow each other:
+// BuildingIDs ["b-1"] with TeacherIDs ["t-1"] means all lessons of t-1 in
+// b-1. A nil list does not limit anything.
 type Coverage struct {
 	Institution bool     `json:"institution,omitempty"`
 	BuildingIDs []string `json:"buildingIds,omitempty"`
 	GroupIDs    []string `json:"groupIds,omitempty"`
+	TeacherIDs  []string `json:"teacherIds,omitempty"` // since 0.2
 }
 
 type NonWorkingDay struct {

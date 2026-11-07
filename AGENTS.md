@@ -19,10 +19,12 @@
 **Ранняя разработка.** Стек и размещение выбраны в [ADR 0003](docs/decisions/0003-stack-and-hosting.md): коннекторы и серверная часть — **Go**, приложение — **TypeScript**, публикация — GitHub Actions + GitHub Pages, история данных в git.
 
 Что уже есть:
-- черновик 0.1 стандарта данных в `standard/` (JSON Schema, примеры, валидатор на Node.js) и такой же валидатор на Go;
+- черновик 0.2 стандарта данных в `standard/` (JSON Schema, примеры, валидатор на Node.js) и такой же валидатор на Go;
 - коннектор СИЭУиП и CLI `orbit` (см. «Команды»). Основной адрес API СИЭУиП с ноября 2026 недоступен, данные идут с временного резервного зеркала ([#15](https://github.com/NikkiShuRA/orbit-schedule/issues/15)).
 
-Чего ещё нет: автоматической публикации по расписанию, коннектора СПК, приложения. Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
+- публикация по расписанию: раз в час в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)).
+
+Чего ещё нет: нарезки данных для приложения ([#9](https://github.com/NikkiShuRA/orbit-schedule/issues/9)), коннектора СПК, приложения. Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
 
 Правила для кода:
 

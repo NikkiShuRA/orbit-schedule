@@ -1,0 +1,102 @@
+{
+  "$schema": "../../schema/schedule.schema.json",
+  "standardVersion": "0.2.0",
+  "x-comment": "Вымышленные данные. Неделя одного преподавателя, нарезанная из публикации двух корпусов (стандарт 0.2): охват — все пары преподавателя t-1 в корпусах b-1 и b-2. Про его пары в других корпусах ничего не известно.",
+  "institution": {
+    "id": "example-college",
+    "name": "Колледж «Пример»",
+    "timeZone": "Asia/Yekaterinburg"
+  },
+  "publication": {
+    "period": {
+      "start": "2026-11-09",
+      "end": "2026-11-15"
+    },
+    "coverage": {
+      "buildingIds": [
+        "b-1",
+        "b-2"
+      ],
+      "teacherIds": [
+        "t-1"
+      ]
+    }
+  },
+  "provenance": {
+    "connector": {
+      "name": "example-connector",
+      "version": "0.0.1"
+    },
+    "source": {
+      "name": "Вымышленный источник"
+    },
+    "retrievedAt": "2026-11-08T12:00:00+05:00"
+  },
+  "buildings": [
+    {
+      "id": "b-1",
+      "name": "№1, ул. Примерная, 1"
+    },
+    {
+      "id": "b-2",
+      "name": "№2, ул. Образцовая, 2"
+    }
+  ],
+  "groups": [
+    {
+      "id": "g-a",
+      "name": "ИС-25/9",
+      "buildingId": "b-1"
+    },
+    {
+      "id": "g-b",
+      "name": "ЭК-24/1",
+      "buildingId": "b-2"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t-1",
+      "name": "Иванова Анна Петровна",
+      "shortName": "Иванова А. П."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l-1",
+      "date": "2026-11-09",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "b-1",
+      "groups": [
+        {
+          "groupId": "g-a"
+        }
+      ],
+      "teachers": [
+        {
+          "teacherId": "t-1"
+        }
+      ]
+    },
+    {
+      "id": "l-2",
+      "date": "2026-11-11",
+      "period": 3,
+      "start": "12:00",
+      "end": "13:20",
+      "buildingId": "b-2",
+      "groups": [
+        {
+          "groupId": "g-b"
+        }
+      ],
+      "teachers": [
+        {
+          "teacherId": "t-1"
+        }
+      ]
+    }
+  ]
+}
