@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["es2023", "webworker"],
+    "types": ["vite/client"],
+    "exactOptionalPropertyTypes": false
+  },
+  "include": ["src/sw.ts", "src/config.ts"],
+  "exclude": []
+}
