@@ -46,7 +46,7 @@
 
 .when .now {
   background: var(--coral);
-  color: var(--night);
+  color: var(--ink);
 }
 
 .when .next {

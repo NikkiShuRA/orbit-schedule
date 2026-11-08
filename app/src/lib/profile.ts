@@ -35,6 +35,8 @@ export interface Prefs {
   startView: StartView;
   /** My subgroup, by schedule key (see `keyOf`). */
   subgroups: Record<string, number>;
+  /** The side panel on a wide screen, folded away to give the week room. */
+  sideFolded: boolean;
 }
 
 const RECENT = 6;
@@ -94,7 +96,7 @@ export function parsePrefs(raw: unknown): Prefs {
       if (Number.isInteger(n) && (n as number) > 0) subgroups[k] = n as number;
     }
   }
-  return { theme, startView, subgroups };
+  return { theme, startView, subgroups, sideFolded: p.sideFolded === true };
 }
 
 export const profileStore = createStore("orbit.profile.v1", parseProfile);

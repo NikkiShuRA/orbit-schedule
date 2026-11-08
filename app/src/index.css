@@ -42,38 +42,40 @@
 
 :root {
   color-scheme: light dark;
-  /* Brand colors: brand/README.md. Coral fails contrast on white, so on
-     the light theme it is decoration only; text and controls are Night
-     or the darker --coral-text. */
-  --night: #1f2238;
+  /* Brand colors: brand/README.md. Coral is the one accent. The brand's
+     Night (#1f2238) stays in the logo only: in the interface a navy
+     read as heavy, so text, controls and the dark theme are a neutral
+     near-black ink. Coral fails contrast on white, so on the light theme
+     it is decoration only; text is ink or the darker --coral-text. */
+  --ink: #1a1a18;
   --coral: #ff7a59;
 
-  /* The page (--bg) holds one panel (--card); lessons are --surface
-     tiles on it. Neutrals are warm, like paper, around the brand's Night. */
+  /* The page (--bg) holds panels (--card); lessons are --surface tiles
+     on them. Neutrals are warm, like paper. */
   --bg: #f3f3f0;
   --card: #ffffff;
   --surface: #f6f6f3;
-  --text: var(--night);
-  --muted: #5f6172;
+  --text: var(--ink);
+  --muted: #66665f;
   --line: #e8e8e4;
   --fill: #efefeb;
   --fill-strong: #d6d6d0;
-  --accent: var(--night);
+  --accent: var(--ink);
   --on-accent: #ffffff;
   --coral-text: #b4401c;
-  --link: var(--night);
-  --focus: var(--night);
-  --hero-bg: var(--night);
+  --link: var(--ink);
+  --focus: var(--ink);
+  --hero-bg: var(--ink);
   --hero-text: #ffffff;
-  --hero-muted: #b9bcd2;
+  --hero-muted: #b4b4ac;
   --hero-fill: rgb(255 255 255 / 0.1);
   --warn-bg: #fff2ea;
   --warn-line: #ffd6c4;
   --warn-text: #6a2a0f;
   --ok: #1f8f50;
-  --shadow: 0 0 0 1px rgb(31 34 56 / 0.05), 0 1px 2px rgb(31 34 56 / 0.04);
+  --shadow: 0 0 0 1px rgb(40 40 20 / 0.05), 0 1px 2px rgb(40 40 20 / 0.04);
   --shadow-raised:
-    0 0 0 1px rgb(31 34 56 / 0.05), 0 2px 4px rgb(31 34 56 / 0.04), 0 6px 16px rgb(31 34 56 / 0.06);
+    0 0 0 1px rgb(40 40 20 / 0.05), 0 2px 4px rgb(40 40 20 / 0.04), 0 6px 16px rgb(40 40 20 / 0.06);
   --radius-panel: 1.5rem;
   --radius: 0.875rem;
   --radius-small: 0.625rem;
@@ -100,25 +102,25 @@
    settings (data-theme on <html>, set before the first paint). */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0d0f1d;
-    --card: #161a2e;
-    --surface: #1f2340;
-    --text: #f3f3f0;
-    --muted: #a5a9bf;
-    --line: #2a2f4d;
-    --fill: #272c4b;
-    --fill-strong: #3b4166;
+    --bg: #0b0b0a;
+    --card: #161615;
+    --surface: #1f1f1d;
+    --text: #eeeee8;
+    --muted: #97978f;
+    --line: #2a2a27;
+    --fill: #292926;
+    --fill-strong: #3e3e3a;
     --accent: var(--coral);
-    --on-accent: var(--night);
+    --on-accent: var(--ink);
     --coral-text: #ff9b80;
     --link: var(--coral);
     --focus: var(--coral);
-    --hero-bg: #262b4d;
+    --hero-bg: #232321;
     --hero-text: #ffffff;
-    --hero-muted: #b9bcd2;
+    --hero-muted: #a8a8a0;
     --hero-fill: rgb(255 255 255 / 0.08);
-    --warn-bg: #36241f;
-    --warn-line: #573427;
+    --warn-bg: #2e1f17;
+    --warn-line: #52321f;
     --warn-text: #ffd7c9;
     --ok: #4fd18b;
     --shadow: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.3);
@@ -128,25 +130,25 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #0d0f1d;
-  --card: #161a2e;
-  --surface: #1f2340;
-  --text: #f3f3f0;
-  --muted: #a5a9bf;
-  --line: #2a2f4d;
-  --fill: #272c4b;
-  --fill-strong: #3b4166;
+  --bg: #0b0b0a;
+  --card: #161615;
+  --surface: #1f1f1d;
+  --text: #eeeee8;
+  --muted: #97978f;
+  --line: #2a2a27;
+  --fill: #292926;
+  --fill-strong: #3e3e3a;
   --accent: var(--coral);
-  --on-accent: var(--night);
+  --on-accent: var(--ink);
   --coral-text: #ff9b80;
   --link: var(--coral);
   --focus: var(--coral);
-  --hero-bg: #262b4d;
+  --hero-bg: #232321;
   --hero-text: #ffffff;
-  --hero-muted: #b9bcd2;
+  --hero-muted: #a8a8a0;
   --hero-fill: rgb(255 255 255 / 0.08);
-  --warn-bg: #36241f;
-  --warn-line: #573427;
+  --warn-bg: #2e1f17;
+  --warn-line: #52321f;
   --warn-text: #ffd7c9;
   --ok: #4fd18b;
   --shadow: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.3);

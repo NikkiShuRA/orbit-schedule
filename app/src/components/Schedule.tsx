@@ -17,21 +17,20 @@ export function Schedule({
   sel,
   onChange,
   onSeen,
-  onFind,
   onOpen,
   starred,
   mine,
   onStar,
   prefs,
   onPrefs,
+  lead,
+  tail,
 }: {
   sel: Selection;
   /** Choose another schedule, when this one cannot be shown. */
   onChange: () => void;
   /** The schedule was found and is on screen. */
   onSeen: (e: Entry) => void;
-  /** Open search; none when search is already on screen. */
-  onFind: (() => void) | undefined;
   /** Open another schedule, e.g. a teacher's from lesson details. */
   onOpen: (e: Entry) => void;
   starred: boolean;
@@ -39,6 +38,10 @@ export function Schedule({
   onStar: (e: Entry) => void;
   prefs: Prefs;
   onPrefs: (p: Prefs) => void;
+  /** Before the name on a wide screen: the logo when the side panel is folded. */
+  lead: ReactNode;
+  /** After the controls on a wide screen: the profile button. */
+  tail: ReactNode;
 }) {
   const now = useNow();
   const catalog = useJSON<Catalog>(`${sel.source}/catalog.json`);
@@ -109,12 +112,6 @@ export function Schedule({
         >
           <Icon name="star" filled={starred} />
         </button>
-        {onFind && (
-          <button type="button" className={styles.change} onClick={onFind}>
-            <Icon name="swap" />
-            Сменить
-          </button>
-        )}
       </div>
     </div>
   );
@@ -128,6 +125,8 @@ export function Schedule({
         catalogFromCache={catalog.fromCache}
         now={now}
         head={head}
+        lead={lead}
+        tail={tail}
         place={place}
         startView={prefs.startView}
         subgroup={prefs.subgroups[keyOf(sel)]}

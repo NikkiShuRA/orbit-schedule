@@ -1,12 +1,13 @@
 // SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-// The frame of the app. On a wide screen search is always at hand in a
-// side panel and the schedule takes the rest; on a phone the schedule
-// takes the whole screen and search opens over it. Why it is laid out
+// The frame of the app, after «Мой Сиелом». On a wide screen: a card
+// with the logo and a side panel to choose a schedule on the left, the
+// schedule on the right; the panel folds away to give the week room.
+// On a phone the same panel opens from a menu button. Why it is laid out
 // this way: docs/app-design.md.
 
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, type ReactNode, Suspense, useEffect, useState } from "react";
 import styles from "./App.module.css";
 import type { Index } from "./api";
 import logo from "./assets/orbit-logo-ru.svg";
@@ -48,7 +49,7 @@ const SettingsSheet = lazy(() =>
 
 const WIDE = "(min-width: 1024px)";
 
-type Panel = "find" | "profile" | "settings";
+type Panel = "menu" | "profile" | "settings";
 
 const plain = (s: Selection): Selection => ({ source: s.source, kind: s.kind, id: s.id });
 
@@ -93,6 +94,8 @@ export function App() {
   };
   const onStar = (e: Entry) => setProfile(toggleStar(profileStore.get(), e));
   const close = () => setPanel(undefined);
+  const folded = wide && prefs.sideFolded && !!selection;
+  const fold = (sideFolded: boolean) => setPrefs({ ...prefsStore.get(), sideFolded });
 
   const finder = (autoFocus: boolean) =>
     index.kind === "loading" ? (
@@ -114,64 +117,83 @@ export function App() {
       />
     );
 
-  const brand = (
-    <h1 className={styles.brand}>
+  const logoImgs = (
+    <>
       <img className="logo-light" src={logo} alt="Орбита" width="136" height="47" />
       <img className="logo-dark" src={logoDark} alt="Орбита" width="136" height="47" />
-    </h1>
+    </>
   );
-  const actions = (
-    <div className={styles.actions}>
-      {selection && !wide && (
+  const profileButton = (
+    <button
+      type="button"
+      className={`${styles.round} ${styles.me}`}
+      aria-label="Профиль"
+      onClick={() => setPanel("profile")}
+    >
+      <Avatar profile={profile} />
+    </button>
+  );
+  const links = (
+    <div className={styles.links}>
+      <button type="button" className={styles.link} onClick={() => setPanel("settings")}>
+        <Icon name="gear" />
+        Настройки
+      </button>
+      <button type="button" className={styles.link} onClick={() => setPanel("profile")}>
+        <Icon name="person" />
+        Профиль
+      </button>
+      <a className={styles.link} href="https://github.com/NikkiShuRA/orbit-schedule">
+        <Icon name="open" />
+        Исходный код
+      </a>
+      <p className={styles.independent}>Независимый проект, не связан с учебными заведениями.</p>
+    </div>
+  );
+  // The brand card: the way to fold the side panel and to bring it back.
+  const brand = (
+    <div className={styles.brand}>
+      {wide && selection && (
         <button
           type="button"
-          className={styles.action}
-          aria-label="Найти расписание"
-          onClick={() => setPanel("find")}
+          className={styles.round}
+          aria-label={folded ? "Показать панель" : "Скрыть панель"}
+          aria-expanded={!folded}
+          onClick={() => fold(!folded)}
         >
-          <Icon name="search" />
+          <Icon name="sidebar" />
         </button>
       )}
-      <button
-        type="button"
-        className={styles.action}
-        aria-label="Настройки"
-        onClick={() => setPanel("settings")}
-      >
-        <Icon name="gear" />
-      </button>
-      <button
-        type="button"
-        className={`${styles.action} ${styles.me}`}
-        aria-label="Профиль"
-        onClick={() => setPanel("profile")}
-      >
-        <Avatar profile={profile} />
-      </button>
+      <h1 className={styles.logo}>{logoImgs}</h1>
     </div>
   );
 
-  const schedule = selection && (
-    <Schedule
-      key={toSearch(selection)}
-      sel={selection}
-      onChange={() => choose(undefined)}
-      onSeen={onSeen}
-      onFind={wide ? undefined : () => setPanel("find")}
-      onOpen={choose}
-      starred={profile.starred.some((s) => same(s, selection))}
-      mine={same(profile.mine, selection)}
-      onStar={onStar}
-      prefs={prefs}
-      onPrefs={setPrefs}
-    />
-  );
+  const schedule = (lead: ReactNode) =>
+    selection && (
+      <Schedule
+        key={toSearch(selection)}
+        sel={selection}
+        onChange={() => choose(undefined)}
+        onSeen={onSeen}
+        onOpen={choose}
+        starred={profile.starred.some((s) => same(s, selection))}
+        mine={same(profile.mine, selection)}
+        onStar={onStar}
+        prefs={prefs}
+        onPrefs={setPrefs}
+        lead={lead}
+        tail={profileButton}
+      />
+    );
 
   const sheets = (
     <Suspense fallback={null}>
-      {panel === "find" && (
-        <Sheet title="Расписание" onClose={close}>
-          {finder(true)}
+      {panel === "menu" && (
+        <Sheet title="Расписания" onClose={close} side="left">
+          <div className={styles.drawer}>
+            {finder(false)}
+            {links}
+          </div>
         </Sheet>
       )}
       {panel === "profile" && (
@@ -193,33 +215,75 @@ export function App() {
     </Suspense>
   );
 
-  if (wide && selection) {
+  if (wide) {
     return (
-      <div className={styles.shell}>
-        <aside className={styles.side} aria-label="Поиск расписания">
-          <div className={styles.sideHead}>
+      <div className={folded ? `${styles.shell} ${styles.folded}` : styles.shell}>
+        {!folded && (
+          <aside className={styles.side}>
             {brand}
-            {actions}
-          </div>
-          <div className={styles.sideFind}>{finder(false)}</div>
-          <p className={styles.sideNote}>Независимый проект, не связан с учебными заведениями.</p>
-        </aside>
-        <main className={styles.content}>{schedule}</main>
+            <nav className={styles.sidePanel} aria-label="Выбор расписания">
+              <div className={styles.sideFind}>{finder(false)}</div>
+              {links}
+            </nav>
+          </aside>
+        )}
+        <main className={styles.content}>
+          {selection ? (
+            schedule(folded ? brand : null)
+          ) : (
+            <div className={styles.welcome}>
+              <div className={styles.welcomeTop}>{profileButton}</div>
+              <div className={styles.welcomeBody}>
+                <span className={styles.welcomeIcon} aria-hidden="true">
+                  <Icon name="week" />
+                </span>
+                <h2 className={styles.welcomeTitle}>Чьё расписание открыть?</h2>
+                <p className={styles.welcomeText}>
+                  Выберите группу или преподавателя слева: по корпусу и курсу, по букве фамилии или
+                  поиском. Выбор запомнится на этом устройстве.
+                </p>
+              </div>
+            </div>
+          )}
+        </main>
         {sheets}
       </div>
     );
   }
 
+  const menuButton = (
+    <button
+      type="button"
+      className={styles.round}
+      aria-label="Меню"
+      onClick={() => setPanel("menu")}
+    >
+      <Icon name="sidebar" />
+    </button>
+  );
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
         <div className={styles.bar}>
-          {brand}
-          {actions}
+          {selection && menuButton}
+          <h1 className={styles.logo}>{logoImgs}</h1>
+          <span className={styles.spacer} />
+          {selection ? null : (
+            <button
+              type="button"
+              className={styles.round}
+              aria-label="Настройки"
+              onClick={() => setPanel("settings")}
+            >
+              <Icon name="gear" />
+            </button>
+          )}
+          {profileButton}
         </div>
       </header>
       {selection ? (
-        <main className={styles.main}>{schedule}</main>
+        <main className={styles.main}>{schedule(null)}</main>
       ) : (
         <>
           <main className={styles.start}>
@@ -257,7 +321,7 @@ function Avatar({ profile }: { profile: Profile }) {
 
 // The page colors follow the chosen theme; "system" leaves it to the
 // browser. The browser bar color follows too.
-const BAR: Record<Exclude<Theme, "system">, string> = { light: "#f3f3f0", dark: "#0d0f1d" };
+const BAR: Record<Exclude<Theme, "system">, string> = { light: "#f3f3f0", dark: "#0b0b0a" };
 
 function applyTheme(theme: Theme) {
   const root = document.documentElement;

@@ -284,7 +284,9 @@ test("the theme chosen in the settings is applied and remembered", async () => {
   serve(files);
   open("?s=example&g=g-101");
   await screen.findByRole("heading", { name: "Группа 101" });
-  fireEvent.click(screen.getByRole("button", { name: "Настройки" }));
+  fireEvent.click(screen.getByRole("button", { name: "Меню" }));
+  const menu = await screen.findByRole("dialog", { name: "Расписания" });
+  fireEvent.click(within(menu).getByRole("button", { name: "Настройки" }));
   const dialog = await screen.findByRole("dialog", { name: "Настройки" });
   fireEvent.click(within(dialog).getByRole("radio", { name: "Тёмная" }));
   expect(document.documentElement.dataset.theme).toBe("dark");
@@ -297,7 +299,7 @@ test("search moves through results with arrows and opens the first with Enter", 
   serve(files);
   open("");
   const input = await screen.findByLabelText("Группа или преподаватель");
-  await screen.findAllByRole("button", { name: /^101/ });
+  await screen.findByRole("button", { name: "Группы" });
   fireEvent.change(input, { target: { value: "Иван" } });
   fireEvent.keyDown(input, { key: "ArrowDown" });
   expect(document.activeElement?.textContent).toMatch(/Иванов/);
@@ -313,4 +315,20 @@ test("my subgroup hides the other's lessons and says how many", async () => {
   expect(screen.getByText(/Показана 1 подгруппа · скрыто пар других: \d+/)).toBeDefined();
   fireEvent.click(within(choice).getByRole("button", { name: "Все" }));
   expect(screen.queryByText(/скрыто пар других/)).toBeNull();
+});
+
+test("the side panel lists groups by building and course, opening where the group is", async () => {
+  screenWidth(true);
+  serve(files);
+  open("?s=example&g=g-101");
+  const side = await screen.findByRole("navigation", { name: "Выбор расписания" });
+  const here = await within(side).findByRole("button", { name: /^101/ });
+  expect(here.getAttribute("aria-current")).toBe("page");
+  fireEvent.click(within(side).getByRole("button", { name: "Преподаватели" }));
+  expect(within(side).getByRole("list", { name: "Первая буква фамилии" })).toBeDefined();
+  fireEvent.click(screen.getByRole("button", { name: "Скрыть панель" }));
+  expect(screen.queryByRole("navigation", { name: "Выбор расписания" })).toBeNull();
+  expect(JSON.parse(localStorage.getItem("orbit.prefs.v1") ?? "{}").sideFolded).toBe(true);
+  fireEvent.click(screen.getByRole("button", { name: "Показать панель" }));
+  expect(screen.getByRole("navigation", { name: "Выбор расписания" })).toBeDefined();
 });

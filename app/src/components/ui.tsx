@@ -52,12 +52,15 @@ export function Sheet({
   onClose,
   children,
   wide = false,
+  side = "right",
 }: {
   title: ReactNode;
   onClose: () => void;
   children: ReactNode;
   /** Wider panel, for lesson details with long names. */
   wide?: boolean;
+  /** "left": slides from the left edge on every screen, like a menu. */
+  side?: "left" | "right";
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -75,7 +78,9 @@ export function Sheet({
   return (
     <dialog
       ref={ref}
-      className={`${styles.sheet} ${wide ? styles.sheetWide : ""}`}
+      className={[styles.sheet, wide && styles.sheetWide, side === "left" && styles.sheetLeft]
+        .filter(Boolean)
+        .join(" ")}
       aria-labelledby={titleId}
       onClose={onClose}
       onCancel={(e) => {

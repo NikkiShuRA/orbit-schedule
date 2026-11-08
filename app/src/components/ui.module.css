@@ -84,7 +84,7 @@
 }
 
 .sheet::backdrop {
-  background: rgb(13 15 29 / 0.45);
+  background: rgb(0 0 0 / 0.5);
 }
 
 .sheetInner {
@@ -165,5 +165,32 @@
 
   .sheetInner {
     height: 100%;
+  }
+}
+
+/* From the left edge, full height, on any screen: the menu with the
+   side panel on a phone. */
+.sheet.sheetLeft {
+  width: min(22rem, 90vw);
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0 auto 0 0;
+  border-radius: 0 1.5rem 1.5rem 0;
+}
+
+.sheetLeft .sheetInner {
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet.sheetLeft[open] {
+    animation: slide 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(-2rem);
+    opacity: 0;
   }
 }

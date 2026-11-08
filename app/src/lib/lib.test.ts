@@ -6,6 +6,7 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { catalog, groupWeek, teacherWeek } from "../testdata";
 import { ago, isStale } from "./age";
+import { badgeOf, groupLevel, letters, pathTo, teachersBy } from "./browse";
 import {
   daySpan,
   initials,
@@ -37,7 +38,7 @@ import {
   visit,
 } from "./profile";
 import { buildWeek, coverageState, findNow, type LessonView, lessonTime } from "./schedule";
-import { browse, search } from "./search";
+import { search } from "./search";
 import { fromSearch, loadSaved, save, toSearch } from "./selection";
 
 describe("dates", () => {
@@ -333,7 +334,7 @@ describe("profile", () => {
     ).toEqual({ starred: [], recent: [a] });
     expect(
       parsePrefs({ theme: "pink", startView: "week", subgroups: { k: 2, j: -1, z: "1" } }),
-    ).toEqual({ theme: "system", startView: "week", subgroups: { k: 2 } });
+    ).toEqual({ theme: "system", startView: "week", subgroups: { k: 2 }, sideFolded: false });
   });
 
   test("the first visit becomes mine; recent is newest first without repeats", () => {
@@ -357,30 +358,69 @@ describe("profile", () => {
 });
 
 describe("browse", () => {
-  test("groups by course and teachers by letter, in natural order", () => {
-    const parts = browse(
-      {
-        ...catalog,
-        groups: [
-          { id: "g10", name: "10", course: 2 },
-          { id: "g9", name: "9", course: 2 },
-          { id: "g1", name: "1", course: 1 },
-        ],
-        teachers: [
-          { id: "t1", name: "Смирнова А. А." },
-          { id: "t2", name: "Андреев Б. Б." },
-        ],
-      },
-      "all",
-    );
-    expect(parts.map((p) => [p.title, p.items.map((i) => i.title)])).toEqual([
-      ["1 курс", ["1"]],
-      ["2 курс", ["9", "10"]],
-      ["Преподаватели · А", ["Андреев Б. Б."]],
-      ["Преподаватели · С", ["Смирнова А. А."]],
+  const cat = {
+    ...catalog,
+    buildings: [
+      { id: "b1", name: "№1, Маяковского 16/1" },
+      { id: "b7", name: "№7, Пролетарский,3" },
+    ],
+    groups: [
+      { id: "g10", name: "ИС-10", course: 2, buildingId: "b7" },
+      { id: "g9", name: "ИС-9", course: 2, buildingId: "b7" },
+      { id: "g1", name: "ИС-1", course: 1, buildingId: "b7" },
+      { id: "g2", name: "БУ-2", course: 1, buildingId: "b1" },
+      { id: "g0", name: "Х-0" },
+    ],
+    teachers: [
+      { id: "t1", name: "Смирнова А. А." },
+      { id: "t2", name: "Андреев Б. Б." },
+      { id: "t3", name: "Аксёнов В. В." },
+    ],
+  };
+
+  test("buildings, then courses, then groups in natural order; none is guessed", () => {
+    const top = groupLevel(cat, {});
+    expect(top.kind === "places" && top.places.map((p) => [p.name, p.count])).toEqual([
+      ["№1, Маяковского 16/1", 1],
+      ["№7, Пролетарский,3", 3],
+      ["Без корпуса", 1],
     ]);
-    expect(
-      browse(catalog, "teacher").every((p) => p.items.every((i) => i.kind === "teacher")),
-    ).toBe(true);
+    const courses = groupLevel(cat, { place: "b7" });
+    expect(courses.kind === "courses" && courses.courses).toEqual([
+      { course: 1, count: 1 },
+      { course: 2, count: 2 },
+    ]);
+    const groups = groupLevel(cat, { place: "b7", course: 2 });
+    expect(groups.kind === "groups" && groups.groups.map((g) => g.name)).toEqual(["ИС-9", "ИС-10"]);
+    // One course in a building: that step is skipped.
+    const one = groupLevel(cat, { place: "b1" });
+    expect(one.kind === "groups" && one.groups.map((g) => g.name)).toEqual(["БУ-2"]);
+  });
+
+  test("the list opens where the current group is", () => {
+    expect(pathTo(cat, { source: "x", kind: "group", id: "g9" })).toEqual({
+      place: "b7",
+      course: 2,
+    });
+    expect(pathTo(cat, { source: "x", kind: "group", id: "g2" })).toEqual({ place: "b1" });
+    expect(pathTo(cat, undefined)).toEqual({});
+  });
+
+  test("teachers by first letter", () => {
+    expect(letters(cat)).toEqual([
+      { letter: "А", count: 2 },
+      { letter: "С", count: 1 },
+    ]);
+    expect(teachersBy(cat, "А").map((t) => t.name)).toEqual(["Аксёнов В. В.", "Андреев Б. Б."]);
+  });
+
+  test("a short code is taken off a name for its badge", () => {
+    expect(badgeOf("ИС-23/9-2")).toEqual({ badge: "ИС", rest: "23/9-2" });
+    expect(badgeOf("№7, Пролетарский,3")).toEqual({ badge: "№7", rest: "Пролетарский,3" });
+    expect(badgeOf("(СП-2) Отделение строительства")).toEqual({
+      badge: "СП-2",
+      rest: "Отделение строительства",
+    });
+    expect(badgeOf("301")).toEqual({ rest: "301" });
   });
 });

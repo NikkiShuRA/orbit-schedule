@@ -80,6 +80,8 @@ export function Calendar({
   catalogFromCache,
   now,
   head,
+  lead,
+  tail,
   place,
   startView,
   subgroup,
@@ -93,6 +95,8 @@ export function Calendar({
   now: Date;
   /** The name of the schedule with its buttons. */
   head: ReactNode;
+  lead: ReactNode;
+  tail: ReactNode;
   /** The institution's short name. */
   place: string;
   startView: StartView;
@@ -241,8 +245,10 @@ export function Calendar({
     <div className={wide ? undefined : tabs ? styles.withDockTall : styles.withDock}>
       {wide ? (
         <div className={styles.top}>
-          {head}
+          {lead}
+          <div className={styles.topHead}>{head}</div>
           {toolbar}
+          {tail}
         </div>
       ) : (
         head

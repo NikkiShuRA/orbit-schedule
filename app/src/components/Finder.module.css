@@ -4,11 +4,10 @@
 .finder {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
   min-height: 0;
 }
 
-/* The field and filters stay on top while the list scrolls. */
+/* The tabs, the field and the kinds stay on top while the list scrolls. */
 .controls {
   position: sticky;
   top: 0;
@@ -16,12 +15,68 @@
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.6rem;
   background: var(--card);
 }
 
-.sources,
-.filters {
+/* "Моё / Все расписания" and "Группы / Преподаватели": segmented. */
+.tabs,
+.kinds {
+  margin: 0;
+  padding: 0.2rem;
+  border: 0;
+  min-inline-size: 0;
+  display: flex;
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.tabs button,
+.kinds button {
+  flex: 1;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.tabs button:hover,
+.kinds button:hover {
+  color: var(--text);
+}
+
+.tabs button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.kinds {
+  background: transparent;
+  padding: 0;
+  gap: 0.3rem;
+}
+
+.kinds button {
+  flex: 0 1 auto;
+  padding: 0.3rem 0.85rem;
+  background: var(--surface);
+}
+
+.kinds button[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--card);
+}
+
+.sources {
   margin: 0;
   padding: 0;
   border: 0;
@@ -31,36 +86,30 @@
   gap: 0.35rem;
 }
 
-.sourceChip,
-.filter {
+.sourceChip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 2.25rem;
-  padding: 0.3rem 0.85rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
   border: 0;
   border-radius: 999px;
-  background: var(--surface);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line);
   color: var(--muted);
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s;
 }
 
-.sourceChip:hover,
-.filter:hover {
-  background: var(--fill);
+.sourceChip:hover {
   color: var(--text);
 }
 
-.sourceChip[aria-pressed="true"],
-.filter[aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--on-accent);
+.sourceChip[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1.5px var(--text);
+  color: var(--text);
 }
 
 .field {
@@ -69,10 +118,10 @@
 
 .fieldIcon {
   position: absolute;
-  left: 0.95rem;
+  left: 0.85rem;
   top: 50%;
   translate: 0 -50%;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: var(--muted);
   pointer-events: none;
 }
@@ -80,9 +129,9 @@
 .input {
   width: 100%;
   font: inherit;
-  font-size: 1rem;
-  min-height: 3rem;
-  padding: 0.65rem 1rem 0.65rem 2.75rem;
+  font-size: 0.9375rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem 0.55rem 2.5rem;
   border: 0;
   border-radius: var(--radius);
   background: var(--surface);
@@ -98,7 +147,7 @@
 }
 
 .input:focus {
-  box-shadow: inset 0 0 0 1.5px var(--accent);
+  box-shadow: inset 0 0 0 1.5px var(--coral);
 }
 
 .input:focus-visible {
@@ -115,24 +164,70 @@
   font-size: 0.9375rem;
 }
 
+/* Where you are: "‹ Корпуса / №7, Пролетарский,3 / 4 курс". */
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.35rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.crumbPart {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.back {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.back:hover {
+  background: var(--fill);
+}
+
+.crumb {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.crumb:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.crumbHere {
+  color: var(--text);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
 .section + .section {
   margin-top: 0.85rem;
 }
 
 .sectionTitle {
-  display: flex;
-  align-items: baseline;
-  gap: 0.4rem;
   margin: 0.4rem 0.35rem 0.3rem;
   font-size: 0.8125rem;
   font-weight: 700;
   color: var(--muted);
-}
-
-.count {
-  font-family: var(--font-ui);
-  font-weight: 500;
-  font-size: 0.75rem;
 }
 
 .rows {
@@ -152,9 +247,9 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  min-height: 3.25rem;
-  padding: 0.45rem 3rem 0.45rem 0.5rem;
+  gap: 0.7rem;
+  min-height: 3rem;
+  padding: 0.35rem 2.75rem 0.35rem 0.4rem;
   border: 0;
   border-radius: var(--radius-small);
   background: transparent;
@@ -176,27 +271,45 @@
 
 .row[aria-current="page"] {
   background: var(--surface);
-  box-shadow: inset 3px 0 0 var(--coral);
 }
 
-.avatar {
+/* Steps have no star: the chevron sits at the edge. */
+.step {
+  padding-right: 0.6rem;
+}
+
+/* A short code in a box: "ИС", "№7", or initials. */
+.badge {
   flex: none;
   display: grid;
   place-items: center;
-  width: 2.25rem;
+  min-width: 2.25rem;
   height: 2.25rem;
-  border-radius: 0.65rem;
+  padding: 0 0.35rem;
+  border-radius: 0.6rem;
   background: var(--fill);
-  color: var(--muted);
+  color: var(--text);
   font-size: 0.75rem;
   font-weight: 800;
+  white-space: nowrap;
 }
 
-.avatar svg {
-  font-size: 1.1rem;
+.badge svg {
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+.row[aria-current="page"] .badge {
+  background: var(--coral);
+  color: var(--ink);
+}
+
+.initials {
+  color: var(--muted);
 }
 
 .text {
+  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -216,6 +329,16 @@
   white-space: nowrap;
 }
 
+.count {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.chevron {
+  color: var(--muted);
+}
+
 .mark {
   background: color-mix(in srgb, var(--coral) 30%, transparent);
   color: inherit;
@@ -228,13 +351,13 @@
   right: 0.25rem;
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   border: 0;
   border-radius: 50%;
   background: transparent;
   color: var(--fill-strong);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   cursor: pointer;
   transition:
     color 0.15s,
@@ -248,6 +371,67 @@
 
 .star[aria-pressed="true"] {
   color: var(--coral);
+}
+
+/* Letters of teachers' surnames as a grid of keys. */
+.letters {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3rem, 1fr));
+  gap: 0.35rem;
+}
+
+.letter {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  padding: 0.45rem 0.25rem;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.letter:hover,
+.letter:focus-visible {
+  background: var(--fill);
+}
+
+.letterCount {
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.empty {
+  padding: 1rem 0.5rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty p {
+  margin: 0 0 0.75rem;
+}
+
+.emptyButton {
+  min-height: 2.5rem;
+  padding: 0.4rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
 }
 
 /* Read by screen readers, not shown. */

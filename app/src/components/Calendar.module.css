@@ -252,9 +252,12 @@
   margin: 0.25rem 0 0.75rem;
 }
 
-.top > :first-child {
+.topHead {
   flex: 1 1 18rem;
   min-width: 0;
+}
+
+.topHead > * {
   margin: 0;
 }
 
@@ -446,7 +449,7 @@
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
   background: var(--coral);
-  color: var(--night);
+  color: var(--ink);
 }
 
 .summary {
@@ -778,7 +781,7 @@
 .gridHeadToday .gridDate {
   border-radius: 50%;
   background: var(--coral);
-  color: var(--night);
+  color: var(--ink);
 }
 
 .gridHeadToday .gridWeekday {

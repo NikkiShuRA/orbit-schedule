@@ -158,7 +158,7 @@
 
 .live {
   background: var(--coral);
-  color: var(--night);
+  color: var(--ink);
 }
 
 .live::before {
