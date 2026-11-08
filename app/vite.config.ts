@@ -28,21 +28,23 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts",
       injectRegister: "script-defer",
-      registerType: "prompt",
+      registerType: "autoUpdate",
       injectManifest: {
-        globPatterns: ["**/*.{html,js,css,svg,png,webmanifest}"],
+        globPatterns: ["**/*.{html,js,css,svg,png,webmanifest,woff2}"],
       },
       manifest: {
         name: "Orbit — расписание",
         short_name: "Orbit",
         description: "Расписание колледжей и вузов. Независимый проект.",
         lang: "ru",
+        id: "./",
         start_url: "./",
         scope: "./",
         display: "standalone",
+        categories: ["education", "productivity"],
         // Colors and icons: brand/README.md.
-        background_color: "#1f2238",
-        theme_color: "#1f2238",
+        background_color: "#0b0b0a",
+        theme_color: "#0b0b0a",
         icons: [
           { src: "icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
           { src: "icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

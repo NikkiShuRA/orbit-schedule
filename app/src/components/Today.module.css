@@ -1,0 +1,149 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* Read like a departure board: the countdown and the room are the
+   largest things here, because they are what people act on. */
+.hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  margin: 0 0 1rem;
+  border-radius: 1.25rem;
+  background: var(--hero-bg);
+  color: var(--hero-text);
+}
+
+.block {
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+/* Blocks stack on a phone and stand side by side on a wide screen;
+   the line between them follows. */
+.block + .block {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12);
+}
+
+@media (min-width: 640px) {
+  .block + .block {
+    box-shadow: inset 1px 0 0 rgb(255 255 255 / 0.12);
+  }
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.label {
+  margin: 0 0 0.4rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--hero-muted);
+}
+
+.countdown {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--coral);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.done {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.slot + .slot {
+  margin-top: 0.9rem;
+}
+
+.subject {
+  margin: 0;
+  font-size: 1.1875rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.time {
+  margin: 0.2rem 0 0;
+  font-size: 0.875rem;
+  color: var(--hero-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.places {
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0;
+}
+
+.place {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.1rem 0.6rem;
+}
+
+.place + .place {
+  margin-top: 0.35rem;
+}
+
+.subgroup {
+  font-size: 0.8125rem;
+  font-weight: 650;
+  padding: 0.05rem 0.45rem;
+  border-radius: 0.4rem;
+  background: var(--hero-fill);
+}
+
+.rowSubject {
+  flex-basis: 100%;
+  font-weight: 650;
+}
+
+.room {
+  font-size: 1.375rem;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.who {
+  font-size: 0.875rem;
+  color: var(--hero-muted);
+}
+
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.progress {
+  flex: 1;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: var(--hero-fill);
+  overflow: hidden;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--coral);
+  transition: width 0.6s ease;
+}
+
+.left {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--coral);
+  white-space: nowrap;
+}

@@ -1,0 +1,280 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.me {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.25rem 0 0.75rem;
+}
+
+.me p {
+  margin: 0;
+}
+
+.bigAvatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.bigAvatar svg {
+  font-size: 1.6rem;
+}
+
+.meName {
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.note {
+  margin: 0 0 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-small);
+  background: var(--surface);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.text {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.group {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-right: 0.4rem;
+}
+
+.entry + .entry {
+  border-top: 1px solid var(--line);
+}
+
+.entryOpen {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.entryOpen:hover {
+  background: var(--fill);
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.65rem;
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.entryText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.entryName {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.small,
+.wide,
+.danger {
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 650;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.small {
+  padding: 0.35rem 0.8rem;
+  background: var(--fill);
+  color: var(--text);
+}
+
+.wide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.wide:hover,
+.small:hover {
+  background: var(--fill);
+}
+
+.danger {
+  padding: 0.5rem 1rem;
+  background: var(--warn-text);
+  color: var(--warn-bg);
+}
+
+.icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--coral);
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.icon:hover {
+  background: var(--fill);
+}
+
+.confirm {
+  padding: 0.75rem 0.85rem;
+  border-radius: var(--radius-small);
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.confirm p {
+  margin: 0 0 0.6rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.9375rem;
+}
+
+.choice {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.choiceLabel {
+  padding: 0;
+  margin-bottom: 0.4rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.segments {
+  display: flex;
+  padding: 0.2rem;
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.segment {
+  position: relative;
+  flex: 1;
+  display: grid;
+}
+
+.segment input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segment span {
+  display: grid;
+  place-items: center;
+  min-height: 2.4rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.segment input:checked + span {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.segment input:focus-visible + span {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

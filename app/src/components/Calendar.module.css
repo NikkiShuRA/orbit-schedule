@@ -1,0 +1,1028 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* ── Freshness ─────────────────────────────────────────────── */
+
+.fresh {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent);
+}
+
+.freshWarn {
+  color: var(--text);
+}
+
+.freshWarn .dot {
+  background: var(--coral);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--coral) 25%, transparent);
+}
+
+/* ── Toolbar: today, period, view ──────────────────────────── */
+
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0.25rem 0 1rem;
+}
+
+.todayButton {
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: inherit;
+  min-height: 2.5rem;
+  padding: 0.4rem 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition:
+    box-shadow 0.15s,
+    opacity 0.15s;
+}
+
+.todayButton:hover:not(:disabled) {
+  box-shadow: var(--shadow-raised);
+}
+
+.todayButton:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  background: transparent;
+  cursor: default;
+}
+
+.nav {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.iconButton {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  color: inherit;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.iconButton:hover {
+  background: var(--fill);
+}
+
+.navLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.navMain {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.navSub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: pre;
+}
+
+.views {
+  display: flex;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  min-inline-size: 0;
+}
+
+.views button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--muted);
+  min-height: 2.25rem;
+  padding: 0.3rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.views button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.back {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: var(--coral-text);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Phone: one line. The period in the middle, the view as two icons;
+   the "today" button gives way to the link under the date. */
+@media (max-width: 639px) {
+  .todayButton,
+  .awaySub {
+    display: none;
+  }
+
+  .views button {
+    padding: 0.3rem 0.7rem;
+    font-size: 1.15rem;
+  }
+
+  .viewLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 640px) {
+  .back {
+    display: none;
+  }
+}
+
+/* Wide: like a calendar app. Today and the period on the left, the
+   view on the right, where it is looked for. */
+@media (min-width: 640px) {
+  .nav {
+    flex: 0 1 auto;
+  }
+
+  .navLabel {
+    min-width: 11rem;
+  }
+
+  .views {
+    margin-left: auto;
+  }
+}
+
+/* ── Day tabs ──────────────────────────────────────────────── */
+
+.tabsWrap {
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto 1rem;
+}
+
+/* On a phone the days and the arrows sit at the bottom, under the
+   thumb: switching days is the most frequent action. */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  padding: 0.5rem max(0.6rem, env(safe-area-inset-right, 0px))
+    calc(0.5rem + env(safe-area-inset-bottom, 0px)) max(0.6rem, env(safe-area-inset-left, 0px));
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: saturate(1.6) blur(16px);
+  backdrop-filter: saturate(1.6) blur(16px);
+}
+
+.dock .toolbar {
+  margin: 0;
+}
+
+.dockTabs {
+  margin: 0 0 0.45rem;
+}
+
+.withDock {
+  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.withDockTall {
+  padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* On a wide screen the name and the controls share one row. */
+.top {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topHead {
+  flex: 1 1 18rem;
+  min-width: 10rem;
+}
+
+.topHead > * {
+  margin: 0;
+}
+
+/* In the top bar the name keeps to one line, as the bar has a fixed height. */
+.topHead h2 {
+  overflow: hidden;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* In the top bar the place line stays one line: the place shrinks with
+   "…", the chips keep their size. */
+.topHead p {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.topHead p > * {
+  flex: none;
+}
+
+.topHead p > :first-child {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topHead p > :first-child svg {
+  margin-right: 0.35rem;
+  vertical-align: -0.125em;
+}
+
+/* On a middle-sized screen "День / Неделя" keep their icons only, so the
+   name keeps its room; the words stay for screen readers. */
+@media (max-width: 1279px) {
+  .top .navLabel {
+    min-width: 9rem;
+  }
+
+  .top .viewLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.top .toolbar {
+  margin: 0;
+}
+
+/* ── My subgroup: one small choice ───────────────────────── */
+
+.subPick {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.5rem;
+  padding: 0 0.75rem 0 0.9rem;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.panel > .subPick {
+  margin: 0 0 0.75rem;
+}
+
+.subOn {
+  box-shadow: inset 0 0 0 1.5px var(--coral);
+}
+
+.subLabel {
+  color: var(--muted);
+}
+
+/* The native list: right for a phone, readable by screen readers. */
+.subSelect {
+  padding: 0 1.1rem 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.subSelect:focus-visible {
+  outline: none;
+}
+
+.subPick:has(.subSelect:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.subSelect option {
+  background: var(--card);
+  color: var(--text);
+}
+
+.subChevron {
+  position: absolute;
+  right: 0.7rem;
+  rotate: 90deg;
+  font-size: 0.85rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.subNote {
+  margin: 0 0 0.85rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-small);
+  background: var(--surface);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.subAll {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+/* ── The panel that holds the schedule ────────────────────── */
+
+.panel {
+  padding: 1rem;
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+/* On a wide screen the main card is laid out as in «Мой Сиелом»: a status
+   bar on top, and under it one area that scrolls both ways, with the
+   week down to the card's bottom. */
+.fill {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.statusBar {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.statusBar .fresh {
+  margin: 0;
+  font-size: inherit;
+}
+
+.statusChanged {
+  font-variant-numeric: tabular-nums;
+}
+
+.scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+/* On a phone the same content simply flows down the page. */
+.flow {
+  display: contents;
+}
+
+.panelFlat {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+@media (max-width: 639px) {
+  .panel {
+    margin: 0 -0.5rem;
+    padding: 1rem 0.75rem;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.tab {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  font: inherit;
+  color: var(--muted);
+  padding: 0.4rem 0.2rem 0.45rem;
+  border: 0;
+  border-radius: 0.9rem;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.tab:hover {
+  background: var(--fill);
+}
+
+.tab[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tabToday:not([aria-selected="true"]) {
+  box-shadow: inset 0 0 0 1.5px var(--coral);
+}
+
+.tabDay {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tabDate {
+  font-size: 1.1875rem;
+  font-weight: 800;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.tab:not([aria-selected="true"]) .tabDate {
+  color: var(--text);
+}
+
+.tabToday:not([aria-selected="true"]) .tabDate,
+.tabToday:not([aria-selected="true"]) .tabDay {
+  color: var(--coral-text);
+}
+
+.dots {
+  display: flex;
+  gap: 2px;
+  height: 4px;
+}
+
+.dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* ── Day: a timeline ───────────────────────────────────────── */
+
+.dayPanel {
+  max-width: 44rem;
+  margin: 0 auto;
+  touch-action: pan-y;
+}
+
+.dayHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0 0 1.1rem;
+}
+
+.dayTitle {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.dayDate {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 650;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--coral);
+  color: var(--ink);
+}
+
+.summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline {
+  --time: 3.4rem;
+  --rail: 1.25rem;
+  --label: 1.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.timeline > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--time) var(--rail) minmax(0, 1fr);
+  column-gap: 0.5rem;
+}
+
+/* The rail runs through the day, from the first node to the last. */
+.timeline > li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--time) + 0.5rem + var(--rail) / 2 - 1px);
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline > li:first-child::before {
+  top: calc(1.1rem + var(--label));
+}
+
+.timeline > li:last-child::before {
+  bottom: calc(100% - 1.1rem - var(--label));
+}
+
+.item {
+  padding-bottom: 0.8rem;
+}
+
+.itemTime {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: calc(0.85rem + var(--label));
+  line-height: 1.25;
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.start {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.end {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* The period number lives with the time: students name lessons by it
+   ("на третьей"), and the card stays for what and where. */
+/* "2 пара" over the card; the time and the node line up with the card. */
+.periodNo {
+  display: flex;
+  align-items: center;
+  height: var(--label);
+  padding-left: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.node {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  margin-top: calc(0.85rem + var(--label));
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  background: var(--bg);
+}
+
+/* The part of the day that is over is drawn in coral along the rail:
+   the day's progress at a glance. */
+.timeline > .item[data-state="past"]::before {
+  background: var(--coral);
+}
+
+.item[data-state="past"] .node {
+  border-color: var(--coral);
+  background: var(--coral);
+}
+
+.item[data-state="next"] .node {
+  border-color: var(--accent);
+}
+
+.item[data-state="now"] .node {
+  border-color: var(--coral);
+  background: var(--coral);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--coral) 25%, transparent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--coral) 10%, transparent);
+  }
+}
+
+.item[data-state="past"] .itemTime {
+  opacity: 0.55;
+}
+
+.itemBody {
+  min-width: 0;
+}
+
+/* A free window: the rail turns dashed, the time it gives is named. */
+.gap {
+  padding: 0.1rem 0 0.9rem;
+}
+
+.timeline > .gap::before {
+  background: repeating-linear-gradient(var(--line) 0 4px, transparent 4px 8px);
+}
+
+.gapText {
+  grid-column: 3;
+  justify-self: start;
+  padding: 0.25rem 0.7rem;
+  border: 1.5px dashed var(--line);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* Now, between lessons: a coral line, as in calendar apps. */
+.now {
+  align-items: center;
+  padding: 0 0 0.8rem;
+}
+
+.nowTime {
+  justify-self: end;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--coral-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.now::after {
+  content: "";
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  z-index: 1;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+.nowLine {
+  grid-column: 3;
+  grid-row: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--coral);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  background: color-mix(in srgb, var(--coral) 16%, transparent);
+  color: var(--coral-text);
+}
+
+/* ── Week on a phone: a list of days ───────────────────────── */
+
+.agendaDay + .agendaDay {
+  margin-top: 1.5rem;
+}
+
+.agendaHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+  padding: 0 0.15rem;
+}
+
+.agendaTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 650;
+}
+
+.agendaCount {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.agendaEmpty {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.agendaList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+/* ── Week on a wide screen: a grid of periods ──────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--days), minmax(12.5rem, 1fr));
+  grid-template-rows: auto repeat(var(--rows), auto);
+  align-content: start;
+  gap: 0.375rem;
+}
+
+/* A day is a column of its own; its rows are the grid's rows, so the
+   same period lines up across the week. */
+.gridDay {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: subgrid;
+  padding: 0.375rem;
+  margin: -0.375rem 0;
+  border-radius: 1.125rem;
+}
+
+.gridDayToday {
+  background: color-mix(in srgb, var(--coral) 8%, var(--card));
+}
+
+/* The day's name stays on top while the week scrolls. */
+.gridHead {
+  position: sticky;
+  top: -0.5rem;
+  z-index: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 0 0 0.125rem;
+  font-size: 1rem;
+  background: var(--card);
+}
+
+.gridDayToday .gridHead {
+  background: color-mix(in srgb, var(--coral) 8%, var(--card));
+}
+
+.gridHeadButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.45rem;
+  font: inherit;
+  color: inherit;
+  padding: 0.35rem 0.5rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.gridHeadButton:hover {
+  background: var(--fill);
+}
+
+.gridWeekday {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.gridDate {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gridMonth {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.gridHeadToday .gridDate {
+  border-radius: 50%;
+  background: var(--coral);
+  color: var(--ink);
+}
+
+.gridHeadToday .gridWeekday {
+  color: var(--coral-text);
+}
+
+/* A free period between lessons. */
+.gridFree {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  border: 1px dashed var(--fill-strong);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.gridFreeNo {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gridCell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.gridEmpty {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.gridEmpty p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.legend {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.legendSample {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+}
+
+/* ── Misc ──────────────────────────────────────────────────── */
+
+.changed {
+  margin: 1.5rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Read by screen readers, not shown. */
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

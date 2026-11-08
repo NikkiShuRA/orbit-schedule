@@ -1,0 +1,174 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.when {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.when p {
+  margin: 0;
+}
+
+.date {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.time {
+  margin-top: 0.15rem;
+  font-family: var(--font-ui);
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.time .muted {
+  font-family: var(--font);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.when .state {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  background: var(--fill);
+}
+
+.when .now {
+  background: var(--coral);
+  color: var(--ink);
+}
+
+.when .next {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.when .past {
+  color: var(--muted);
+}
+
+.when .bells {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  margin-top: 0.6rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.when .bells svg {
+  flex: none;
+  margin-top: 0.15rem;
+}
+
+.part {
+  margin-top: 1rem;
+}
+
+.part + .part {
+  padding-top: 1rem;
+  border-top: 1px dashed var(--fill-strong);
+}
+
+.subgroup {
+  display: inline-flex;
+  margin: 0 0 0.5rem;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--card);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.facts {
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.fact dt {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.fact dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.room {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 0.45rem;
+  box-shadow: inset 0 0 0 1px var(--fill-strong);
+  font-weight: 800;
+}
+
+.people {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+/* A name that opens that person's or group's schedule. */
+.link {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--fill-strong);
+  text-underline-offset: 0.2em;
+}
+
+.link:hover {
+  text-decoration-color: currentColor;
+}
+
+.linkHint {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.source {
+  margin: 1.25rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+@media (max-width: 359px) {
+  .fact {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+}

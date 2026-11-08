@@ -4,10 +4,28 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="Расписание колледжей и вузов в одном месте. Независимый проект." />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#16182a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f3f3f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0b0a" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Orbit" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
+    <!-- The theme chosen in the settings, before the first paint (src/lib/profile.ts). -->
+    <script>
+      try {
+        const t = JSON.parse(localStorage.getItem("orbit.prefs.v1") || "{}").theme;
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+    <!-- The page color before the styles load: no white flash in the dark. -->
+    <style>
+      html { background: #f3f3f0; }
+      @media (prefers-color-scheme: dark) { html:not([data-theme="light"]) { background: #0b0b0a; } }
+      html[data-theme="dark"] { background: #0b0b0a; }
+    </style>
     <link rel="icon" href="./icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <title>Orbit — расписание</title>

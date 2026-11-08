@@ -1,32 +1,186 @@
 /* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
+/* Fonts are served with the app (SIL OFL 1.1, see assets/fonts/OFL-*.txt):
+   Wix Madefor Display is the brand's typeface (brand/README.md), Inter
+   is for times and numbers. Only the subsets in use are downloaded. */
+@font-face {
+  font-family: "Wix Madefor Display";
+  font-weight: 500 800;
+  font-display: swap;
+  src: url("./assets/fonts/wix-madefor-display-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Wix Madefor Display";
+  font-weight: 500 800;
+  font-display: swap;
+  src: url("./assets/fonts/wix-madefor-display-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("./assets/fonts/inter-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("./assets/fonts/inter-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   color-scheme: light dark;
-  /* Brand colors: brand/README.md. Coral fails contrast on white, so on
-     the light theme it is decoration only; text and links are Night. */
-  --night: #1f2238;
+  /* Brand colors: brand/README.md. Coral is the one accent. The brand's
+     Night (#1f2238) stays in the logo only: in the interface a navy
+     read as heavy, so text, controls and the dark theme are a neutral
+     near-black ink. Coral fails contrast on white, so on the light theme
+     it is decoration only; text is ink or the darker --coral-text. */
+  --ink: #1a1a18;
   --coral: #ff7a59;
-  --text: var(--night);
-  --muted: #555a70;
-  --bg: #ffffff;
-  --link: var(--night);
 
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* The page (--bg) holds panels (--card); lessons are --surface tiles
+     on them. Neutrals are warm, like paper. */
+  --bg: #f3f3f0;
+  --card: #ffffff;
+  --surface: #f6f6f3;
+  --text: var(--ink);
+  --muted: #66665f;
+  --line: #e8e8e4;
+  --fill: #efefeb;
+  --fill-strong: #d6d6d0;
+  --accent: var(--ink);
+  --on-accent: #ffffff;
+  --coral-text: #b4401c;
+  --link: var(--ink);
+  --focus: var(--ink);
+  --hero-bg: var(--ink);
+  --hero-text: #ffffff;
+  --hero-muted: #b4b4ac;
+  --hero-fill: rgb(255 255 255 / 0.1);
+  --warn-bg: #fff2ea;
+  --warn-line: #ffd6c4;
+  --warn-text: #6a2a0f;
+  --ok: #1f8f50;
+  --shadow: 0 0 0 1px rgb(40 40 20 / 0.05), 0 1px 2px rgb(40 40 20 / 0.04);
+  --shadow-raised:
+    0 0 0 1px rgb(40 40 20 / 0.05), 0 2px 4px rgb(40 40 20 / 0.04), 0 6px 16px rgb(40 40 20 / 0.06);
+  --radius-panel: 1.5rem;
+  --radius: 0.875rem;
+  --radius-small: 0.625rem;
+  --font:
+    "Wix Madefor Display", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    sans-serif;
+  --font-ui: Inter, system-ui, sans-serif;
+  --header-height: 3.5rem;
+  --safe-top: env(safe-area-inset-top, 0px);
+
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 100%;
   line-height: 1.5;
   color: var(--text);
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark: as the system says, unless the person chose a theme in the
+   settings (data-theme on <html>, set before the first paint). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0b0a;
+    --card: #161615;
+    --surface: #1f1f1d;
+    --text: #eeeee8;
+    --muted: #97978f;
+    --line: #2a2a27;
+    --fill: #292926;
+    --fill-strong: #3e3e3a;
+    --accent: var(--coral);
+    --on-accent: var(--ink);
+    --coral-text: #ff9b80;
+    --link: var(--coral);
+    --focus: var(--coral);
+    --hero-bg: #232321;
+    --hero-text: #ffffff;
+    --hero-muted: #a8a8a0;
+    --hero-fill: rgb(255 255 255 / 0.08);
+    --warn-bg: #2e1f17;
+    --warn-line: #52321f;
+    --warn-text: #ffd7c9;
+    --ok: #4fd18b;
+    --shadow: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-raised:
+      0 0 0 1px rgb(255 255 255 / 0.07), 0 2px 4px rgb(0 0 0 / 0.3), 0 6px 16px rgb(0 0 0 / 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0b0a;
+  --card: #161615;
+  --surface: #1f1f1d;
+  --text: #eeeee8;
+  --muted: #97978f;
+  --line: #2a2a27;
+  --fill: #292926;
+  --fill-strong: #3e3e3a;
+  --accent: var(--coral);
+  --on-accent: var(--ink);
+  --coral-text: #ff9b80;
+  --link: var(--coral);
+  --focus: var(--coral);
+  --hero-bg: #232321;
+  --hero-text: #ffffff;
+  --hero-muted: #a8a8a0;
+  --hero-fill: rgb(255 255 255 / 0.08);
+  --warn-bg: #2e1f17;
+  --warn-line: #52321f;
+  --warn-text: #ffd7c9;
+  --ok: #4fd18b;
+  --shadow: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-raised:
+    0 0 0 1px rgb(255 255 255 / 0.07), 0 2px 4px rgb(0 0 0 / 0.3), 0 6px 16px rgb(0 0 0 / 0.35);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* The logo comes in a light and a dark version; the page shows one. */
+.logo-dark {
+  display: none;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text: #f3f3f0;
-    --muted: #a9acbd;
-    --bg: #16182a;
-    --link: var(--coral);
+  :root:not([data-theme="light"]) .logo-light {
+    display: none;
   }
+  :root:not([data-theme="light"]) .logo-dark {
+    display: block;
+  }
+}
+
+:root[data-theme="dark"] .logo-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .logo-dark {
+  display: block;
 }
 
 *,
@@ -35,15 +189,74 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-padding-top: calc(var(--safe-top) + var(--header-height) + 4.5rem);
+}
+
 body {
   margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 a {
   color: var(--link);
+  text-underline-offset: 0.15em;
 }
 
-a:focus-visible {
-  outline: 2px solid currentColor;
+:focus-visible {
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
+
+/* Scrollbars: thin, rounded, in the page's colors, with the track
+   invisible, as in «Мой Сиелом». Firefox and Chrome take the standard
+   properties; Safari only the old -webkit- ones. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--fill-strong) transparent;
+}
+
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 0.25rem solid transparent;
+    border-radius: 999px;
+    background: var(--fill-strong) padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--muted);
+  }
+}
+
+/* Motion off for those who asked their system for it. !important is
+   the point here: it must beat every component's own animation. */
+/* biome-ignore-start lint/complexity/noImportantStyles: see above */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* biome-ignore-end lint/complexity/noImportantStyles: see above */

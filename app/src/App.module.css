@@ -1,52 +1,416 @@
 /* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
-.page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.header {
-  padding: 1.5rem 0 0.5rem;
-}
-
-.title {
+.logo {
   margin: 0;
   line-height: 0;
 }
 
-.title img {
-  display: block;
-  height: 2.75rem;
+.logo img {
+  height: 1.75rem;
   width: auto;
 }
 
-.tagline {
-  margin: 0.25rem 0 0;
+.round {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.round:hover {
+  background: var(--fill);
+}
+
+.me {
+  background: var(--card);
+  box-shadow: var(--shadow);
+  font-size: 1.05rem;
+}
+
+.me:hover {
+  background: var(--fill);
+}
+
+.initials {
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* Settings, profile and the source code, under the list. */
+.links {
+  flex: none;
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.6rem 0.5rem 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.6rem;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: transparent;
   color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ── Wide screen: laid out like «Мой Сиелом» ───────────────
+   A top row (brand card + top bar) and a body row (side panel + main
+   card). The page itself does not scroll: the list and the schedule
+   scroll inside their cards. */
+
+.app {
+  --side-w: 22.5rem;
+  --brand-w: 17.75rem;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100dvh;
+  padding: 0.75rem;
+}
+
+.head {
+  flex: none;
+  display: flex;
+  gap: 0.75rem;
+  height: 4.25rem;
+}
+
+/* The logo on a card of its own, with the button that folds the panel.
+   It narrows when the panel folds, so the top bar gets the room. */
+.brand {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: var(--side-w);
+  padding: 0 1rem 0 0.75rem;
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  transition: width 0.3s var(--ease);
+}
+
+/* The logo a little larger than in the bar on a phone, and under it
+   what the app is for. */
+.brandText {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand .logo img {
+  height: 2rem;
+}
+
+.tagline {
+  margin: 0;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--line);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.folded .brand {
+  width: var(--brand-w);
+}
+
+.topbar {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topSlot {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.topTitle {
+  margin: 0 0 0 0.25rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.015em;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 0.75rem;
+  transition: gap 0.3s var(--ease);
+}
+
+.folded .body {
+  gap: 0;
 }
 
 .main {
   flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
-.heading {
-  font-size: 1.125rem;
-  margin: 1.5rem 0 0.5rem;
+.main > * {
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
-.list {
+.sidebar {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: var(--side-w);
+  min-height: 0;
+  padding: 0.75rem;
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition:
+    width 0.3s var(--ease),
+    padding 0.3s var(--ease);
+}
+
+/* Folded: no width, and gone for the keyboard and screen readers too
+   (inert), but only after the panel has finished closing. */
+.folded .sidebar {
+  width: 0;
+  padding-inline: 0;
+  box-shadow: none;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    width 0.3s var(--ease),
+    padding 0.3s var(--ease),
+    visibility 0s 0.35s;
+}
+
+/* The content keeps its width while the panel narrows, so it is cut
+   off rather than squeezed. */
+.sidebar > * {
+  min-width: calc(var(--side-w) - 1.5rem);
+}
+
+.expanding .sidebar > * {
+  animation: side-in 0.25s var(--ease) both;
+}
+
+.expanding .sidebar > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.collapsing .sidebar > * {
+  animation: side-out 0.2s ease both;
+}
+
+.collapsing .sidebar > :nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+@keyframes side-in {
+  from {
+    opacity: 0;
+    transform: translateX(-0.75rem);
+  }
+}
+
+@keyframes side-out {
+  to {
+    opacity: 0;
+    transform: translateX(-0.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand,
+  .body,
+  .sidebar,
+  .folded .sidebar {
+    transition: none;
+  }
+
+  .expanding .sidebar > *,
+  .collapsing .sidebar > * {
+    animation: none;
+  }
+}
+
+/* The finder fills the panel; its list scrolls inside its own box. */
+.sideFind {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .links {
+  padding: 0.5rem 0 0;
+}
+
+/* Before a schedule is chosen: an invitation where the week will be. */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.welcomeIcon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 1rem;
+  border-radius: 1.25rem;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1.75rem;
+}
+
+.welcomeText {
+  max-width: 26rem;
   margin: 0;
-  padding-left: 1.25rem;
-  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ── Phone ─────────────────────────────────────────────────── */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: var(--safe-top);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: saturate(1.6) blur(14px);
+  backdrop-filter: saturate(1.6) blur(14px);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: var(--header-height);
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 0.75rem;
+}
+
+.phoneMain {
+  flex: 1;
+  width: 100%;
+  padding: 0 1rem 1rem;
+}
+
+/* The side panel as a menu on a phone. */
+.drawer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.drawer .links {
+  margin-top: 1rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.start {
+  flex: 1;
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+}
+
+.startTitle {
+  margin: 0.5rem 0 0.35rem;
+  font-size: clamp(1.6rem, 1.3rem + 1.5vw, 2.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.startText {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.startCard {
+  margin: 0 -0.5rem;
+  padding: 0.85rem 0.75rem;
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  box-shadow: var(--shadow);
 }
 
 .footer {
-  padding: 1.5rem 0;
-  font-size: 0.875rem;
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  font-size: 0.8125rem;
   color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+.footer p {
+  margin: 0 0 0.4rem;
+}
+
+.footer a {
+  color: inherit;
 }

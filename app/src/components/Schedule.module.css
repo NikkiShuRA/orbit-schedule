@@ -1,0 +1,94 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.schedule {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.who {
+  min-width: 0;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.name {
+  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 1.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0;
+  overflow-wrap: anywhere;
+  /* "Группа" / "ИС-23/9-2" on two lines, not "…9-" / "2". */
+  text-wrap: balance;
+}
+
+.place {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin: 0.3rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.placeName {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mine {
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* A small chip, like "моё" next to it: a star, not a big round button. */
+.star {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.55rem 0 0.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.star:hover {
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--fill-strong);
+}
+
+.star[aria-pressed="true"] {
+  color: var(--coral-text);
+  box-shadow: inset 0 0 0 1px var(--coral);
+}
+
+.primary {
+  font: inherit;
+  font-weight: 600;
+  min-height: 3rem;
+  padding: 0.6rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+}
+
+.problem {
+  max-width: 36rem;
+  margin: 1.5rem auto;
+}
