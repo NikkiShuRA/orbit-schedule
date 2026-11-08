@@ -93,12 +93,17 @@ jobs:
               commit -q -m "Update schedules" -m "$changes"
           git push
 
+      # The data is a static API; its path carries the version of the
+      # contract (ADR 0008). A breaking change publishes api/v2 next to
+      # api/v1 instead of changing this path.
       - name: Assemble the site
+        env:
+          API: _site/api/v1
         run: |
-          mkdir -p _site
-          rsync -a --exclude='.git*' data/ _site/data/
-          "$RUNNER_TEMP/orbit" slice --in data --out _site/data
-          find _site -maxdepth 3 -type f | sort
+          mkdir -p "$API"
+          rsync -a --exclude='.git*' data/ "$API/"
+          "$RUNNER_TEMP/orbit" slice --in data --out "$API"
+          find "$API" -maxdepth 2 -type f | sort
           echo "$(find _site -type f | wc -l) files, $(du -sh _site | cut -f1)"
 
       - uses: actions/upload-pages-artifact@v5

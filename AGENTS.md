@@ -22,7 +22,7 @@
 - черновик 0.2 стандарта данных в `standard/` (JSON Schema, примеры, валидатор на Node.js) и такой же валидатор на Go;
 - коннекторы СИЭУиП и СПК и CLI `orbit` (см. «Команды»). Основной адрес API СИЭУиП с ноября 2026 недоступен, данные идут с временного резервного зеркала ([#15](https://github.com/NikkiShuRA/orbit-schedule/issues/15)). У СПК время начала пар берётся с сайта расписания, у самих пар времени нет;
 - публикация по расписанию: днём каждые 10 минут, ночью раз в час, в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md));
-- нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md)).
+- нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md)); всё это доступно как статичный API `api/v1` ([ADR 0008](docs/decisions/0008-versioned-data-api.md)).
 
 Чего ещё нет: приложения ([#11](https://github.com/NikkiShuRA/orbit-schedule/issues/11)). Решения для него уже приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); перед началом нужен ADR о фреймворке и сборке. Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
 
@@ -66,7 +66,7 @@ go run ./cmd/orbit slice --in data --out site    # нарезка для при�
 
 CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck).
 
-Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` днём каждые 10 минут, ночью раз в час запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages (`https://nikkishura.github.io/orbit-schedule/data/`). Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
+Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` днём каждые 10 минут, ночью раз в час запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages как статичный API (`https://nikkishura.github.io/orbit-schedule/api/v1/`, [ADR 0008](docs/decisions/0008-versioned-data-api.md)). Несовместимое изменение раскладки или служебных файлов — только новой версией рядом со старой, не правкой `v1`. Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
 
 ## Работа с источниками
 

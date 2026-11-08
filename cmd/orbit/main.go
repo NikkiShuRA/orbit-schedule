@@ -5,7 +5,7 @@
 // standard documents.
 //
 //	orbit fetch sieup|spk --out data [--date 2026-11-09] [--weeks 2]
-//	orbit slice --in data --out site/data
+//	orbit slice --in data --out site/api/v1
 //	orbit validate file.json...
 //
 // Exit codes: 0 ok, 1 error, 2 bad usage, 3 none of the requested weeks
