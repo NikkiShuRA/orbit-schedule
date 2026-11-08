@@ -4,7 +4,7 @@
 // Command orbit fetches schedules from sources and writes them as Orbit
 // standard documents.
 //
-//	orbit fetch sieup --out data [--date 2026-11-09] [--weeks 2]
+//	orbit fetch sieup|spk --out data [--date 2026-11-09] [--weeks 2]
 //	orbit slice --in data --out site/data
 //	orbit validate file.json...
 //
@@ -21,11 +21,11 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"slices"
 	"strings"
 	"time"
 	_ "time/tzdata" // embed time zones: the binary must work where the OS has none (Windows, minimal containers)
 
-	"github.com/NikkiShuRA/orbit-schedule/internal/sieup"
 	"github.com/NikkiShuRA/orbit-schedule/internal/standard"
 )
 
@@ -63,16 +63,17 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 
 func usage(w io.Writer) {
 	fmt.Fprintln(w, "usage:")
-	fmt.Fprintln(w, "  orbit fetch sieup --out DIR [--date YYYY-MM-DD] [--weeks N] [--base URL]...")
+	fmt.Fprintln(w, "  orbit fetch sieup|spk --out DIR [--date YYYY-MM-DD] [--weeks N] [--base URL]...")
 	fmt.Fprintln(w, "  orbit slice --in DIR --out DIR [--from YYYY-MM-DD]")
 	fmt.Fprintln(w, "  orbit validate FILE...")
 }
 
 func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
-	if len(args) == 0 || args[0] != "sieup" {
-		fmt.Fprintln(stderr, "unknown source; available: sieup")
+	if len(args) == 0 || !slices.Contains(sourceNames, args[0]) {
+		fmt.Fprintf(stderr, "unknown source; available: %s\n", strings.Join(sourceNames, ", "))
 		return exitUsage
 	}
+	name := args[0]
 	fs := flag.NewFlagSet("fetch", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	out := fs.String("out", "", "output directory (required)")
@@ -80,13 +81,13 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	weeks := fs.Int("weeks", 1, "how many weeks to fetch, starting from --date (1-4)")
 	// --base may be given several times; the addresses are tried in
 	// order. flag.Func calls the function once per occurrence.
-	var bases []sieup.Base
-	fs.Func("base", "API address to use instead of the built-in ones; repeat to give fallbacks", func(s string) error {
+	var bases []string
+	fs.Func("base", "API address to use instead of the built-in ones; sieup takes several, tried in order", func(s string) error {
 		u, err := url.Parse(s)
 		if err != nil || (u.Scheme != "https" && u.Scheme != "http") || u.Host == "" {
 			return fmt.Errorf("want an http(s) URL, got %q", s)
 		}
-		bases = append(bases, sieup.Base{URL: strings.TrimRight(s, "/"), Name: sieup.CustomBaseName})
+		bases = append(bases, strings.TrimRight(s, "/"))
 		return nil
 	})
 	if err := fs.Parse(args[1:]); err != nil {
@@ -100,7 +101,12 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "--weeks: want 1 to 4, got %d\n", *weeks)
 		return exitUsage
 	}
-	loc, err := time.LoadLocation(sieup.TimeZone)
+	src, err := newSource(name, bases)
+	if err != nil {
+		fmt.Fprintln(stderr, err)
+		return exitUsage
+	}
+	loc, err := time.LoadLocation(src.timeZone)
 	if err != nil {
 		fmt.Fprintln(stderr, err)
 		return exitError
@@ -113,14 +119,12 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		}
 	}
 
-	// One client for all weeks: it remembers which address answered.
-	client := sieup.NewClient(bases...)
-	dir := filepath.Join(*out, sieup.Name)
-	st := status{Source: sieup.Name}
+	dir := filepath.Join(*out, src.name)
+	st := status{Source: src.name}
 	published := 0
 	for i := range *weeks {
 		day := first.AddDate(0, 0, 7*i).Format(time.DateOnly)
-		res, err := fetchWeek(ctx, client, dir, day, stdout, stderr)
+		res, err := fetchWeek(ctx, src, dir, day, stdout, stderr)
 		if err != nil {
 			// Stop without writing the status: a failed run must not look
 			// like a fresh check. Files already written are complete and

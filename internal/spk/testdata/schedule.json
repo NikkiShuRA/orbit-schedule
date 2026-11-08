@@ -1,0 +1,85 @@
+{
+  "success": true,
+  "schedule": {
+    "error": "",
+    "data": {
+      "schedule": [
+        {
+          "date": 1793905200000,
+          "lessons": [
+            {
+              "discipline": "s-math",
+              "teacher": "t-1",
+              "auditoria": "r-11",
+              "territory": "b-1",
+              "lesson_type": "lt-lec",
+              "number_lesson": 1,
+              "subgroup": 0,
+              "group": "g-101"
+            }
+          ]
+        },
+        {
+          "date": 1794164400000,
+          "lessons": [
+            {
+              "discipline": "s-lang",
+              "teacher": "t-2",
+              "auditoria": "r-11",
+              "territory": "b-1",
+              "lesson_type": "lt-pr",
+              "number_lesson": 2,
+              "subgroup": 2,
+              "group": "g-201"
+            },
+            {
+              "discipline": "s-math",
+              "teacher": "t-1",
+              "auditoria": "r-11",
+              "territory": "b-1",
+              "lesson_type": "lt-lec",
+              "number_lesson": 1,
+              "subgroup": 0,
+              "group": "g-101"
+            },
+            {
+              "discipline": "s-lang",
+              "teacher": "t-1",
+              "auditoria": "r-11",
+              "territory": "b-1",
+              "lesson_type": "lt-pr",
+              "number_lesson": 2,
+              "subgroup": 1,
+              "group": "g-201"
+            }
+          ]
+        },
+        {
+          "date": 1794337200000,
+          "lessons": [
+            {
+              "discipline": "s-pe",
+              "teacher": "t-2",
+              "auditoria": "00000000-0000-0000-0000-000000000000",
+              "territory": "00000000-0000-0000-0000-000000000000",
+              "lesson_type": "00000000-0000-0000-0000-000000000000",
+              "number_lesson": 3,
+              "subgroup": 0,
+              "group": "g-101"
+            },
+            {
+              "discipline": "s-pe",
+              "teacher": "t-2",
+              "auditoria": "r-gym",
+              "territory": "b-2",
+              "lesson_type": "lt-pr",
+              "number_lesson": 1,
+              "subgroup": 0,
+              "group": "g-201"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

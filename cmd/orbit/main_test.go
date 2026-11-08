@@ -258,3 +258,69 @@ func readJSON(t *testing.T, path string, v any) {
 		t.Fatal(err)
 	}
 }
+
+// fakeSPK serves the SPK connector's fictional fixtures: the week of
+// 2026-11-09 is published, every other week is not.
+func fakeSPK(t *testing.T) string {
+	t.Helper()
+	dir := filepath.Join("..", "..", "internal", "spk", "testdata")
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /index", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(dir, "index.json"))
+	})
+	mux.HandleFunc("GET /schedule", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("date") == "1794164400000" { // 2026-11-09 00:00 +05:00
+			http.ServeFile(w, r, filepath.Join(dir, "schedule.json"))
+			return
+		}
+		w.Write([]byte(`{"success":true,"schedule":{"error":"","data":{"schedule":[]}}}`))
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+	return srv.URL
+}
+
+func TestFetchSPKAndSliceBothSources(t *testing.T) {
+	data, site := t.TempDir(), t.TempDir()
+	code, log := orbit(t, "fetch", "spk", "--out", data, "--base", fakeSPK(t), "--date", "2026-11-10", "--weeks", "2")
+	if code != 0 {
+		t.Fatalf("fetch spk: exit %d:\n%s", code, log)
+	}
+	if code, log := orbit(t, "validate", filepath.Join(data, "spk", "2026-11-09.json")); code != 0 {
+		t.Fatalf("spk week is invalid:\n%s", log)
+	}
+	var st status
+	readJSON(t, filepath.Join(data, "spk", statusFile), &st)
+	if st.Source != "spk" || len(st.Weeks) != 2 || st.Weeks[0].Result != resultUpdated || st.Weeks[1].Result != resultNotPublished {
+		t.Errorf("status = %+v, want the first week updated and the second not published", st)
+	}
+
+	if code, log := orbit(t, "fetch", "sieup", "--out", data, "--base", fakeSIEUiP(t), "--date", "2026-11-11"); code != 0 {
+		t.Fatalf("fetch sieup: exit %d:\n%s", code, log)
+	}
+	if code, log := orbit(t, "slice", "--in", data, "--out", site, "--from", "2026-11-01"); code != 0 {
+		t.Fatalf("slice: exit %d:\n%s", code, log)
+	}
+	var index Index
+	readJSON(t, filepath.Join(site, "index.json"), &index)
+	var ids []string
+	for _, s := range index.Sources {
+		ids = append(ids, s.ID)
+	}
+	if strings.Join(ids, ",") != "sieup,spk" {
+		t.Errorf("sources = %v, want sieup and spk", ids)
+	}
+	// A group without lessons this week still gets its file: within the
+	// coverage (the whole college) "no lessons" is a fact.
+	path := filepath.Join(site, "spk", "groups", "g-301", "2026-11-09.json")
+	if code, log := orbit(t, "validate", path); code != 0 {
+		t.Errorf("group without lessons: %s", log)
+	}
+}
+
+func TestSPKTakesOneBase(t *testing.T) {
+	code, _ := orbit(t, "fetch", "spk", "--out", t.TempDir(), "--base", "https://a.example", "--base", "https://b.example")
+	if code != exitUsage {
+		t.Errorf("exit %d, want %d", code, exitUsage)
+	}
+}
