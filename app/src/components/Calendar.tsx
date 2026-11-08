@@ -587,6 +587,9 @@ function DayPanel({
                 <SlotTime slot={item.slot} />
                 <span className={styles.node} aria-hidden="true" />
                 <div className={styles.itemBody}>
+                  <span className={styles.periodNo}>
+                    {item.slot.period !== undefined && `${item.slot.period} пара`}
+                  </span>
                   <SlotCard
                     slot={item.slot}
                     kind={kind}
@@ -820,7 +823,6 @@ function SlotTime({ slot }: { slot: Slot }) {
     <div className={styles.itemTime}>
       {slot.start && <span className={styles.start}>{slot.start}</span>}
       {slot.end && <span className={styles.end}>{slot.end}</span>}
-      {slot.period !== undefined && <span className={styles.periodNo}>{slot.period} пара</span>}
       {slot.timeFromBells && <Bells />}
     </div>
   );

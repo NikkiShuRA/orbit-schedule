@@ -328,19 +328,6 @@
   min-height: 1.6rem;
 }
 
-.avatar {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 0.45rem;
-  background: var(--fill);
-  color: var(--muted);
-  font-size: 0.625rem;
-  font-weight: 800;
-}
-
 .building {
   margin: 0;
   font-size: 0.8125rem;
@@ -407,7 +394,9 @@
 
 .fitText {
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  /* Exactly the lines shown: no sliver of the next one under the "…". */
+  max-height: calc(var(--lines, 2) * 1lh);
   display: -webkit-box;
   -webkit-line-clamp: var(--lines, 2);
   line-clamp: var(--lines, 2);

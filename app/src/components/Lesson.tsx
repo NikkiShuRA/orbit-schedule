@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { type ReactNode, useEffect, useRef } from "react";
-import { initials, type LessonState, roomLabel, type Slot } from "../lib/calendar";
+import { type LessonState, roomLabel, type Slot } from "../lib/calendar";
 import type { LessonView } from "../lib/schedule";
 import type { Selection } from "../lib/selection";
 import styles from "./Lesson.module.css";
@@ -164,7 +164,7 @@ function Part({
 }) {
   const room = l.rooms.map((r) => roomLabel(r, l.building)).join(", ");
   const fullRoom = l.rooms.join(", ");
-  const teachers = compact ? l.teachers : l.teacherNames;
+  const teachers = l.teachers;
   return (
     <li className={styles.part}>
       {withSubject && <Subject lesson={l} />}
@@ -191,11 +191,6 @@ function Part({
           {teachers.map((name, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: the same name can repeat.
             <span key={i} className={styles.person}>
-              {!compact && initials(name) && (
-                <span className={styles.avatar} aria-hidden="true">
-                  {initials(name)}
-                </span>
-              )}
               {name}
             </span>
           ))}
