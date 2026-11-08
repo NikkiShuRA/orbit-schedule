@@ -24,7 +24,7 @@
 - публикация по расписанию: днём каждые 10 минут, ночью раз в час, в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md));
 - нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md)); всё это доступно как статичный API `api/v1` ([ADR 0008](docs/decisions/0008-versioned-data-api.md)) с описанием в OpenAPI 3.1 и схемами служебных файлов ([ADR 0009](docs/decisions/0009-api-description.md), [инструкция](docs/api.md)).
 
-Чего ещё нет: приложения ([#11](https://github.com/NikkiShuRA/orbit-schedule/issues/11)). Решения для него уже приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); фреймворк и инструменты — [ADR 0010](docs/decisions/0010-app-stack.md) (React, Vite, PWA на Workbox, Biome, Vitest). Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
+Чего ещё нет: самого приложения — есть только заготовка в `app/` (оболочка, PWA, работа без сети), экраны впереди ([#11](https://github.com/NikkiShuRA/orbit-schedule/issues/11)). Решения для него приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); фреймворк и инструменты — [ADR 0010](docs/decisions/0010-app-stack.md) (React, Vite, PWA на Workbox, Biome, Vitest). Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
 
 Правила для кода:
 
@@ -43,6 +43,19 @@ npm ci                                   # зависимости
 npm test                                 # все примеры: valid/ проходят, invalid/ падают
 npm run validate -- examples/valid/college-week.json   # проверить один документ
 ```
+
+Приложение (`app/`, Node.js 22+, [ADR 0010](docs/decisions/0010-app-stack.md)):
+
+```bash
+cd app
+npm ci                                   # зависимости
+npm run dev                              # разработка: http://localhost:5173
+npm run check                            # всё, что проверяет CI: типы, Biome, тесты, сборка, вес
+npm run format                           # исправить форматирование и порядок импортов
+npm run build && npm run preview         # собранное приложение с service worker: http://localhost:4173
+```
+
+Данные при разработке берутся по адресу `./api/v1/` рядом с приложением; другой адрес — `VITE_DATA_URL=https://nikkishura.github.io/orbit-schedule/api/v1/ npm run dev`. Бюджет веса — 100 КБ сжатого JS при первом открытии (`npm run size`); превышение — повод для обсуждения, а не для поднятия лимита.
 
 Коннекторы (Go 1.25+, модуль в корне репозитория):
 
@@ -66,7 +79,7 @@ go run ./cmd/orbit slice --in data --out site    # нарезка для при�
 
 Меняешь формат служебного файла — правь его схему в `api/v1/schemas/` и `openapi.json` в том же PR: тест сверяет поля в Go и в схемах. Внутри `v1` — только совместимые изменения ([ADR 0008](docs/decisions/0008-versioned-data-api.md)). Id источника не может быть `schemas`, `openapi` или `index`.
 
-CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck).
+CI: `.github/workflows/standard.yml` (Node, `npm test`), `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck) и `.github/workflows/app.yml` (аудит зависимостей, попадающих к пользователям, типы, Biome, тесты, сборка, бюджет веса).
 
 Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` днём каждые 10 минут, ночью раз в час запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages как статичный API (`https://nikkishura.github.io/orbit-schedule/api/v1/`, [ADR 0008](docs/decisions/0008-versioned-data-api.md)). Несовместимое изменение раскладки или служебных файлов — только новой версией рядом со старой, не правкой `v1`. Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
 

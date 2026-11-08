@@ -1,0 +1,45 @@
+name: App
+
+on:
+  push:
+    branches: [main]
+    paths: ["app/**", ".github/workflows/app.yml"]
+  # No path filter on pull requests: "app" is meant to be a required
+  # check, and a filtered-out run never reports (see standard.yml).
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      # Only what reaches people's phones must be free of known
+      # vulnerabilities; build tools are updated by Dependabot.
+      - name: Audit runtime dependencies
+        run: npm audit --omit=dev
+      - name: Types
+        run: npm run typecheck
+      - name: Lint and format
+        run: npx biome ci .
+      - name: Tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      # The weight budget of ADR 0010: at most 100 kB of gzipped JS.
+      - name: Size
+        run: npm run size

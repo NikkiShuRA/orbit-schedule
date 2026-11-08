@@ -1,0 +1,8 @@
+[
+  {
+    "name": "JavaScript loaded on first open (ADR 0010)",
+    "path": ["dist/assets/*.js", "dist/registerSW.js"],
+    "limit": "100 kB",
+    "gzip": true
+  }
+]

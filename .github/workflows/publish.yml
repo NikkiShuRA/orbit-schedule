@@ -52,9 +52,23 @@ jobs:
           go-version-file: code/go.mod
           cache-dependency-path: code/go.sum
 
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: code/app/package-lock.json
+
       - name: Build orbit
         working-directory: code
         run: go build -trimpath -o "$RUNNER_TEMP/orbit" ./cmd/orbit
+
+      # The app (ADR 0010) is built from the same commit and served from
+      # the root of the site, next to the data in api/v1.
+      - name: Build the app
+        working-directory: code/app
+        run: |
+          npm ci
+          npm run build
 
       # Sources are independent: one being down must not stop the others
       # from being published. A failed source still fails the job at the
@@ -104,6 +118,7 @@ jobs:
           API: _site/api/v1
         run: |
           mkdir -p "$API"
+          cp -R code/app/dist/. _site/
           rsync -a --exclude='.git*' --exclude='/README.md' data/ "$API/"
           "$RUNNER_TEMP/orbit" slice --in data --out "$API"
           cp code/api/v1/openapi.json "$API/"

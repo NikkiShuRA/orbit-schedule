@@ -1,0 +1,52 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  padding: 1.5rem 0 0.5rem;
+}
+
+.title {
+  margin: 0;
+  line-height: 0;
+}
+
+.title img {
+  display: block;
+  height: 2.75rem;
+  width: auto;
+}
+
+.tagline {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+}
+
+.main {
+  flex: 1;
+}
+
+.heading {
+  font-size: 1.125rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.6;
+}
+
+.footer {
+  padding: 1.5rem 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
