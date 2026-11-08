@@ -38,16 +38,16 @@ jobs:
     outputs:
       site: ${{ steps.pages.outputs.artifact_id }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: code
           persist-credentials: false
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: data
           path: data
           persist-credentials: ${{ github.ref == 'refs/heads/main' }}
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: code/go.mod
           cache-dependency-path: code/go.sum
@@ -101,7 +101,7 @@ jobs:
           find _site -maxdepth 3 -type f | sort
           echo "$(find _site -type f | wc -l) files, $(du -sh _site | cut -f1)"
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         id: pages
         if: env.PUBLISH == 'true'
         with:
@@ -128,7 +128,7 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   # GitHub turns off scheduled workflows in a repository with no activity
   # for 60 days, which would happen every summer break. Re-enabling the
