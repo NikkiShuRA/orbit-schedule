@@ -265,7 +265,7 @@
 
 .topHead {
   flex: 1 1 18rem;
-  min-width: 0;
+  min-width: 10rem;
 }
 
 .topHead > * {
@@ -278,6 +278,47 @@
   font-size: 1.5rem;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+/* In the top bar the place line stays one line: the place shrinks with
+   "…", the chips keep their size. */
+.topHead p {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.topHead p > * {
+  flex: none;
+}
+
+.topHead p > :first-child {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topHead p > :first-child svg {
+  margin-right: 0.35rem;
+  vertical-align: -0.125em;
+}
+
+/* On a middle-sized screen "День / Неделя" keep their icons only, so the
+   name keeps its room; the words stay for screen readers. */
+@media (max-width: 1279px) {
+  .top .navLabel {
+    min-width: 9rem;
+  }
+
+  .top .viewLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 .top .toolbar {

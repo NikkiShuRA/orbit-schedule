@@ -283,6 +283,11 @@
   color: var(--muted);
 }
 
+.row[aria-current="page"] .initials,
+.row[aria-current="page"] .badge svg {
+  color: inherit;
+}
+
 .text {
   flex: 1;
   min-width: 0;
@@ -293,6 +298,12 @@
 
 .title {
   font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: var(--muted);
   overflow-wrap: anywhere;
 }
 

@@ -543,7 +543,10 @@ function Row({
 }) {
   const title = entry.kind === "group" ? entry.name.replace(/^Группа /, "") : entry.name;
   const split = entry.kind === "group" ? badgeOf(title) : undefined;
-  const shown = split?.badge ? split.rest : title;
+  // A teacher reads as a surname with the name and patronymic under it.
+  const person = entry.kind === "teacher" ? splitName(title) : undefined;
+  const shown = split?.badge ? split.rest : (person?.surname ?? title);
+  const mark = (text: string) => (query ? <Marked text={text} query={query} /> : text);
   return (
     <li className={styles.rowItem}>
       <button
@@ -565,9 +568,8 @@ function Row({
           </span>
         )}
         <span className={styles.text}>
-          <span className={styles.title}>
-            {query ? <Marked text={shown} query={query} /> : shown}
-          </span>
+          <span className={styles.title}>{mark(shown)}</span>
+          {person?.rest && <span className={styles.subtitle}>{mark(person.rest)}</span>}
           {details && <span className={styles.details}>{details}</span>}
         </span>
       </button>
@@ -583,6 +585,14 @@ function Row({
       </button>
     </li>
   );
+}
+
+/** "Иванов Иван Иванович" → "Иванов" and "Иван Иванович". */
+function splitName(name: string): { surname: string; rest: string } {
+  const at = name.indexOf(" ");
+  return at < 0
+    ? { surname: name, rest: "" }
+    : { surname: name.slice(0, at), rest: name.slice(at + 1) };
 }
 
 /** The part of a name that matched the query, highlighted. */
