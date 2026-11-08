@@ -172,7 +172,10 @@ export function App() {
           <Icon name="sidebar" />
         </button>
       )}
-      <h1 className={styles.logo}>{logoImgs}</h1>
+      <div className={styles.brandText}>
+        <h1 className={styles.logo}>{logoImgs}</h1>
+        <p className={styles.tagline}>Расписание пар</p>
+      </div>
     </div>
   );
 

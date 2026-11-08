@@ -257,74 +257,90 @@ export function Calendar({
             topSlot,
           )
         : head}
-      <Freshness status={status} fromCache={fromCache} now={now} />
-      {todayView && <Today day={todayView} minutes={minutes} kind={sel.kind} />}
+      {wide ? (
+        <div className={styles.statusBar}>
+          <Freshness status={status} fromCache={fromCache} now={now} bar />
+          {weekView && (
+            <span className={styles.statusChanged}>
+              Изменено в источнике {formatMoment(weekView.changedAt, tz)}
+            </span>
+          )}
+        </div>
+      ) : (
+        <Freshness status={status} fromCache={fromCache} now={now} />
+      )}
 
-      <div className={wide ? styles.panelFlat : styles.panel}>
-        {!wide && subgroupPick}
-        {mySubgroup !== undefined && hidden > 0 && (
-          <p className={styles.subNote}>
-            Показана только {mySubgroup}-я подгруппа: скрыто пар другой — {hidden}.{" "}
-            <button type="button" className={styles.subAll} onClick={() => onSubgroup(undefined)}>
-              Показать все
-            </button>
-          </p>
-        )}
-        {wide && tabs}
-        {!entry ? (
-          <Notice icon="clock">
-            Расписание на неделю с {formatShortDate(monday)} ещё не опубликовано.
-          </Notice>
-        ) : week.kind === "loading" ? (
-          <Skeleton label="Загружаем неделю…" rows={4} />
-        ) : week.kind === "missing" ? (
-          <Notice icon="clock">Расписание на эту неделю ещё не опубликовано.</Notice>
-        ) : week.kind === "failed" ? (
-          <Notice tone="warn" role="alert">
-            {failedText(week.reason, "эту неделю")}
-          </Notice>
-        ) : (
-          weekView && (
-            <>
-              <CoverageNotice coverage={weekView.coverage} kind={sel.kind} />
-              {covered &&
-                (view === "day" ? (
-                  <DayPanel
-                    id="day-panel"
-                    day={weekView.days.find((d) => d.date === date) ?? { date, lessons: [] }}
-                    minutes={date === today ? minutes : undefined}
-                    coverage={weekView.coverage}
-                    kind={sel.kind}
-                    onSwipe={step}
-                    onOpen={open}
-                  />
-                ) : wide ? (
-                  <WeekGrid
-                    view={weekView}
-                    today={today}
-                    minutes={minutes}
-                    kind={sel.kind}
-                    onOpen={open}
-                    onOpenDay={(d) => {
-                      setDate(d);
-                      setView("day");
-                    }}
-                  />
-                ) : (
-                  <Agenda
-                    view={weekView}
-                    today={today}
-                    minutes={minutes}
-                    kind={sel.kind}
-                    onOpen={open}
-                  />
-                ))}
-              <p className={styles.changed}>
-                Изменено в источнике {formatMoment(weekView.changedAt, tz)}
-              </p>
-            </>
-          )
-        )}
+      <div className={wide ? styles.scroll : styles.flow}>
+        {todayView && <Today day={todayView} minutes={minutes} kind={sel.kind} />}
+
+        <div className={wide ? styles.panelFlat : styles.panel}>
+          {!wide && subgroupPick}
+          {mySubgroup !== undefined && hidden > 0 && (
+            <p className={styles.subNote}>
+              Показана только {mySubgroup}-я подгруппа: скрыто пар другой — {hidden}.{" "}
+              <button type="button" className={styles.subAll} onClick={() => onSubgroup(undefined)}>
+                Показать все
+              </button>
+            </p>
+          )}
+          {wide && tabs}
+          {!entry ? (
+            <Notice icon="clock">
+              Расписание на неделю с {formatShortDate(monday)} ещё не опубликовано.
+            </Notice>
+          ) : week.kind === "loading" ? (
+            <Skeleton label="Загружаем неделю…" rows={4} />
+          ) : week.kind === "missing" ? (
+            <Notice icon="clock">Расписание на эту неделю ещё не опубликовано.</Notice>
+          ) : week.kind === "failed" ? (
+            <Notice tone="warn" role="alert">
+              {failedText(week.reason, "эту неделю")}
+            </Notice>
+          ) : (
+            weekView && (
+              <>
+                <CoverageNotice coverage={weekView.coverage} kind={sel.kind} />
+                {covered &&
+                  (view === "day" ? (
+                    <DayPanel
+                      id="day-panel"
+                      day={weekView.days.find((d) => d.date === date) ?? { date, lessons: [] }}
+                      minutes={date === today ? minutes : undefined}
+                      coverage={weekView.coverage}
+                      kind={sel.kind}
+                      onSwipe={step}
+                      onOpen={open}
+                    />
+                  ) : wide ? (
+                    <WeekGrid
+                      view={weekView}
+                      today={today}
+                      minutes={minutes}
+                      kind={sel.kind}
+                      onOpen={open}
+                      onOpenDay={(d) => {
+                        setDate(d);
+                        setView("day");
+                      }}
+                    />
+                  ) : (
+                    <Agenda
+                      view={weekView}
+                      today={today}
+                      minutes={minutes}
+                      kind={sel.kind}
+                      onOpen={open}
+                    />
+                  ))}
+                {!wide && (
+                  <p className={styles.changed}>
+                    Изменено в источнике {formatMoment(weekView.changedAt, tz)}
+                  </p>
+                )}
+              </>
+            )
+          )}
+        </div>
       </div>
 
       {opened && weekView && (
@@ -699,12 +715,13 @@ function WeekGrid({
           const isToday = day.date === today;
           const stateOf = stateIn(isToday ? timeline(day.lessons, minutes) : undefined);
           return (
-            <section key={day.date} className={styles.gridDay} aria-label={formatDay(day.date)}>
-              {isToday && <div className={styles.gridToday} style={{ gridColumn: col }} />}
-              <h3
-                className={`${styles.gridHead} ${isToday ? styles.gridHeadTodayCell : ""}`}
-                style={{ gridColumn: col }}
-              >
+            <section
+              key={day.date}
+              className={isToday ? `${styles.gridDay} ${styles.gridDayToday}` : styles.gridDay}
+              style={{ gridColumn: col, gridRow: `1 / span ${rows + 1}` }}
+              aria-label={formatDay(day.date)}
+            >
+              <h3 className={styles.gridHead}>
                 <button
                   type="button"
                   className={`${styles.gridHeadButton} ${isToday ? styles.gridHeadToday : ""}`}
@@ -717,10 +734,7 @@ function WeekGrid({
                 </button>
               </h3>
               {day.lessons.length === 0 ? (
-                <div
-                  className={styles.gridEmpty}
-                  style={{ gridColumn: col, gridRow: `2 / span ${rows}` }}
-                >
+                <div className={styles.gridEmpty} style={{ gridRow: `2 / span ${rows}` }}>
                   <span className={styles.emptyIcon} aria-hidden="true">
                     <Icon name="cup" />
                   </span>
@@ -731,14 +745,23 @@ function WeekGrid({
               ) : range ? (
                 periods.map((p) => {
                   const here = slots(day.lessons.filter((l) => l.period === p));
-                  // Free periods are not drawn: the empty space says it.
-                  if (here.length === 0) return null;
+                  // A free period between lessons (a gap in the day): a quiet dashed
+                  // slot, as in «Мой Сиелом». Before the first and after the last
+                  // lesson nothing is drawn: that would be noise.
+                  if (here.length === 0) {
+                    const own = day.lessons.flatMap((l) =>
+                      l.period === undefined ? [] : [l.period],
+                    );
+                    if (p < Math.min(...own) || p > Math.max(...own)) return null;
+                    return (
+                      <div key={p} className={styles.gridFree} style={{ gridRow: rowOf(p) }}>
+                        <span className={styles.gridFreeNo}>{p}</span>
+                        нет пары
+                      </div>
+                    );
+                  }
                   return (
-                    <div
-                      key={p}
-                      className={styles.gridCell}
-                      style={{ gridColumn: col, gridRow: rowOf(p) }}
-                    >
+                    <div key={p} className={styles.gridCell} style={{ gridRow: rowOf(p) }}>
                       {here.map((slot) => (
                         <SlotCard
                           key={slot.key}
@@ -753,7 +776,7 @@ function WeekGrid({
                   );
                 })
               ) : (
-                <div className={styles.gridCell} style={{ gridColumn: col, gridRow: 2 }}>
+                <div className={styles.gridCell} style={{ gridRow: 2 }}>
                   {slots(day.lessons).map((slot) => (
                     <SlotCard
                       key={slot.key}
@@ -807,14 +830,30 @@ function Freshness({
   status,
   fromCache,
   now,
+  bar = false,
 }: {
   status: Loaded<Status>;
   fromCache: boolean;
   now: Date;
+  /** A line in the status bar of the main card instead of a block. */
+  bar?: boolean;
 }) {
   if (status.kind === "loading") return null;
   const checkedAt = status.kind === "ready" ? status.data.checkedAt : undefined;
   const age = checkedAt ? `проверено ${ago(checkedAt, now)}` : "когда проверено — неизвестно";
+  if (bar) {
+    const warn = fromCache || !checkedAt || isStale(checkedAt, now);
+    return (
+      <p className={warn ? `${styles.fresh} ${styles.freshWarn}` : styles.fresh} role="status">
+        <span className={styles.dot} aria-hidden="true" />
+        {fromCache
+          ? `Нет связи — сохранённая копия, ${age}. Расписание могло измениться.`
+          : warn
+            ? `Расписание давно не обновлялось: ${age}. Оно могло измениться.`
+            : `Расписание ${age}`}
+      </p>
+    );
+  }
   if (fromCache) {
     return (
       <Notice tone="warn" role="status" icon="cloudOff">

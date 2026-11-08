@@ -183,7 +183,7 @@ export function SettingsSheet({
   onClose: () => void;
 }) {
   return (
-    <Sheet title="Настройки" onClose={onClose}>
+    <Sheet title="Настройки" onClose={onClose} side="left">
       <Group title="Оформление">
         <Choice<Theme>
           label="Тема"

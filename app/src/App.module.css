@@ -120,6 +120,29 @@
   transition: width 0.3s var(--ease);
 }
 
+/* The logo a little larger than in the bar on a phone, and under it
+   what the app is for. */
+.brandText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.brand .logo img {
+  height: 2.125rem;
+}
+
+.tagline {
+  margin: 0 0 0 0.1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
 .folded .brand {
   width: var(--brand-w);
 }
@@ -163,16 +186,16 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0;
   border-radius: var(--radius-panel);
   background: var(--card);
   box-shadow: var(--shadow);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  overflow: hidden;
 }
 
 .main > * {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .sidebar {
