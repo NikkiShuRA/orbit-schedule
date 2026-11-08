@@ -6,6 +6,7 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { catalog, groupWeek, teacherWeek } from "../testdata";
 import { ago, isStale } from "./age";
+import { daySpan, periodRange, startDay, stepDay, timeline, weekName } from "./calendar";
 import {
   addDays,
   datesBetween,
@@ -17,7 +18,7 @@ import {
   mondayOf,
   todayIn,
 } from "./dates";
-import { buildWeek, coverageState, findNow, lessonTime } from "./schedule";
+import { buildWeek, coverageState, findNow, type LessonView, lessonTime } from "./schedule";
 import { search } from "./search";
 import { fromSearch, loadSaved, save, toSearch } from "./selection";
 
@@ -192,5 +193,76 @@ describe("week", () => {
     // Without an end, a started lesson is not called "on now".
     expect(at(11 * 60)).toEqual([[], ["d"]]);
     expect(at(14 * 60)).toEqual([[], []]);
+  });
+});
+
+describe("calendar", () => {
+  const lesson = (key: string, start?: string, end?: string, period?: number): LessonView => ({
+    key,
+    ...(start ? { start } : {}),
+    ...(end ? { end } : {}),
+    ...(period !== undefined ? { period } : {}),
+    timeFromBells: false,
+    rooms: [],
+    teachers: [],
+    groups: [],
+  });
+
+  test("a day shows free windows only between a known end and start", () => {
+    const day = [
+      lesson("a", "08:30", "10:00"),
+      lesson("b", "10:10", "11:40"),
+      lesson("c", "13:00", "14:30"),
+      lesson("d", "16:00"),
+      lesson("e", "18:00", "19:30"),
+    ];
+    const kinds = timeline(day).map((i) => (i.kind === "lesson" ? i.lesson.key : i.kind));
+    // 10-minute break: no window; 80 minutes: a window; after an
+    // unknown end nothing can be measured.
+    expect(kinds).toEqual(["a", "b", "gap", "c", "gap", "d", "e"]);
+    expect(timeline(day).find((i) => i.kind === "gap")).toMatchObject({ minutes: 80 });
+  });
+
+  test("today gets the now mark between lessons and states for lessons", () => {
+    const day = [lesson("a", "08:30", "10:00"), lesson("b", "12:00", "13:30")];
+    const at11 = timeline(day, 11 * 60);
+    expect(at11.map((i) => (i.kind === "lesson" ? `${i.lesson.key}:${i.state}` : i.kind))).toEqual([
+      "a:past",
+      "gap",
+      "now",
+      "b:next",
+    ]);
+    // Inside a lesson the card itself shows it: no separate mark.
+    const at9 = timeline(day, 9 * 60);
+    expect(at9.some((i) => i.kind === "now")).toBe(false);
+    expect(at9[0]).toMatchObject({ state: "now" });
+  });
+
+  test("a week is lined up by periods only if every lesson has one", () => {
+    const days = [
+      { date: "2026-11-09", lessons: [lesson("a", "08:30", undefined, 2)] },
+      { date: "2026-11-10", lessons: [lesson("b", "08:30", undefined, 4)] },
+    ];
+    expect(periodRange(days)).toEqual({ first: 2, last: 4 });
+    expect(periodRange([{ date: "2026-11-09", lessons: [lesson("c", "08:30")] }])).toBeUndefined();
+  });
+
+  test("the span of a day does not invent an end", () => {
+    expect(daySpan([lesson("a", "08:30", "10:00"), lesson("b", "10:10", "11:40")])).toBe(
+      "08:30–11:40",
+    );
+    expect(daySpan([lesson("a", "08:30", "10:00"), lesson("b", "10:10")])).toBe("с 08:30");
+    expect(daySpan([lesson("a")])).toBeUndefined();
+  });
+
+  test("days step over an empty Sunday and weeks have names", () => {
+    const week = [{ date: "2026-11-14", lessons: [] }];
+    expect(stepDay("2026-11-14", 1, week)).toBe("2026-11-16");
+    expect(stepDay("2026-11-16", -1, week)).toBe("2026-11-14");
+    expect(stepDay("2026-11-14", 1, [{ date: "2026-11-15", lessons: [] }])).toBe("2026-11-15");
+    expect(startDay("2026-11-15")).toBe("2026-11-16");
+    expect(startDay("2026-11-11")).toBe("2026-11-11");
+    expect(weekName("2026-11-16", "2026-11-11")).toBe("Следующая неделя");
+    expect(weekName("2026-11-23", "2026-11-11")).toBeUndefined();
   });
 });

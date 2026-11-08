@@ -90,3 +90,17 @@ export function useNow(): Date {
   }, []);
   return now;
 }
+
+/** Whether a media query matches, following changes (a rotated tablet). */
+export function useMedia(query: string): boolean {
+  const [matches, setMatches] = useState(() => globalThis.matchMedia?.(query).matches ?? false);
+  useEffect(() => {
+    const mq = globalThis.matchMedia?.(query);
+    if (!mq) return;
+    const update = () => setMatches(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+  return matches;
+}

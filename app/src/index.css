@@ -107,6 +107,9 @@ a {
   outline-offset: 2px;
 }
 
+/* Motion off for those who asked their system for it. !important is
+   the point here: it must beat every component's own animation. */
+/* biome-ignore-start lint/complexity/noImportantStyles: see above */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -117,3 +120,4 @@ a {
     scroll-behavior: auto !important;
   }
 }
+/* biome-ignore-end lint/complexity/noImportantStyles: see above */

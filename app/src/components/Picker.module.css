@@ -113,6 +113,10 @@
   font-size: 1.0625rem;
 }
 
+.muted {
+  color: var(--muted);
+}
+
 .sourceText .muted {
   font-size: 0.875rem;
   margin-top: 0.15rem;
@@ -247,8 +251,4 @@
   flex: none;
   color: var(--muted);
   font-size: 1.1rem;
-}
-
-.muted {
-  color: var(--muted);
 }

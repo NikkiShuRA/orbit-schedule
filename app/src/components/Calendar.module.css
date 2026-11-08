@@ -1,0 +1,770 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+/* ── Freshness ─────────────────────────────────────────────── */
+
+.fresh {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent);
+}
+
+/* ── Toolbar: today, period, view ──────────────────────────── */
+
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin: 0.25rem 0 1rem;
+}
+
+.todayButton {
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: inherit;
+  min-height: 2.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+}
+
+.todayButton:hover:not(:disabled) {
+  background: var(--fill);
+}
+
+.todayButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.nav {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.iconButton {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  color: inherit;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.iconButton:hover {
+  background: var(--fill);
+}
+
+.navLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.navMain {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.navSub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: pre;
+}
+
+.views {
+  display: flex;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 0.9rem;
+  background: var(--fill);
+  min-inline-size: 0;
+}
+
+.views button {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 550;
+  color: var(--muted);
+  min-height: 2.25rem;
+  padding: 0.3rem 0.9rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.views button[aria-pressed="true"] {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+}
+
+.back {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: var(--coral-text);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* Phone: one line. The period in the middle, the view as two icons;
+   the "today" button gives way to the link under the date. */
+@media (max-width: 639px) {
+  .todayButton,
+  .awaySub {
+    display: none;
+  }
+
+  .views button {
+    padding: 0.3rem 0.7rem;
+    font-size: 1.15rem;
+  }
+
+  .viewLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 640px) {
+  .back {
+    display: none;
+  }
+}
+
+/* Wide: like a calendar app. Today and the period on the left, the
+   view on the right, where it is looked for. */
+@media (min-width: 640px) {
+  .nav {
+    flex: 0 1 auto;
+  }
+
+  .navLabel {
+    min-width: 11rem;
+  }
+
+  .views {
+    margin-left: auto;
+  }
+}
+
+/* ── Day tabs ──────────────────────────────────────────────── */
+
+.tabsWrap {
+  max-width: 44rem;
+  margin: 0 auto 1rem;
+}
+
+/* On a phone the tabs sit at the bottom, under the thumb. */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  padding: 0.45rem max(0.6rem, env(safe-area-inset-right, 0px))
+    calc(0.45rem + env(safe-area-inset-bottom, 0px)) max(0.6rem, env(safe-area-inset-left, 0px));
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  -webkit-backdrop-filter: saturate(1.6) blur(16px);
+  backdrop-filter: saturate(1.6) blur(16px);
+}
+
+.withDock {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.tabs {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.tab {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  font: inherit;
+  color: var(--muted);
+  padding: 0.4rem 0.2rem 0.45rem;
+  border: 0;
+  border-radius: 0.9rem;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.tab:hover {
+  background: var(--fill);
+}
+
+.tab[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tabDay {
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tabDate {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.tab:not([aria-selected="true"]) .tabDate {
+  color: var(--text);
+}
+
+.tabToday:not([aria-selected="true"]) .tabDate,
+.tabToday:not([aria-selected="true"]) .tabDay {
+  color: var(--coral-text);
+}
+
+.dots {
+  display: flex;
+  gap: 2px;
+  height: 4px;
+}
+
+.dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* ── Day: a timeline ───────────────────────────────────────── */
+
+.dayPanel {
+  max-width: 44rem;
+  margin: 0 auto;
+  touch-action: pan-y;
+}
+
+.dayHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0 0 1.1rem;
+}
+
+.dayTitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.dayDate {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+}
+
+.badge {
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--coral);
+  color: var(--night);
+}
+
+.summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline {
+  --time: 3.4rem;
+  --rail: 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.timeline > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--time) var(--rail) minmax(0, 1fr);
+  column-gap: 0.5rem;
+}
+
+/* The rail runs through the day, from the first node to the last. */
+.timeline > li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--time) + 0.5rem + var(--rail) / 2 - 1px);
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline > li:first-child::before {
+  top: 1.1rem;
+}
+
+.timeline > li:last-child::before {
+  bottom: calc(100% - 1.1rem);
+}
+
+.item {
+  padding-bottom: 0.8rem;
+}
+
+.itemTime {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 0.75rem;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.start {
+  font-weight: 700;
+}
+
+.end {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.node {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  margin-top: 0.85rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  background: var(--bg);
+}
+
+.item[data-state="past"] .node {
+  border-color: var(--line);
+  background: var(--line);
+}
+
+.item[data-state="next"] .node {
+  border-color: var(--accent);
+}
+
+.item[data-state="now"] .node {
+  border-color: var(--coral);
+  background: var(--coral);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--coral) 25%, transparent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--coral) 10%, transparent);
+  }
+}
+
+.item[data-state="past"] .itemTime {
+  opacity: 0.55;
+}
+
+.itemBody {
+  min-width: 0;
+}
+
+.period {
+  margin: 0.15rem 0 0.3rem 0.15rem;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* A free window: the rail turns dashed, the time it gives is named. */
+.gap {
+  padding: 0.1rem 0 0.9rem;
+}
+
+.timeline > .gap::before {
+  background: repeating-linear-gradient(var(--line) 0 4px, transparent 4px 8px);
+}
+
+.gapText {
+  grid-column: 3;
+  justify-self: start;
+  padding: 0.25rem 0.7rem;
+  border: 1.5px dashed var(--line);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* Now, between lessons: a coral line, as in calendar apps. */
+.now {
+  align-items: center;
+  padding: 0 0 0.8rem;
+}
+
+.nowTime {
+  justify-self: end;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--coral-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.now::after {
+  content: "";
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  z-index: 1;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--coral);
+}
+
+.nowLine {
+  grid-column: 3;
+  grid-row: 1;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--coral);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  background: color-mix(in srgb, var(--coral) 16%, transparent);
+  color: var(--coral-text);
+}
+
+/* ── Week on a phone: a list of days ───────────────────────── */
+
+.agendaDay {
+  margin: 0.5rem 0 1.5rem;
+}
+
+.agendaHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+  padding: 0 0.15rem;
+}
+
+.agendaTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 650;
+}
+
+.agendaCount {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.agendaEmpty {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.agendaList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+/* ── Week on a wide screen: a grid of periods ──────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: 2.5rem repeat(var(--days), minmax(0, 1fr));
+  grid-template-rows: auto repeat(var(--rows), minmax(6rem, auto));
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.gridDay {
+  display: contents;
+}
+
+.gridToday {
+  grid-row: 1 / -1;
+  margin: -0.25rem;
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--coral) 8%, transparent);
+  pointer-events: none;
+}
+
+.gridHead {
+  position: sticky;
+  top: calc(var(--safe-top) + var(--header-height));
+  z-index: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 0.25rem 0;
+  font-size: 1rem;
+  background: var(--card);
+}
+
+.gridHeadTodayCell {
+  background: color-mix(in srgb, var(--coral) 8%, var(--card));
+}
+
+.gridHeadButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font: inherit;
+  color: inherit;
+  padding: 0.35rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.gridHeadButton:hover {
+  background: var(--fill);
+}
+
+.gridWeekday {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.gridDate {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gridHeadToday .gridDate {
+  border-radius: 50%;
+  background: var(--coral);
+  color: var(--night);
+}
+
+.gridHeadToday .gridWeekday {
+  color: var(--coral-text);
+}
+
+.gridPeriod {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.55rem;
+  line-height: 1.1;
+  color: var(--muted);
+}
+
+.gridPeriod span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.gridPeriod small {
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gridCell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.gridWindow {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-small);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.gridEmpty {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.gridEmpty p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.legend {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.legendSample {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+}
+
+/* ── Misc ──────────────────────────────────────────────────── */
+
+.changed {
+  margin: 1.5rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Read by screen readers, not shown. */
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

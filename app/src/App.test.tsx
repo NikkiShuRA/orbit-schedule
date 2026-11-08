@@ -37,6 +37,19 @@ function serve(served: Files, cached: string[] = []) {
   );
 }
 
+/** The screen width the app sees: a phone unless a test says otherwise. */
+function screenWidth(wide: boolean) {
+  vi.stubGlobal(
+    "matchMedia",
+    (query: string) =>
+      ({
+        matches: wide && query.includes("min-width"),
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      }) as unknown as MediaQueryList,
+  );
+}
+
 function open(search: string) {
   globalThis.history.replaceState(null, "", `/${search}`);
   render(<App />);
@@ -46,6 +59,7 @@ beforeEach(() => {
   // Monday 9 November 2026, 10:30 in the institution's zone (UTC+5).
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(new Date("2026-11-09T05:30:00Z"));
+  screenWidth(false);
 });
 
 afterEach(() => {
@@ -80,7 +94,9 @@ test("shows the week as published: next lesson, bell times, placeholders, notes"
   // so it is not called "on now"; the next ones start at 10:40.
   expect(screen.queryByText("Сейчас")).toBeNull();
   expect(screen.getByText("через 10 мин")).toBeDefined();
-  expect(screen.getByRole("navigation", { name: "Дни недели" })).toBeDefined();
+  expect(screen.getByRole("tablist", { name: "Дни недели" })).toBeDefined();
+  // The rest of the week, in the week view.
+  fireEvent.click(screen.getByRole("button", { name: "Неделя" }));
   expect(screen.getAllByText("по звонкам").length).toBeGreaterThan(0);
   expect(screen.getAllByText(/ВАКАНСИЯ/).length).toBeGreaterThan(0);
   expect(screen.getAllByText("Предмет не указан").length).toBeGreaterThan(0);
@@ -117,7 +133,8 @@ test("warns when the data has not been checked for long", async () => {
 test("a week not published yet is not shown as empty", async () => {
   serve(files);
   open("?s=example&g=g-101");
-  fireEvent.click(await screen.findByRole("button", { name: "Следующая" }));
+  fireEvent.click(await screen.findByRole("button", { name: "Неделя" }));
+  fireEvent.click(screen.getByRole("button", { name: "Следующая неделя" }));
   expect(
     await screen.findByText("Расписание на неделю с 16 ноября ещё не опубликовано."),
   ).toBeDefined();
@@ -194,4 +211,39 @@ test("coming back to the page refreshes quietly and keeps the week if that fails
   await act(async () => {});
   expect(screen.getByText("Дальше")).toBeDefined();
   expect(screen.queryByRole("alert")).toBeNull();
+});
+
+test("a day opens as a timeline; tabs, arrows and the view choice work", async () => {
+  serve(files);
+  open("?s=example&g=g-101");
+  const monday = await screen.findByRole("tabpanel", { name: "Понедельник, 9 ноября" });
+  expect(within(monday).getByText("сегодня")).toBeDefined();
+  expect(screen.getByRole("button", { name: "Сегодня" })).toHaveProperty("disabled", true);
+
+  fireEvent.click(screen.getByRole("tab", { name: /^вторник, 10 ноября/ }));
+  expect(screen.getByRole("tabpanel", { name: "Вторник, 10 ноября" })).toBeDefined();
+  expect(screen.getByRole("tab", { name: /^вторник/ }).getAttribute("aria-selected")).toBe("true");
+
+  fireEvent.click(screen.getByRole("button", { name: "Следующий день" }));
+  expect(screen.getByRole("tabpanel", { name: "Среда, 11 ноября" })).toBeDefined();
+  expect(screen.getByText("Пар нет")).toBeDefined();
+
+  fireEvent.click(screen.getByRole("button", { name: "Сегодня" }));
+  expect(screen.getByRole("tabpanel", { name: "Понедельник, 9 ноября" })).toBeDefined();
+
+  fireEvent.click(screen.getByRole("button", { name: "Неделя" }));
+  expect(localStorage.getItem("orbit.view.v1")).toBe("week");
+  expect(screen.queryByRole("tablist")).toBeNull();
+});
+
+test("a wide screen opens the week as a grid of periods", async () => {
+  screenWidth(true);
+  serve(files);
+  open("?s=example&g=g-101");
+  const wednesday = await screen.findByRole("region", { name: "среда, 11 ноября" });
+  expect(within(wednesday).getByText("Пар нет")).toBeDefined();
+  expect(screen.queryByRole("tablist")).toBeNull();
+  // A day's header opens that day.
+  fireEvent.click(within(wednesday).getByRole("button", { name: /11/ }));
+  expect(screen.getByRole("tabpanel", { name: "Среда, 11 ноября" })).toBeDefined();
 });
