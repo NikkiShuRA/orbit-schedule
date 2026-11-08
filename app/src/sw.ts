@@ -4,8 +4,9 @@
 // The service worker: how Orbit works without a network (ADR 0005,
 // ADR 0010).
 
-import type { WorkboxPlugin } from "workbox-core/types";
 /// <reference lib="webworker" />
+import { clientsClaim } from "workbox-core";
+import type { WorkboxPlugin } from "workbox-core/types";
 import { ExpirationPlugin } from "workbox-expiration";
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
@@ -14,6 +15,13 @@ import { FROM_CACHE_HEADER } from "./api";
 import { dataURL } from "./config";
 
 declare const self: ServiceWorkerGlobalScope;
+
+// A new version takes over at once instead of waiting until every tab
+// of Orbit is closed: otherwise people would keep an old version for
+// days, and a plain reload would not help. An open page keeps the code
+// it has already loaded; the next load gets the new version.
+self.skipWaiting();
+clientsClaim();
 
 // The app shell (HTML, JS, CSS, icons) is cached ahead, version by
 // version; caches of older versions are removed.
