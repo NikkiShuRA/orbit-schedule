@@ -1,0 +1,14 @@
+{
+  "name": "orbit-trigger",
+  "private": true,
+  "type": "module",
+  "description": "Starts the Publish workflow on a timer (ADR 0011)",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "test": "node --test",
+    "deploy": "npx --yes wrangler@4.155.0 deploy"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

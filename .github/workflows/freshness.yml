@@ -1,0 +1,62 @@
+# Checks once a day that the published data is fresh (ADR 0011).
+#
+# Publishing is started by an external timer (ops/trigger), not by this
+# repository. If the timer stops, its token expires or publishing keeps
+# failing, nothing else would notice: this job fails and GitHub emails
+# the owner. GitHub's own schedule may run it hours late; for a daily
+# check that does not matter.
+name: Freshness
+
+on:
+  schedule:
+    - cron: "37 7 * * *" # 12:37 in Surgut, when data is refreshed every 10 minutes
+  workflow_dispatch:
+  pull_request:
+    paths: [".github/workflows/freshness.yml"]
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write # keep this workflow enabled, see below
+    env:
+      API: https://nikkishura.github.io/orbit-schedule/api/v1
+      MAX_AGE_HOURS: 2
+    steps:
+      # GitHub turns off scheduled workflows in a repository with no
+      # activity for 60 days, which would happen every summer break.
+      # Re-enabling the workflow resets that timer. Only on main: a PR
+      # run has no write access.
+      - name: Keep this workflow enabled
+        if: github.ref == 'refs/heads/main'
+        run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/freshness.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      # Every source in index.json must have been checked recently.
+      # status.json is only written after a successful fetch (ADR 0004),
+      # so a source that keeps failing goes stale too.
+      - name: Check when each source was last checked
+        shell: bash # -eo pipefail: a failed download fails the check
+        run: |
+          get() { curl -sS --fail --retry 3 --max-time 30 "$API/$1"; }
+          statuses=$(get index.json | jq -r '.sources[].status')
+          if [ -z "$statuses" ]; then
+            echo "::error::index.json lists no sources"
+            exit 1
+          fi
+          now=$(date +%s)
+          stale=0
+          for status in $statuses; do
+            checked=$(get "$status" | jq -er '.checkedAt')
+            age=$(( (now - $(date -d "$checked" +%s)) / 60 ))
+            echo "$status: checked at $checked, $age min ago"
+            if [ "$age" -gt $(( MAX_AGE_HOURS * 60 )) ]; then
+              echo "::error::$status was last checked $age minutes ago (limit ${MAX_AGE_HOURS} h). Is the timer in ops/trigger running?"
+              stale=1
+            fi
+          done
+          exit "$stale"

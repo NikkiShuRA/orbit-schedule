@@ -1,0 +1,19 @@
+# Cloudflare Worker that starts the Publish workflow on a timer (ADR 0011).
+# Deploy with `npx wrangler@4.155.0 deploy` from this directory; see README.md.
+name = "orbit-trigger"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+# No anonymous usage data from wrangler.
+send_metrics = false
+
+# No public URL: only the timer can run the worker.
+workers_dev = false
+preview_urls = false
+
+[triggers]
+# UTC; Surgut is UTC+5. The same schedule as ADR 0004:
+# every 10 minutes from 07:00 to 21:00 in Surgut, hourly at night.
+crons = ["3-59/10 2-15 * * *", "17 0,1,16-23 * * *"]
+
+[observability]
+enabled = true

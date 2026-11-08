@@ -21,7 +21,7 @@
 Что уже есть:
 - черновик 0.2 стандарта данных в `standard/` (JSON Schema, примеры, валидатор на Node.js) и такой же валидатор на Go;
 - коннекторы СИЭУиП и СПК и CLI `orbit` (см. «Команды»). Основной адрес API СИЭУиП с ноября 2026 недоступен, данные идут с временного резервного зеркала ([#15](https://github.com/NikkiShuRA/orbit-schedule/issues/15)). У СПК время начала пар берётся с сайта расписания, у самих пар времени нет;
-- публикация по расписанию: днём каждые 10 минут, ночью раз в час, в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md));
+- публикация по расписанию: днём каждые 10 минут, ночью раз в час, в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)); запускает её внешний таймер на Cloudflare Workers ([ADR 0011](docs/decisions/0011-external-trigger.md));
 - нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md)); всё это доступно как статичный API `api/v1` ([ADR 0008](docs/decisions/0008-versioned-data-api.md)) с описанием в OpenAPI 3.1 и схемами служебных файлов ([ADR 0009](docs/decisions/0009-api-description.md), [инструкция](docs/api.md)).
 
 Чего ещё нет: самого приложения — есть только заготовка в `app/` (оболочка, PWA, работа без сети), экраны впереди ([#11](https://github.com/NikkiShuRA/orbit-schedule/issues/11)). Решения для него приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); фреймворк и инструменты — [ADR 0010](docs/decisions/0010-app-stack.md) (React, Vite, PWA на Workbox, Biome, Vitest). Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
@@ -57,6 +57,16 @@ npm run build && npm run preview         # собранное приложени
 
 Данные при разработке берутся по адресу `./api/v1/` рядом с приложением; другой адрес — `VITE_DATA_URL=https://nikkishura.github.io/orbit-schedule/api/v1/ npm run dev`. Бюджет веса — 100 КБ сжатого JS при первом открытии (`npm run size`); превышение — повод для обсуждения, а не для поднятия лимита.
 
+Таймер публикации (`ops/trigger/`, Node.js 22+, без зависимостей, [ADR 0011](docs/decisions/0011-external-trigger.md)):
+
+```bash
+cd ops/trigger
+npm test                                 # тесты воркера, без сети
+npx --yes wrangler@4.155.0 deploy --dry-run --outdir "$(mktemp -d)"   # проверить настройки без выкладки и без входа
+```
+
+Выкладку (`wrangler deploy`) делает только владелец, по `ops/trigger/README.md`.
+
 Коннекторы (Go 1.25+, модуль в корне репозитория):
 
 ```bash
@@ -79,9 +89,11 @@ go run ./cmd/orbit slice --in data --out site    # нарезка для при�
 
 Меняешь формат служебного файла — правь его схему в `api/v1/schemas/` и `openapi.json` в том же PR: тест сверяет поля в Go и в схемах. Внутри `v1` — только совместимые изменения ([ADR 0008](docs/decisions/0008-versioned-data-api.md)). Id источника не может быть `schemas`, `openapi` или `index`.
 
-CI: `.github/workflows/standard.yml` (Node, `npm test`), `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck) и `.github/workflows/app.yml` (аудит зависимостей, попадающих к пользователям, типы, Biome, тесты, сборка, бюджет веса).
+CI: `.github/workflows/standard.yml` (Node, `npm test`), `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck), `.github/workflows/app.yml` (аудит зависимостей, попадающих к пользователям, типы, Biome, тесты, сборка, бюджет веса) и `.github/workflows/trigger.yml` (тесты таймера публикации).
 
-Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` днём каждые 10 минут, ночью раз в час запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages как статичный API (`https://nikkishura.github.io/orbit-schedule/api/v1/`, [ADR 0008](docs/decisions/0008-versioned-data-api.md)). Несовместимое изменение раскладки или служебных файлов — только новой версией рядом со старой, не правкой `v1`. Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
+Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages как статичный API (`https://nikkishura.github.io/orbit-schedule/api/v1/`, [ADR 0008](docs/decisions/0008-versioned-data-api.md)). Несовместимое изменение раскладки или служебных файлов — только новой версией рядом со старой, не правкой `v1`. Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
+
+Своего расписания у `publish.yml` нет: GitHub выполнял его с опозданием на часы. Его запускает через `workflow_dispatch` воркер Cloudflare из `ops/trigger/` — днём каждые 10 минут, ночью раз в час ([ADR 0011](docs/decisions/0011-external-trigger.md)). Расписание воркера — в `ops/trigger/wrangler.toml`; меняется только через ADR. Выкладывает воркер владелец (`ops/trigger/README.md`): ни у агентов, ни у CI нет доступа к Cloudflare и токена. `.github/workflows/freshness.yml` раз в день проверяет `status.json` на сайте и падает, если источник не проверяли дольше 2 часов. Не возвращай расписание в `publish.yml`: два таймера опрашивали бы источники вдвое чаще.
 
 ## Работа с источниками
 
@@ -133,7 +145,7 @@ CI: `.github/workflows/standard.yml` (Node, `npm test`), `.github/workflows/go.y
 - Коммиты маленькие и осмысленные. Ветка по умолчанию — `main`, работа идёт в отдельных ветках через PR.
 - Автор коммитов — адрес GitHub вида `…@users.noreply.github.com`, не личная почта.
 - **Слияние PR и удаление веток — только с явного согласия человека**, каждый раз отдельно. Это касается и PR от Dependabot: обновление зависимостей проверяет человек.
-- `main` защищена правилами репозитория (ruleset «Protect main»): изменения только через PR, слияние только squash (заголовок коммита = заголовок PR), обязательны зелёные проверки `test`, `vulncheck`, `validate` и актуальность ветки относительно `main`; force push и удаление `main` запрещены. Не пытайся обойти эти правила; если они мешают — скажи человеку.
+- `main` защищена правилами репозитория (ruleset «Protect main»): изменения только через PR, слияние только squash (заголовок коммита = заголовок PR), обязательны зелёные проверки `test`, `vulncheck`, `validate`, `app` и актуальность ветки относительно `main`; force push и удаление `main` запрещены. Не пытайся обойти эти правила; если они мешают — скажи человеку.
 - Обязательные проверки запускаются на каждом PR, поэтому у `pull_request` в их workflow не должно быть фильтра `paths`, иначе PR без подходящих файлов зависнет навсегда.
 - Тексты для пользователей — простым языком, без канцелярита.
 - Скрипты и инструкции должны работать и на Windows, и на Unix. Окончания строк — LF (см. `.gitattributes`).
