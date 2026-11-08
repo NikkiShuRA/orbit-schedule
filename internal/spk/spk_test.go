@@ -37,6 +37,9 @@ func fakeAPI(t *testing.T) *httptest.Server {
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /index", func(w http.ResponseWriter, r *http.Request) { file(w, "index.json") })
+	// The schedule site, on the same fake server.
+	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) { file(w, "site.html") })
+	mux.HandleFunc("GET /assets/index-0a1b2c3d.js", func(w http.ResponseWriter, r *http.Request) { file(w, "site.js") })
 	mux.HandleFunc("GET /schedule", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Query().Get("date") == monday1109 {
 			file(w, "schedule.json")
@@ -49,10 +52,17 @@ func fakeAPI(t *testing.T) *httptest.Server {
 	return srv
 }
 
+// testClient talks only to the fake server, never to the real site.
+func testClient(u string) *Client {
+	c := NewClient(Base{URL: u, Name: "test"})
+	c.Site = u
+	return c
+}
+
 func fetchFixture(t *testing.T, date string) *standard.Document {
 	t.Helper()
 	srv := fakeAPI(t)
-	doc, err := Fetch(context.Background(), NewClient(Base{URL: srv.URL, Name: "test"}), date)
+	doc, err := Fetch(context.Background(), testClient(srv.URL), date)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -188,7 +198,7 @@ func TestLessonsAreSorted(t *testing.T) {
 
 func TestNotPublishedWeek(t *testing.T) {
 	srv := fakeAPI(t)
-	_, err := Fetch(context.Background(), NewClient(Base{URL: srv.URL}), "2026-11-18")
+	_, err := Fetch(context.Background(), testClient(srv.URL), "2026-11-18")
 	if !errors.Is(err, ErrNotPublished) {
 		t.Errorf("err = %v, want ErrNotPublished", err)
 	}
@@ -218,8 +228,54 @@ func TestSourceError(t *testing.T) {
 		w.Write([]byte(`{"success":false,"schedule":{"error":"db is down","data":{"schedule":[]}}}`))
 	}))
 	t.Cleanup(srv.Close)
-	_, err := Fetch(context.Background(), NewClient(Base{URL: srv.URL}), "2026-11-09")
+	_, err := Fetch(context.Background(), testClient(srv.URL), "2026-11-09")
 	if err == nil || errors.Is(err, ErrNotPublished) {
 		t.Errorf("err = %v, want a source error, not 'not published'", err)
+	}
+}
+
+func TestBellsFromTheSite(t *testing.T) {
+	doc := fetchFixture(t, "2026-11-09")
+	if len(doc.BellSchedules) != 1 {
+		t.Fatalf("bell schedules = %+v, want the site's one", doc.BellSchedules)
+	}
+	b := doc.BellSchedules[0]
+	want := []standard.BellPeriod{{Period: 1, Start: "08:30"}, {Period: 2, Start: "10:00"}, {Period: 3, Start: "12:00"}}
+	if b.Name != BellScheduleName || !slices.Equal(b.Periods, want) {
+		t.Errorf("bells = %+v, want %v named after the site", b, want)
+	}
+	// The bell schedule never gives lessons a time.
+	for _, l := range doc.Lessons {
+		if l.Start != "" {
+			t.Errorf("lesson got a time from the bell schedule: %+v", l)
+		}
+	}
+}
+
+func TestNoBellsIsOnlyAWarning(t *testing.T) {
+	srv := fakeAPI(t)
+	c := testClient(srv.URL)
+	c.Site = srv.URL + "/missing"
+	var warnings []string
+	c.Warn = func(msg string) { warnings = append(warnings, msg) }
+	doc, err := Fetch(context.Background(), c, "2026-11-09")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if doc.BellSchedules != nil || len(warnings) != 1 {
+		t.Errorf("bells %+v, warnings %q: want no bells and one warning", doc.BellSchedules, warnings)
+	}
+}
+
+func TestParseBells(t *testing.T) {
+	for _, bad := range []string{
+		`nothing here`,
+		`lessons:["8:30"] and again lessons:["9:00"]`, // two lists: which one?
+		`lessons:["24:00"]`,
+		`lessons:["8:61"]`,
+	} {
+		if _, err := parseBells(bad); err == nil {
+			t.Errorf("%s: accepted", bad)
+		}
 	}
 }

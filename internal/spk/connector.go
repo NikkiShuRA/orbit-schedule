@@ -56,7 +56,21 @@ func Fetch(ctx context.Context, c *Client, date string) (*standard.Document, err
 	if err != nil {
 		return nil, fmt.Errorf("reference lists: %w", err)
 	}
-	return convert(ref, days, monday, c.Base, time.Now())
+	doc, err := convert(ref, days, monday, c.Base, time.Now())
+	if err != nil {
+		return nil, err
+	}
+	// Start times are a separate, optional fact: without them the week is
+	// still complete, so a problem here is a warning, not a failure.
+	b, err := c.bells(ctx)
+	if err != nil {
+		if c.Warn != nil {
+			c.Warn(fmt.Sprintf("start times of periods: %v; publishing without them", err))
+		}
+		return doc, nil
+	}
+	doc.BellSchedules = []standard.BellSchedule{b}
+	return doc, nil
 }
 
 // mondayOf returns local midnight of the Monday of t's week. Go numbers

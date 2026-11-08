@@ -55,6 +55,7 @@ go run ./cmd/orbit fetch sieup --out data --date 2026-11-09
 go run ./cmd/orbit fetch sieup --out data --weeks 2   # эта и следующая недели; неизменившиеся файлы не перезаписываются
 go run ./cmd/orbit fetch sieup --out data --base https://example.org/api   # свой адрес API вместо встроенных
 go run ./cmd/orbit fetch spk --out data --weeks 2     # СПК → data/spk/<понедельник>.json (один --base, без зеркал)
+go run ./cmd/orbit fetch spk --out data --site https://example.org   # свой адрес сайта, откуда берётся время начала пар
 go run ./cmd/orbit validate data/sieup/*.json    # проверить документы
 go run ./cmd/orbit slice --in data --out site    # нарезка для приложения: site/index.json, site/<источник>/catalog.json, groups/, teachers/
 ```

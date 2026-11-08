@@ -31,9 +31,12 @@ type source struct {
 // newSource builds the source called name. bases are the addresses given
 // with --base, if any. The client is created once and shared by all
 // weeks of a run: the SIEUiP client remembers which address answered.
-func newSource(name string, bases []string) (source, error) {
+func newSource(name string, bases []string, site string, warn func(string)) (source, error) {
 	switch name {
 	case sieup.Name:
+		if site != "" {
+			return source{}, errors.New("--site: only spk has a schedule site to read")
+		}
 		var bs []sieup.Base
 		for _, u := range bases {
 			bs = append(bs, sieup.Base{URL: u, Name: sieup.CustomBaseName})
@@ -56,6 +59,10 @@ func newSource(name string, bases []string) (source, error) {
 			return source{}, errors.New("--base: spk takes one address")
 		}
 		c := spk.NewClient(b)
+		c.Warn = warn
+		if site != "" {
+			c.Site = site
+		}
 		return source{
 			name:         spk.Name,
 			timeZone:     spk.TimeZone,

@@ -38,7 +38,11 @@ const UserAgent = "OrbitSchedule (+https://github.com/NikkiShuRA/orbit-schedule)
 // the state of the source.
 type Client struct {
 	Base Base
+	Site string // the schedule site, for the start times of periods
 	HTTP *http.Client
+	// Warn reports problems that do not stop a run, such as start times
+	// that could not be read. It may be nil.
+	Warn func(msg string)
 }
 
 // NewClient returns a client for base, or DefaultBase if base is zero.
@@ -55,6 +59,7 @@ func NewClient(base Base) *Client {
 	transport.TLSHandshakeTimeout = 5 * time.Second
 	return &Client{
 		Base: base,
+		Site: DefaultSite,
 		HTTP: &http.Client{Timeout: 60 * time.Second, Transport: transport},
 	}
 }

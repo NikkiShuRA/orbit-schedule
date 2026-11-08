@@ -63,7 +63,7 @@ func run(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 
 func usage(w io.Writer) {
 	fmt.Fprintln(w, "usage:")
-	fmt.Fprintln(w, "  orbit fetch sieup|spk --out DIR [--date YYYY-MM-DD] [--weeks N] [--base URL]...")
+	fmt.Fprintln(w, "  orbit fetch sieup|spk --out DIR [--date YYYY-MM-DD] [--weeks N] [--base URL]... [--site URL]")
 	fmt.Fprintln(w, "  orbit slice --in DIR --out DIR [--from YYYY-MM-DD]")
 	fmt.Fprintln(w, "  orbit validate FILE...")
 }
@@ -90,8 +90,16 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		bases = append(bases, strings.TrimRight(s, "/"))
 		return nil
 	})
+	site := fs.String("site", "", "schedule site to read period start times from, instead of the built-in one (spk only)")
 	if err := fs.Parse(args[1:]); err != nil {
 		return exitUsage
+	}
+	if *site != "" {
+		if u, err := url.Parse(*site); err != nil || (u.Scheme != "https" && u.Scheme != "http") || u.Host == "" {
+			fmt.Fprintf(stderr, "--site: want an http(s) URL, got %q\n", *site)
+			return exitUsage
+		}
+		*site = strings.TrimRight(*site, "/")
 	}
 	if *out == "" {
 		fmt.Fprintln(stderr, "--out is required")
@@ -101,7 +109,7 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "--weeks: want 1 to 4, got %d\n", *weeks)
 		return exitUsage
 	}
-	src, err := newSource(name, bases)
+	src, err := newSource(name, bases, *site, func(msg string) { fmt.Fprintln(stderr, "warning:", msg) })
 	if err != nil {
 		fmt.Fprintln(stderr, err)
 		return exitUsage

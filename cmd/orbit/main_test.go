@@ -268,6 +268,12 @@ func fakeSPK(t *testing.T) string {
 	mux.HandleFunc("GET /index", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, filepath.Join(dir, "index.json"))
 	})
+	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(dir, "site.html"))
+	})
+	mux.HandleFunc("GET /assets/index-0a1b2c3d.js", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(dir, "site.js"))
+	})
 	mux.HandleFunc("GET /schedule", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Query().Get("date") == "1794164400000" { // 2026-11-09 00:00 +05:00
 			http.ServeFile(w, r, filepath.Join(dir, "schedule.json"))
@@ -282,7 +288,8 @@ func fakeSPK(t *testing.T) string {
 
 func TestFetchSPKAndSliceBothSources(t *testing.T) {
 	data, site := t.TempDir(), t.TempDir()
-	code, log := orbit(t, "fetch", "spk", "--out", data, "--base", fakeSPK(t), "--date", "2026-11-10", "--weeks", "2")
+	spk := fakeSPK(t)
+	code, log := orbit(t, "fetch", "spk", "--out", data, "--base", spk, "--site", spk, "--date", "2026-11-10", "--weeks", "2")
 	if code != 0 {
 		t.Fatalf("fetch spk: exit %d:\n%s", code, log)
 	}
