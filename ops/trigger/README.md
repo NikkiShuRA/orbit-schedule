@@ -24,9 +24,11 @@ GitHub → аватар → **Settings → Developer settings → Personal acces
 
 Зарегистрируйтесь на [dash.cloudflare.com](https://dash.cloudflare.com) (карта не нужна, хватит бесплатного тарифа) и включите двухфакторный вход: **My Profile → Authentication**.
 
+Откройте **Compute → Workers & Pages** хотя бы один раз: при этом создаётся поддомен аккаунта `*.workers.dev`, без него Cloudflare не сохранит расписание. Сам воркер этим адресом не пользуется. Поддомен по умолчанию берётся из адреса почты — смените его на нейтральный (карандаш рядом с **Subdomain**), например `orbit-schedule`. Делайте это до выкладки: смена поддомена сбрасывает расписания воркеров. Если сменили после, верните их командой `npx --yes wrangler@4.155.0 triggers deploy`.
+
 ### 3. Выкладка
 
-Нужен Node.js 22+. Из этой папки:
+Нужен Node.js 22+. Из этой папки (в Windows PowerShell, где запуск скриптов отключён, пишите `npx.cmd` вместо `npx`):
 
 ```bash
 npx --yes wrangler@4.155.0 login
@@ -44,7 +46,13 @@ npx --yes wrangler@4.155.0 secret put GITHUB_TOKEN
 npx --yes wrangler@4.155.0 deploy
 ```
 
-В выводе должны быть оба расписания из `wrangler.toml` и не должно быть адреса `workers.dev`.
+В выводе должны быть оба расписания из `wrangler.toml` и не должно быть адреса `workers.dev`. Ошибка `You need a workers.dev subdomain` значит, что раздел Workers & Pages ещё не открывали (шаг 2).
+
+Когда всё заработает, выйдите из wrangler на этом компьютере — воркеру вход больше не нужен:
+
+```bash
+npx --yes wrangler@4.155.0 logout
+```
 
 ### 4. Проверка
 
