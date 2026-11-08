@@ -15,7 +15,9 @@ import {
   type LessonState,
   loadView,
   periodRange,
+  type Slot,
   saveView,
+  slots,
   startDay,
   stepDay,
   type TimelineItem,
@@ -40,7 +42,7 @@ import { buildWeek, type CoverageState, type DayView, type WeekView } from "../l
 import type { Selection } from "../lib/selection";
 import styles from "./Calendar.module.css";
 import { Icon } from "./Icon";
-import { Bells, Lesson } from "./Lesson";
+import { Bells, SlotCard } from "./Lesson";
 import { failedText } from "./messages";
 import { Today } from "./Today";
 import { Notice, Skeleton } from "./ui";
@@ -400,18 +402,11 @@ function DayPanel({
                 <span className={styles.hidden}>Сейчас перерыв</span>
               </li>
             ) : (
-              <li key={item.lesson.key} className={styles.item} data-state={item.state}>
-                <div className={styles.itemTime}>
-                  {item.lesson.start && <span className={styles.start}>{item.lesson.start}</span>}
-                  {item.lesson.end && <span className={styles.end}>{item.lesson.end}</span>}
-                  {item.lesson.timeFromBells && <Bells />}
-                </div>
+              <li key={item.slot.key} className={styles.item} data-state={item.state}>
+                <SlotTime slot={item.slot} />
                 <span className={styles.node} aria-hidden="true" />
                 <div className={styles.itemBody}>
-                  {item.lesson.period !== undefined && (
-                    <p className={styles.period}>{item.lesson.period} пара</p>
-                  )}
-                  <Lesson lesson={item.lesson} kind={kind} state={item.state} />
+                  <SlotCard slot={item.slot} kind={kind} state={item.state} />
                 </div>
               </li>
             ),
@@ -472,9 +467,9 @@ function Agenda({
               </p>
             ) : (
               <ol className={styles.agendaList}>
-                {day.lessons.map((l) => (
-                  <li key={l.key}>
-                    <Lesson lesson={l} kind={kind} state={stateOf(l.key)} time />
+                {slots(day.lessons).map((slot) => (
+                  <li key={slot.key}>
+                    <SlotCard slot={slot} kind={kind} state={stateOf(slot.key)} time />
                   </li>
                 ))}
               </ol>
@@ -568,7 +563,7 @@ function WeekGrid({
                 </div>
               ) : range ? (
                 periods.map((p) => {
-                  const here = day.lessons.filter((l) => l.period === p);
+                  const here = slots(day.lessons.filter((l) => l.period === p));
                   if (here.length === 0) {
                     // A gap inside the day is worth seeing; before the first
                     // and after the last lesson it is just empty space.
@@ -579,7 +574,7 @@ function WeekGrid({
                         style={{ gridColumn: col, gridRow: rowOf(p) }}
                         aria-hidden="true"
                       >
-                        окно
+                        Окно
                       </div>
                     ) : null;
                   }
@@ -589,16 +584,28 @@ function WeekGrid({
                       className={styles.gridCell}
                       style={{ gridColumn: col, gridRow: rowOf(p) }}
                     >
-                      {here.map((l) => (
-                        <Lesson key={l.key} lesson={l} kind={kind} state={stateOf(l.key)} compact />
+                      {here.map((slot) => (
+                        <SlotCard
+                          key={slot.key}
+                          slot={slot}
+                          kind={kind}
+                          state={stateOf(slot.key)}
+                          compact
+                        />
                       ))}
                     </div>
                   );
                 })
               ) : (
                 <div className={styles.gridCell} style={{ gridColumn: col, gridRow: 2 }}>
-                  {day.lessons.map((l) => (
-                    <Lesson key={l.key} lesson={l} kind={kind} state={stateOf(l.key)} compact />
+                  {slots(day.lessons).map((slot) => (
+                    <SlotCard
+                      key={slot.key}
+                      slot={slot}
+                      kind={kind}
+                      state={stateOf(slot.key)}
+                      compact
+                    />
                   ))}
                 </div>
               )}
@@ -616,12 +623,27 @@ function WeekGrid({
   );
 }
 
-/** The state of a lesson by its key, from today's timeline. */
+/** The state of a slot by its key, from today's timeline. */
 function stateIn(items: TimelineItem[] | undefined) {
   return (key: string): LessonState | undefined => {
-    const it = items?.find((x) => x.kind === "lesson" && x.lesson.key === key);
-    return it?.kind === "lesson" ? it.state : undefined;
+    const it = items?.find((x) => x.kind === "slot" && x.slot.key === key);
+    return it?.kind === "slot" ? it.state : undefined;
   };
+}
+
+/**
+ * The time column of the timeline: start, end and the period number,
+ * which students use as the name of a lesson ("на третьей").
+ */
+function SlotTime({ slot }: { slot: Slot }) {
+  return (
+    <div className={styles.itemTime}>
+      {slot.start && <span className={styles.start}>{slot.start}</span>}
+      {slot.end && <span className={styles.end}>{slot.end}</span>}
+      {slot.period !== undefined && <span className={styles.periodNo}>{slot.period} пара</span>}
+      {slot.timeFromBells && <Bells />}
+    </div>
+  );
 }
 
 function Freshness({

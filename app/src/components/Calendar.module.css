@@ -261,10 +261,8 @@
 }
 
 .tabDay {
-  font-size: 0.6875rem;
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .tabDate {
@@ -331,11 +329,9 @@
 }
 
 .badge {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 650;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.15rem 0.5rem;
+  padding: 0.1rem 0.5rem;
   border-radius: 999px;
   background: var(--coral);
   color: var(--night);
@@ -403,12 +399,23 @@
 }
 
 .start {
+  font-size: 1.0625rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .end {
   font-size: 0.8125rem;
   color: var(--muted);
+}
+
+/* The period number lives with the time: students name lessons by it
+   ("на третьей"), and the card stays for what and where. */
+.periodNo {
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 .node {
@@ -451,15 +458,6 @@
 
 .itemBody {
   min-width: 0;
-}
-
-.period {
-  margin: 0.15rem 0 0.3rem 0.15rem;
-  font-size: 0.6875rem;
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
 }
 
 /* A free window: the rail turns dashed, the time it gives is named. */
@@ -650,10 +648,8 @@
 }
 
 .gridWeekday {
-  font-size: 0.75rem;
-  font-weight: 650;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -694,9 +690,7 @@
 }
 
 .gridPeriod small {
-  font-size: 0.625rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 0.6875rem;
 }
 
 .gridCell {
@@ -708,14 +702,16 @@
   min-width: 0;
 }
 
+/* A free period inside a day: hatched, like an empty cell on a paper
+   timetable, so it reads as "nothing here" and not as a missing card. */
 .gridWindow {
   position: relative;
   z-index: 1;
   display: grid;
   place-items: center;
-  border: 1.5px dashed var(--line);
   border-radius: var(--radius-small);
-  font-size: 0.75rem;
+  background: repeating-linear-gradient(-45deg, var(--fill) 0 6px, transparent 6px 12px);
+  font-size: 0.8125rem;
   color: var(--muted);
 }
 

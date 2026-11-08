@@ -156,7 +156,9 @@ export function buildWeek(doc: ScheduleDocument, sel: Selection, catalog: Catalo
     if (type) view.lessonType = type;
     if (own?.subgroup) view.subgroup = own.subgroup;
     const building = lesson.buildingId && buildings.get(lesson.buildingId);
-    if (building) view.building = building.shortName ?? building.name;
+    // The full name: it has the address, and some sources cut the short
+    // one to a stub ("№7,").
+    if (building) view.building = building.name;
     if (lesson.note) view.note = lesson.note;
 
     const day = byDate.get(lesson.date) ?? [];

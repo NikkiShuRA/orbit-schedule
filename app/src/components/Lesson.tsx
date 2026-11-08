@@ -1,10 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import type { LessonState } from "../lib/calendar";
+import { type LessonState, type Slot, subjectColor } from "../lib/calendar";
 import type { LessonView } from "../lib/schedule";
 import type { Selection } from "../lib/selection";
-import { Icon } from "./Icon";
 import styles from "./Lesson.module.css";
 
 type Kind = Selection["kind"];
@@ -22,82 +21,112 @@ export function Bells() {
 }
 
 /**
- * A lesson as a card. `time` puts the time inside the card (lists);
- * a timeline shows the time beside it. `compact` is for the week grid.
+ * Lessons at one time as one card. Subgroups are rows inside it: the
+ * subject once (when it is the same), then for each subgroup its room
+ * and teacher. Two cards one under another read as two lessons in a
+ * row, which is what confused people.
+ *
+ * `time` puts the time inside the card (lists); a timeline shows it
+ * beside the card. `compact` is for the week grid.
  */
-export function Lesson({
-  lesson: l,
+export function SlotCard({
+  slot,
   kind,
   state,
   time = false,
   compact = false,
 }: {
-  lesson: LessonView;
+  slot: Slot;
   kind: Kind;
   state?: LessonState | undefined;
   time?: boolean;
   compact?: boolean;
 }) {
-  const people = kind === "teacher" ? l.groups : l.teachers;
-  const others = kind === "teacher" ? l.teachers : [];
-  const place = [l.rooms.join(", "), compact ? undefined : l.building].filter(Boolean).join(" · ");
+  const subjects = new Set(slot.lessons.map((l) => l.subject));
+  const shared = subjects.size === 1 ? slot.lessons[0] : undefined;
+  const color = shared ? subjectColor(shared.subject) : undefined;
   return (
     <article
-      className={`${styles.lesson} ${compact ? styles.compact : ""} ${time ? styles.withTime : ""}`}
+      className={[styles.card, compact && styles.compact, time && styles.withTime]
+        .filter(Boolean)
+        .join(" ")}
       data-state={state}
+      data-color={color}
     >
       {time && (
         <div className={styles.time}>
-          {l.start ? <span className={styles.start}>{l.start}</span> : null}
-          {l.end && <span className={styles.end}>{l.end}</span>}
-          {l.period !== undefined && <span className={styles.period}>{l.period} пара</span>}
-          {l.timeFromBells && <Bells />}
+          {slot.start ? <span className={styles.start}>{slot.start}</span> : null}
+          {slot.end && <span className={styles.end}>{slot.end}</span>}
+          {slot.period !== undefined && <span className={styles.period}>{slot.period} пара</span>}
+          {slot.timeFromBells && <Bells />}
         </div>
       )}
       <div className={styles.body}>
-        {compact && l.start && (
+        {compact && slot.start && (
           <p
-            className={`${styles.compactTime} ${l.timeFromBells ? styles.fromBells : ""}`}
-            title={l.timeFromBells ? "Время по сетке звонков" : undefined}
+            className={`${styles.compactTime} ${slot.timeFromBells ? styles.fromBells : ""}`}
+            title={slot.timeFromBells ? "Время по сетке звонков" : undefined}
           >
-            {l.start}
-            {l.end && `–${l.end}`}
-            {l.timeFromBells && <span className={styles.hidden}> (по звонкам)</span>}
+            {slot.start}
+            {slot.end && `–${slot.end}`}
+            {slot.timeFromBells && <span className={styles.hidden}> (по звонкам)</span>}
           </p>
         )}
-        {state === "now" && <span className={styles.live}>идёт</span>}
-        {state === "next" && !compact && <span className={styles.soon}>следующая</span>}
-        <p className={styles.subject} title={compact ? l.subject : undefined}>
-          {l.subject ?? <span className={styles.muted}>Предмет не указан</span>}
-        </p>
-        {(l.lessonType || l.subgroup) && (
-          <p className={styles.tags}>
-            {l.lessonType && <span className={styles.tag}>{l.lessonType}</span>}
-            {l.subgroup && <span className={styles.tag}>подгруппа {l.subgroup}</span>}
-          </p>
-        )}
-        <ul className={styles.meta}>
-          {place && (
-            <li>
-              <Icon name="place" className={styles.metaIcon} />
-              <span>{place}</span>
-            </li>
-          )}
-          {people.length > 0 && (
-            <li>
-              <Icon name={kind === "teacher" ? "people" : "person"} className={styles.metaIcon} />
-              <span>{people.join(" · ")}</span>
-            </li>
-          )}
-          {others.length > 0 && (
-            <li>
-              <Icon name="person" className={styles.metaIcon} />
-              <span>{others.join(" · ")}</span>
-            </li>
-          )}
+        {state === "now" && <p className={styles.live}>Идёт сейчас</p>}
+        {state === "next" && !compact && <p className={styles.soon}>Следующая</p>}
+        {shared && <Subject lesson={shared} />}
+        <ul className={styles.rows}>
+          {slot.lessons.map((l) => (
+            <Row key={l.key} lesson={l} kind={kind} withSubject={!shared} />
+          ))}
         </ul>
-        {l.note && <p className={styles.note}>{l.note}</p>}
       </div>
     </article>
+  );
+}
+
+function Subject({ lesson: l }: { lesson: LessonView }) {
+  return (
+    <>
+      <p className={styles.subject} title={l.subject}>
+        {l.subject ?? <span className={styles.muted}>Предмет не указан</span>}
+      </p>
+      {l.lessonType && <p className={styles.type}>{l.lessonType}</p>}
+    </>
+  );
+}
+
+/** One lesson of the slot: where and with whom, and the subgroup if any. */
+function Row({
+  lesson: l,
+  kind,
+  withSubject,
+}: {
+  lesson: LessonView;
+  kind: Kind;
+  withSubject: boolean;
+}) {
+  const people = kind === "teacher" ? [...l.groups, ...l.teachers] : l.teachers;
+  const room = l.rooms.join(", ");
+  return (
+    <li className={styles.row} data-color={withSubject ? subjectColor(l.subject) : undefined}>
+      {l.subgroup !== undefined && (
+        <span className={styles.subgroup}>
+          {l.subgroup}
+          <span className={styles.subgroupWord}> подгр.</span>
+        </span>
+      )}
+      <div className={styles.rowBody}>
+        {withSubject && <Subject lesson={l} />}
+        {(room || l.building) && (
+          <p className={styles.place}>
+            {room && <span className={styles.room}>{room}</span>}
+            {l.building && <span className={styles.building}>{l.building}</span>}
+          </p>
+        )}
+        {people.length > 0 && <p className={styles.people}>{people.join(" · ")}</p>}
+        {l.note && <p className={styles.note}>{l.note}</p>}
+      </div>
+    </li>
   );
 }

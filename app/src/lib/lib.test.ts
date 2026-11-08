@@ -6,7 +6,17 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { catalog, groupWeek, teacherWeek } from "../testdata";
 import { ago, isStale } from "./age";
-import { daySpan, periodRange, startDay, stepDay, timeline, weekName } from "./calendar";
+import {
+  daySpan,
+  periodRange,
+  SUBJECT_COLORS,
+  slots,
+  startDay,
+  stepDay,
+  subjectColor,
+  timeline,
+  weekName,
+} from "./calendar";
 import {
   addDays,
   datesBetween,
@@ -216,7 +226,7 @@ describe("calendar", () => {
       lesson("d", "16:00"),
       lesson("e", "18:00", "19:30"),
     ];
-    const kinds = timeline(day).map((i) => (i.kind === "lesson" ? i.lesson.key : i.kind));
+    const kinds = timeline(day).map((i) => (i.kind === "slot" ? i.slot.key : i.kind));
     // 10-minute break: no window; 80 minutes: a window; after an
     // unknown end nothing can be measured.
     expect(kinds).toEqual(["a", "b", "gap", "c", "gap", "d", "e"]);
@@ -226,7 +236,7 @@ describe("calendar", () => {
   test("today gets the now mark between lessons and states for lessons", () => {
     const day = [lesson("a", "08:30", "10:00"), lesson("b", "12:00", "13:30")];
     const at11 = timeline(day, 11 * 60);
-    expect(at11.map((i) => (i.kind === "lesson" ? `${i.lesson.key}:${i.state}` : i.kind))).toEqual([
+    expect(at11.map((i) => (i.kind === "slot" ? `${i.slot.key}:${i.state}` : i.kind))).toEqual([
       "a:past",
       "gap",
       "now",
@@ -236,6 +246,27 @@ describe("calendar", () => {
     const at9 = timeline(day, 9 * 60);
     expect(at9.some((i) => i.kind === "now")).toBe(false);
     expect(at9[0]).toMatchObject({ state: "now" });
+  });
+
+  test("subgroups at the same time are one slot", () => {
+    const one = { ...lesson("a", "10:00", "11:30", 2), subgroup: 1 };
+    const two = { ...lesson("b", "10:00", "11:40", 2), subgroup: 2 };
+    const after = lesson("c", "12:00", undefined, 3);
+    const out = slots([one, two, after]);
+    expect(out.map((s) => s.lessons.map((l) => l.key))).toEqual([["a", "b"], ["c"]]);
+    // The slot ends when the last subgroup ends; unknown ends stay unknown.
+    expect(out[0]?.end).toBe("11:40");
+    expect(out[1]?.end).toBeUndefined();
+    // Two lessons with neither period nor time are never merged.
+    expect(slots([lesson("x"), lesson("y")])).toHaveLength(2);
+  });
+
+  test("a subject keeps its color", () => {
+    const c = subjectColor("Физическая культура");
+    expect(c).toBe(subjectColor("Физическая культура"));
+    expect(c).toBeGreaterThanOrEqual(0);
+    expect(c).toBeLessThan(SUBJECT_COLORS);
+    expect(subjectColor(undefined)).toBeUndefined();
   });
 
   test("a week is lined up by periods only if every lesson has one", () => {

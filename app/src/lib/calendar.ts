@@ -14,8 +14,57 @@ export type View = "day" | "week";
 /** Where a lesson is relative to now, for today only. */
 export type LessonState = "now" | "next" | "past";
 
+/**
+ * Lessons at the same time: one, or several when subgroups have
+ * different lessons, rooms or teachers. Shown as one card, so that two
+ * subgroups never look like two lessons one after another.
+ */
+export interface Slot {
+  key: string;
+  period?: number;
+  start?: string;
+  /** Known only when every lesson of the slot has an end. */
+  end?: string;
+  timeFromBells: boolean;
+  lessons: LessonView[];
+}
+
+/** Groups a day's lessons (sorted by period and time) into slots. */
+export function slots(lessons: LessonView[]): Slot[] {
+  const out: Slot[] = [];
+  for (const lesson of lessons) {
+    const last = out.at(-1);
+    const first = last?.lessons[0];
+    const same =
+      first !== undefined &&
+      (first.period !== undefined || first.start !== undefined) &&
+      first.period === lesson.period &&
+      first.start === lesson.start;
+    if (last && same) {
+      last.lessons.push(lesson);
+    } else {
+      out.push({
+        key: lesson.key,
+        ...(lesson.period !== undefined ? { period: lesson.period } : {}),
+        ...(lesson.start ? { start: lesson.start } : {}),
+        timeFromBells: false,
+        lessons: [lesson],
+      });
+    }
+  }
+  for (const slot of out) {
+    slot.timeFromBells = slot.lessons.some((l) => l.timeFromBells);
+    const ends = slot.lessons.map((l) => l.end);
+    if (ends.every((e) => e !== undefined)) {
+      const latest = (ends as string[]).sort().at(-1);
+      if (latest) slot.end = latest;
+    }
+  }
+  return out;
+}
+
 export type TimelineItem =
-  | { kind: "lesson"; lesson: LessonView; state?: LessonState }
+  | { kind: "slot"; slot: Slot; state?: LessonState }
   /** Free time between two lessons, long enough to plan for. */
   | { kind: "gap"; key: string; minutes: number }
   /** The moment now, between lessons (inside a lesson the card shows it). */
@@ -25,9 +74,8 @@ export type TimelineItem =
 export const GAP_MINUTES = 30;
 
 /**
- * The lessons of a day with free windows between them and, for today
- * (`minutes` given), the "now" mark. Lessons that run in parallel (two
- * subgroups) are next to each other and never make a gap.
+ * The slots of a day with free windows between them and, for today
+ * (`minutes` given), the "now" mark.
  */
 export function timeline(lessons: LessonView[], minutes?: number): TimelineItem[] {
   const now = minutes !== undefined ? findNow(lessons, minutes) : undefined;
@@ -35,34 +83,48 @@ export function timeline(lessons: LessonView[], minutes?: number): TimelineItem[
   let lastEnd: number | undefined;
   let nowPlaced = !now || now.current.length > 0;
 
-  for (const lesson of lessons) {
-    const start = lesson.start ? toMinutes(lesson.start) : undefined;
+  for (const slot of slots(lessons)) {
+    const start = slot.start ? toMinutes(slot.start) : undefined;
     if (lastEnd !== undefined && start !== undefined && start - lastEnd >= GAP_MINUTES) {
-      items.push({ kind: "gap", key: `gap-${lesson.key}`, minutes: start - lastEnd });
+      items.push({ kind: "gap", key: `gap-${slot.key}`, minutes: start - lastEnd });
     }
     if (!nowPlaced && minutes !== undefined && start !== undefined && start > minutes) {
       items.push({ kind: "now", key: "now" });
       nowPlaced = true;
     }
-    const state = now ? stateOf(lesson, now, minutes) : undefined;
-    items.push(state ? { kind: "lesson", lesson, state } : { kind: "lesson", lesson });
+    const state = now ? stateOf(slot, now, minutes) : undefined;
+    items.push(state ? { kind: "slot", slot, state } : { kind: "slot", slot });
 
-    const end = lesson.end ? toMinutes(lesson.end) : undefined;
     // An unknown end breaks the chain: no gap can be measured after it.
-    lastEnd = end === undefined ? undefined : Math.max(lastEnd ?? 0, end);
+    lastEnd = slot.end ? toMinutes(slot.end) : undefined;
   }
   return items;
 }
 
 function stateOf(
-  lesson: LessonView,
+  slot: Slot,
   now: ReturnType<typeof findNow>,
   minutes: number | undefined,
 ): LessonState | undefined {
-  if (now.current.includes(lesson)) return "now";
-  if (now.next.includes(lesson)) return "next";
-  if (minutes !== undefined && lesson.end && toMinutes(lesson.end) <= minutes) return "past";
+  if (slot.lessons.some((l) => now.current.includes(l))) return "now";
+  if (slot.lessons.some((l) => now.next.includes(l))) return "next";
+  if (minutes !== undefined && slot.end && toMinutes(slot.end) <= minutes) return "past";
   return undefined;
+}
+
+/** The number of subject colors (CSS: --hue-0 … in index.css). */
+export const SUBJECT_COLORS = 8;
+
+/**
+ * A color for a subject, the same every time it appears, so the same
+ * subject is recognised across the week at a glance. By name, so that
+ * it stays the same across weeks and sources.
+ */
+export function subjectColor(subject: string | undefined): number | undefined {
+  if (!subject) return undefined;
+  let h = 0;
+  for (const ch of subject) h = (h * 31 + (ch.codePointAt(0) ?? 0)) >>> 0;
+  return h % SUBJECT_COLORS;
 }
 
 /**
