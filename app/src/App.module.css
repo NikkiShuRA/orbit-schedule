@@ -16,8 +16,13 @@
 
 .title {
   margin: 0;
-  font-size: 1.75rem;
-  color: var(--accent);
+  line-height: 0;
+}
+
+.title img {
+  display: block;
+  height: 2.75rem;
+  width: auto;
 }
 
 .tagline {

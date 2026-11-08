@@ -3,11 +3,14 @@
 
 :root {
   color-scheme: light dark;
-  --text: #1a1a1a;
-  --muted: #555;
+  /* Brand colors: brand/README.md. Coral fails contrast on white, so on
+     the light theme it is decoration only; text and links are Night. */
+  --night: #1f2238;
+  --coral: #ff7a59;
+  --text: var(--night);
+  --muted: #555a70;
   --bg: #ffffff;
-  --accent: #1f3a8a;
-  --link: #1d4ed8;
+  --link: var(--night);
 
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.5;
@@ -19,11 +22,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #ececec;
-    --muted: #a8a8a8;
-    --bg: #121212;
-    --accent: #9db4ff;
-    --link: #8fb0ff;
+    --text: #f3f3f0;
+    --muted: #a9acbd;
+    --bg: #16182a;
+    --link: var(--coral);
   }
 }
 

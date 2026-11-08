@@ -13,6 +13,9 @@ export default defineConfig({
   base: "./",
   build: {
     target: "es2022",
+    // Images stay files: inlined into JS they would count against the
+    // JS budget and be parsed on every start.
+    assetsInlineLimit: 0,
   },
   plugins: [
     react(),
@@ -27,7 +30,7 @@ export default defineConfig({
       injectRegister: "script-defer",
       registerType: "prompt",
       injectManifest: {
-        globPatterns: ["**/*.{html,js,css,svg,webmanifest}"],
+        globPatterns: ["**/*.{html,js,css,svg,png,webmanifest}"],
       },
       manifest: {
         name: "Orbit — расписание",
@@ -37,11 +40,19 @@ export default defineConfig({
         start_url: "./",
         scope: "./",
         display: "standalone",
-        background_color: "#ffffff",
-        theme_color: "#1f3a8a",
+        // Colors and icons: brand/README.md.
+        background_color: "#1f2238",
+        theme_color: "#1f2238",
         icons: [
+          { src: "icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+          { src: "icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
           { src: "icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
-          { src: "icon-maskable.svg", sizes: "any", type: "image/svg+xml", purpose: "maskable" },
+          {
+            src: "icon-maskable-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
         ],
       },
     }),

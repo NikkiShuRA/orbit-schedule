@@ -4,6 +4,8 @@
 import { useEffect, useState } from "react";
 import styles from "./App.module.css";
 import { getJSON, type Index } from "./api";
+import logo from "./assets/orbit-logo-ru.svg";
+import logoDark from "./assets/orbit-logo-ru-dark.svg";
 
 type State = { kind: "loading" } | { kind: "ready"; index: Index } | { kind: "failed" };
 
@@ -23,7 +25,12 @@ export function App() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Orbit</h1>
+        <h1 className={styles.title}>
+          <picture>
+            <source srcSet={logoDark} media="(prefers-color-scheme: dark)" />
+            <img src={logo} alt="Орбита" width="136" height="47" />
+          </picture>
+        </h1>
         <p className={styles.tagline}>Расписание колледжей и вузов в одном месте</p>
       </header>
       <main className={styles.main}>
