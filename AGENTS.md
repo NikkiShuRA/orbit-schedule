@@ -24,7 +24,7 @@
 - публикация по расписанию: днём каждые 10 минут, ночью раз в час, в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md));
 - нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md)); всё это доступно как статичный API `api/v1` ([ADR 0008](docs/decisions/0008-versioned-data-api.md)) с описанием в OpenAPI 3.1 и схемами служебных файлов ([ADR 0009](docs/decisions/0009-api-description.md), [инструкция](docs/api.md)).
 
-Чего ещё нет: приложения ([#11](https://github.com/NikkiShuRA/orbit-schedule/issues/11)). Решения для него уже приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); перед началом нужен ADR о фреймворке и сборке. Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
+Чего ещё нет: приложения ([#11](https://github.com/NikkiShuRA/orbit-schedule/issues/11)). Решения для него уже приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); фреймворк и инструменты — [ADR 0010](docs/decisions/0010-app-stack.md) (React, Vite, PWA на Workbox, Biome, Vitest). Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
 
 Правила для кода:
 
