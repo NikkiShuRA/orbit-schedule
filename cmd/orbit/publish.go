@@ -14,7 +14,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/NikkiShuRA/orbit-schedule/internal/sieup"
 	"github.com/NikkiShuRA/orbit-schedule/internal/standard"
 )
 
@@ -45,10 +44,10 @@ type weekResult struct {
 
 // fetchWeek fetches the week that contains day and writes its document
 // into dir, unless the file already holds the same schedule.
-func fetchWeek(ctx context.Context, c *sieup.Client, dir, day string, stdout, stderr io.Writer) (weekResult, error) {
+func fetchWeek(ctx context.Context, src source, dir, day string, stdout, stderr io.Writer) (weekResult, error) {
 	res := weekResult{Date: day}
-	doc, err := sieup.Fetch(ctx, c, day)
-	if errors.Is(err, sieup.ErrNotPublished) {
+	doc, err := src.fetch(ctx, day)
+	if errors.Is(err, src.notPublished) {
 		fmt.Fprintf(stdout, "week of %s: not published yet\n", day)
 		res.Result = resultNotPublished
 		return res, nil
@@ -83,8 +82,7 @@ func fetchWeek(ctx context.Context, c *sieup.Client, dir, day string, stdout, st
 	if err != nil {
 		return res, err
 	}
-	summary := fmt.Sprintf("%d lessons, %d of %d buildings published",
-		len(doc.Lessons), len(doc.Publication.Coverage.BuildingIDs), len(doc.Buildings))
+	summary := fmt.Sprintf("%d lessons, %s", len(doc.Lessons), describeCoverage(doc))
 	if same {
 		fmt.Fprintf(stdout, "%s: unchanged (%s)\n", path, summary)
 		res.Result = resultUnchanged
@@ -147,4 +145,13 @@ func writeJSON(path string, v any) error {
 		return err
 	}
 	return writeFileAtomic(path, data)
+}
+
+// describeCoverage says in a few words what a document covers, for the log.
+func describeCoverage(doc *standard.Document) string {
+	c := doc.Publication.Coverage
+	if c.Institution {
+		return "whole institution published"
+	}
+	return fmt.Sprintf("%d of %d buildings published", len(c.BuildingIDs), len(doc.Buildings))
 }

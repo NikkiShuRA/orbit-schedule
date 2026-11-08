@@ -1,0 +1,110 @@
+{
+  "success": true,
+  "baseInfo": {
+    "error": "",
+    "data": {
+      "divisions": [
+        {
+          "name": "(О-1) Отделение примерных дисциплин",
+          "id": "dep-1"
+        },
+        {
+          "name": "(О-2) Отделение образцовых профессий",
+          "id": "dep-2"
+        }
+      ],
+      "territories": [
+        {
+          "name": "Корпус на ул. Примерной ",
+          "id": "b-1"
+        },
+        {
+          "name": "Корпус на ул. Образцовой",
+          "id": "b-2"
+        }
+      ],
+      "groups": [
+        {
+          "name": "101",
+          "id": "g-101",
+          "division": "dep-1",
+          "curse": 1
+        },
+        {
+          "name": "201",
+          "id": "g-201",
+          "division": "dep-2",
+          "curse": 2
+        },
+        {
+          "name": "301",
+          "id": "g-301",
+          "division": "00000000-0000-0000-0000-000000000000",
+          "curse": 3
+        }
+      ],
+      "teachers": [
+        {
+          "name": "Иванова  Анна Петровна",
+          "id": "t-1",
+          "divisions": []
+        },
+        {
+          "name": "Петров Пётр Петрович",
+          "id": "t-2",
+          "divisions": [
+            "dep-1"
+          ]
+        },
+        {
+          "name": "Сидоров Сидор Сидорович",
+          "id": "t-unused",
+          "divisions": []
+        }
+      ],
+      "audithories": [
+        {
+          "name": "Кабинет №11",
+          "short_name": "11",
+          "id": "r-11"
+        },
+        {
+          "name": "Спортивный зал",
+          "short_name": "",
+          "id": "r-gym"
+        },
+        {
+          "name": "Кабинет №99",
+          "short_name": "99",
+          "id": "r-unused"
+        }
+      ],
+      "disciplines": [
+        {
+          "name": "Математика",
+          "id": "s-math"
+        },
+        {
+          "name": "Физическая культура",
+          "id": "s-pe"
+        },
+        {
+          "name": "Иностранный язык",
+          "id": "s-lang"
+        }
+      ],
+      "lesson_Types": [
+        {
+          "name": "Лекция",
+          "id": "lt-lec"
+        },
+        {
+          "name": "Практическая работа",
+          "id": "lt-pr"
+        }
+      ],
+      "specializations": [],
+      "semesters": []
+    }
+  }
+}

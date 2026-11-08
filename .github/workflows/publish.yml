@@ -32,6 +32,8 @@ jobs:
       contents: write # push to the data branch
     env:
       PUBLISH: ${{ github.ref == 'refs/heads/main' }}
+    outputs:
+      site: ${{ steps.pages.outputs.artifact_id }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -51,12 +53,26 @@ jobs:
         working-directory: code
         run: go build -trimpath -o "$RUNNER_TEMP/orbit" ./cmd/orbit
 
+      # Sources are independent: one being down must not stop the others
+      # from being published. A failed source still fails the job at the
+      # end ("Fail if a source failed"), so the failure is not missed.
       - name: Fetch SIEUiP
+        id: sieup
+        continue-on-error: true
         run: |
           set +e
           "$RUNNER_TEMP/orbit" fetch sieup --out data --weeks 2
           code=$?
           # 3 means nothing is published yet: not a failure.
+          if [ "$code" -ne 0 ] && [ "$code" -ne 3 ]; then exit "$code"; fi
+
+      - name: Fetch SPK
+        id: spk
+        continue-on-error: true
+        run: |
+          set +e
+          "$RUNNER_TEMP/orbit" fetch spk --out data --weeks 2
+          code=$?
           if [ "$code" -ne 0 ] && [ "$code" -ne 3 ]; then exit "$code"; fi
 
       - name: Commit changes
@@ -83,13 +99,22 @@ jobs:
           echo "$(find _site -type f | wc -l) files, $(du -sh _site | cut -f1)"
 
       - uses: actions/upload-pages-artifact@v3
+        id: pages
         if: env.PUBLISH == 'true'
         with:
           path: _site
 
+      - name: Fail if a source failed
+        if: steps.sieup.outcome == 'failure' || steps.spk.outcome == 'failure'
+        run: |
+          echo "::error::SIEUiP: ${{ steps.sieup.outcome }}, SPK: ${{ steps.spk.outcome }}"
+          exit 1
+
   deploy:
     needs: fetch
-    if: github.ref == 'refs/heads/main'
+    # Deploy whatever was assembled, even if one source failed: the other
+    # sources' fresh data should not wait for it.
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && needs.fetch.outputs.site != '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
