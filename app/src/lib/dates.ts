@@ -108,3 +108,31 @@ export function formatMoment(moment: string, timeZone: string): string {
   }).format(d);
   return `${date} в ${time}`;
 }
+
+const weekdayFormat = new Intl.DateTimeFormat("ru-RU", { weekday: "short", timeZone: "UTC" });
+
+/** "пн", "вт"… for a day strip. */
+export function formatWeekday(date: string): string {
+  return weekdayFormat.format(toUTC(date)).replace(".", "");
+}
+
+/** "9" for the 9th of the month. */
+export function dayOfMonth(date: string): string {
+  return String(Number(date.slice(8, 10)));
+}
+
+/** "9–14 ноября" or "30 ноября – 5 декабря". */
+export function formatRange(start: string, end: string): string {
+  if (start.slice(0, 7) === end.slice(0, 7)) {
+    return `${dayOfMonth(start)}–${formatShortDate(end)}`;
+  }
+  return `${formatShortDate(start)} – ${formatShortDate(end)}`;
+}
+
+/** "25 мин", "1 ч", "1 ч 20 мин": a span of minutes, as people say it. */
+export function formatMinutes(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h === 0) return `${m} мин`;
+  return m === 0 ? `${h} ч` : `${h} ч ${m} мин`;
+}

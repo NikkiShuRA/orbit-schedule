@@ -9,6 +9,7 @@ import logoDark from "./assets/orbit-logo-ru-dark.svg";
 import { failedText } from "./components/messages";
 import { Picker } from "./components/Picker";
 import { Schedule } from "./components/Schedule";
+import { Notice, Skeleton } from "./components/ui";
 import { useJSON } from "./hooks";
 import {
   askPersistentStorage,
@@ -48,28 +49,29 @@ export function App() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.title}>
-          <picture>
-            <source srcSet={logoDark} media="(prefers-color-scheme: dark)" />
-            <img src={logo} alt="Орбита" width="136" height="47" />
-          </picture>
-        </h1>
-        <p className={styles.tagline}>Расписание колледжей и вузов в одном месте</p>
+        <div className={styles.bar}>
+          <h1 className={styles.title}>
+            <picture>
+              <source srcSet={logoDark} media="(prefers-color-scheme: dark)" />
+              <img src={logo} alt="Орбита" width="136" height="47" />
+            </picture>
+          </h1>
+        </div>
       </header>
-      <main className={styles.main}>
+      <main className={selection ? styles.main : `${styles.main} ${styles.narrow}`}>
         {selection ? (
           <Schedule key={toSearch(selection)} sel={selection} onChange={() => choose(undefined)} />
         ) : index.kind === "loading" ? (
-          <p aria-live="polite">Загружаем…</p>
+          <Skeleton label="Загружаем…" rows={2} />
         ) : index.kind !== "ready" ? (
-          <p role="alert">
+          <Notice tone="warn" role="alert">
             {failedText(
               index.kind === "failed" ? index.reason : "server",
               "список учебных заведений",
             )}
-          </p>
+          </Notice>
         ) : index.data.sources.length === 0 ? (
-          <p>Пока ни одно расписание не опубликовано.</p>
+          <Notice>Пока ни одно расписание не опубликовано.</Notice>
         ) : (
           <Picker sources={index.data.sources} onPick={choose} />
         )}

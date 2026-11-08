@@ -4,46 +4,73 @@
 :root {
   color-scheme: light dark;
   /* Brand colors: brand/README.md. Coral fails contrast on white, so on
-     the light theme it is decoration only; text and links are Night. */
+     the light theme it is decoration only; text and controls are Night
+     or the darker --coral-text. */
   --night: #1f2238;
   --coral: #ff7a59;
-  --text: var(--night);
-  --muted: #555a70;
-  --bg: #ffffff;
-  --link: var(--night);
-  --line: #dcdde6;
-  --surface: #f3f3f7;
-  --surface-strong: #e7e8ef;
-  --accent-line: var(--night);
-  --focus: var(--night);
-  --warn-bg: #fff1e8;
-  --warn-text: #5a2a12;
-  --badge-bg: var(--night);
-  --badge-text: #ffffff;
 
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --bg: #f4f5f9;
+  --card: #ffffff;
+  --text: var(--night);
+  --muted: #585d75;
+  --line: #e2e4ec;
+  --fill: #eaecf3;
+  --fill-strong: #dfe2eb;
+  --accent: var(--night);
+  --on-accent: #ffffff;
+  --coral-text: #b4401c;
+  --link: var(--night);
+  --focus: var(--night);
+  --hero-bg: var(--night);
+  --hero-text: #ffffff;
+  --hero-muted: #b9bcd2;
+  --hero-fill: rgb(255 255 255 / 0.1);
+  --warn-bg: #fff2ea;
+  --warn-line: #ffd6c4;
+  --warn-text: #6a2a0f;
+  --ok: #1f8f50;
+  --shadow: 0 1px 2px rgb(31 34 56 / 0.05), 0 6px 20px -6px rgb(31 34 56 / 0.1);
+  --radius: 1rem;
+  --radius-small: 0.75rem;
+  --header-height: 3.5rem;
+  --safe-top: env(safe-area-inset-top, 0px);
+
+  font-family:
+    system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue",
+    sans-serif;
+  font-size: 100%;
   line-height: 1.5;
   color: var(--text);
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --bg: #111325;
+    --card: #1b1e34;
     --text: #f3f3f0;
-    --muted: #a9acbd;
-    --bg: #16182a;
+    --muted: #a5a9bf;
+    --line: #2b2f4b;
+    --fill: #232741;
+    --fill-strong: #2e3352;
+    --accent: var(--coral);
+    --on-accent: var(--night);
+    --coral-text: #ff9b80;
     --link: var(--coral);
-    --line: #33364d;
-    --surface: #1f2238;
-    --surface-strong: #2a2e48;
-    --accent-line: var(--coral);
     --focus: var(--coral);
-    --warn-bg: #3a2a24;
-    --warn-text: #ffd9cc;
-    --badge-bg: var(--coral);
-    --badge-text: var(--night);
+    --hero-bg: #262b4d;
+    --hero-text: #ffffff;
+    --hero-muted: #b9bcd2;
+    --hero-fill: rgb(255 255 255 / 0.08);
+    --warn-bg: #36241f;
+    --warn-line: #573427;
+    --warn-text: #ffd7c9;
+    --ok: #4fd18b;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3);
   }
 }
 
@@ -53,15 +80,40 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-padding-top: calc(var(--safe-top) + var(--header-height) + 4.5rem);
+}
+
 body {
   margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 a {
   color: var(--link);
+  text-underline-offset: 0.15em;
 }
 
-a:focus-visible {
-  outline: 2px solid currentColor;
+:focus-visible {
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

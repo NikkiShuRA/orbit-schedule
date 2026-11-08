@@ -37,9 +37,11 @@ export default defineConfig({
         short_name: "Orbit",
         description: "Расписание колледжей и вузов. Независимый проект.",
         lang: "ru",
+        id: "./",
         start_url: "./",
         scope: "./",
         display: "standalone",
+        categories: ["education", "productivity"],
         // Colors and icons: brand/README.md.
         background_color: "#1f2238",
         theme_color: "#1f2238",

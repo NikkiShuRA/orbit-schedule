@@ -6,7 +6,17 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { catalog, groupWeek, teacherWeek } from "../testdata";
 import { ago, isStale } from "./age";
-import { addDays, datesBetween, formatDay, minutesIn, mondayOf, todayIn } from "./dates";
+import {
+  addDays,
+  datesBetween,
+  formatDay,
+  formatMinutes,
+  formatRange,
+  formatWeekday,
+  minutesIn,
+  mondayOf,
+  todayIn,
+} from "./dates";
 import { buildWeek, coverageState, findNow, lessonTime } from "./schedule";
 import { search } from "./search";
 import { fromSearch, loadSaved, save, toSearch } from "./selection";
@@ -31,6 +41,15 @@ describe("dates", () => {
       "2026-11-11",
     ]);
     expect(formatDay("2026-11-09")).toBe("понедельник, 9 ноября");
+  });
+
+  test("short forms for the day strip, the week and countdowns", () => {
+    expect(formatWeekday("2026-11-09")).toBe("пн");
+    expect(formatRange("2026-11-09", "2026-11-14")).toBe("9–14 ноября");
+    expect(formatRange("2026-11-30", "2026-12-05")).toBe("30 ноября – 5 декабря");
+    expect(formatMinutes(25)).toBe("25 мин");
+    expect(formatMinutes(60)).toBe("1 ч");
+    expect(formatMinutes(80)).toBe("1 ч 20 мин");
   });
 });
 

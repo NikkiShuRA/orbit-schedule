@@ -4,7 +4,7 @@
 // The app against a fake API. All data is made up (testdata.ts); no
 // test goes to the network.
 
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { App } from "./App";
 import type { Catalog } from "./api";
@@ -79,6 +79,8 @@ test("shows the week as published: next lesson, bell times, placeholders, notes"
   // 10:30: the first lesson started at 09:00, but its end is unknown,
   // so it is not called "on now"; the next ones start at 10:40.
   expect(screen.queryByText("Сейчас")).toBeNull();
+  expect(screen.getByText("через 10 мин")).toBeDefined();
+  expect(screen.getByRole("navigation", { name: "Дни недели" })).toBeDefined();
   expect(screen.getAllByText("по звонкам").length).toBeGreaterThan(0);
   expect(screen.getAllByText(/ВАКАНСИЯ/).length).toBeGreaterThan(0);
   expect(screen.getAllByText("Предмет не указан").length).toBeGreaterThan(0);
@@ -177,4 +179,19 @@ test("an old link to a group that is gone offers to choose again", async () => {
   fireEvent.click(screen.getByRole("button", { name: "Выбрать другое расписание" }));
   expect(await screen.findByLabelText("Группа или преподаватель")).toBeDefined();
   expect(globalThis.location.search).toBe("");
+});
+
+test("coming back to the page refreshes quietly and keeps the week if that fails", async () => {
+  serve(files);
+  open("?s=example&g=g-101");
+  expect(await screen.findByText("Дальше")).toBeDefined();
+  vi.mocked(fetch).mockImplementation(async () => {
+    throw new TypeError("Failed to fetch");
+  });
+  vi.mocked(fetch).mockClear();
+  fireEvent(document, new Event("visibilitychange"));
+  await waitFor(() => expect(fetch).toHaveBeenCalled());
+  await act(async () => {});
+  expect(screen.getByText("Дальше")).toBeDefined();
+  expect(screen.queryByRole("alert")).toBeNull();
 });

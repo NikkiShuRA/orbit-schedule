@@ -15,17 +15,47 @@ export type Loaded<T> =
    */
   | { kind: "failed"; reason: "offline" | "server" };
 
-/** Loads a file of the API; `null` loads nothing. */
+/**
+ * Counts the moments when shown data may have gone stale: the page came
+ * back to the screen (an installed app is often left open for days) or
+ * the network came back.
+ */
+function useResume(): number {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const bump = () => {
+      if (document.visibilityState === "visible") setCount((c) => c + 1);
+    };
+    document.addEventListener("visibilitychange", bump);
+    globalThis.addEventListener("online", bump);
+    return () => {
+      document.removeEventListener("visibilitychange", bump);
+      globalThis.removeEventListener("online", bump);
+    };
+  }, []);
+  return count;
+}
+
+/**
+ * Loads a file of the API; `null` loads nothing. When the page comes
+ * back to the screen, the file is loaded again quietly: what is shown
+ * stays until a newer answer arrives, and a failed refresh keeps it.
+ */
 export function useJSON<T>(path: string | null): Loaded<T> {
+  const resumed = useResume();
   const [state, setState] = useState<{ path: string | null; loaded: Loaded<T> }>({
     path,
     loaded: { kind: "loading" },
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `resumed` only triggers a reload.
   useEffect(() => {
     if (path === null) return;
     const ctrl = new AbortController();
-    setState({ path, loaded: { kind: "loading" } });
+    // What is already shown for this path stays while it is refreshed.
+    const keepShown = (prev: { path: string | null; loaded: Loaded<T> }) =>
+      prev.path === path && prev.loaded.kind === "ready";
+    setState((prev) => (keepShown(prev) ? prev : { path, loaded: { kind: "loading" } }));
     getJSON<T>(path, ctrl.signal)
       .then((fetched) => setState({ path, loaded: { kind: "ready", ...fetched } }))
       .catch((err: unknown) => {
@@ -34,21 +64,29 @@ export function useJSON<T>(path: string | null): Loaded<T> {
           err instanceof NotFoundError
             ? { kind: "missing" }
             : { kind: "failed", reason: err instanceof ServerError ? "server" : "offline" };
-        setState({ path, loaded });
+        setState((prev) => (keepShown(prev) ? prev : { path, loaded }));
       });
     return () => ctrl.abort();
-  }, [path]);
+  }, [path, resumed]);
 
   // A result for another path is never shown, even for one render.
   return state.path === path ? state.loaded : { kind: "loading" };
 }
 
-/** The current time, updated every 30 seconds for "now" and ages. */
+/**
+ * The current time for "now" and ages: every 30 seconds, and at once
+ * when the page comes back to the screen (timers sleep in background).
+ */
 export function useNow(): Date {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 30_000);
-    return () => clearInterval(id);
+    const tick = () => setNow(new Date());
+    const id = setInterval(tick, 30_000);
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", tick);
+    };
   }, []);
   return now;
 }
