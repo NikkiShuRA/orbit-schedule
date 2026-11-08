@@ -3,24 +3,47 @@
 
 import { useEffect, useState } from "react";
 import styles from "./App.module.css";
-import { getJSON, type Index } from "./api";
+import type { Index } from "./api";
 import logo from "./assets/orbit-logo-ru.svg";
 import logoDark from "./assets/orbit-logo-ru-dark.svg";
+import { failedText } from "./components/messages";
+import { Picker } from "./components/Picker";
+import { Schedule } from "./components/Schedule";
+import { useJSON } from "./hooks";
+import {
+  askPersistentStorage,
+  fromSearch,
+  loadSaved,
+  type Selection,
+  save,
+  toSearch,
+} from "./lib/selection";
 
-type State = { kind: "loading" } | { kind: "ready"; index: Index } | { kind: "failed" };
+/** A link opens what it points to; otherwise what was chosen last time. */
+function initialSelection(): Selection | undefined {
+  return fromSearch(globalThis.location.search) ?? loadSaved()[0];
+}
 
 export function App() {
-  const [state, setState] = useState<State>({ kind: "loading" });
+  const [selection, setSelection] = useState(initialSelection);
+  const index = useJSON<Index>(selection ? null : "index.json");
 
+  // A schedule opened from the saved choice gets its link in the address
+  // too, so it can be shared or bookmarked as is.
   useEffect(() => {
-    const ctrl = new AbortController();
-    getJSON<Index>("index.json", ctrl.signal)
-      .then((index) => setState({ kind: "ready", index }))
-      .catch(() => {
-        if (!ctrl.signal.aborted) setState({ kind: "failed" });
-      });
-    return () => ctrl.abort();
-  }, []);
+    if (selection && !fromSearch(globalThis.location.search)) {
+      globalThis.history.replaceState(null, "", toSearch(selection));
+    }
+  }, [selection]);
+
+  const choose = (sel: Selection | undefined) => {
+    setSelection(sel);
+    globalThis.history.replaceState(null, "", toSearch(sel) || globalThis.location.pathname);
+    if (sel) {
+      save([sel]);
+      askPersistentStorage();
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -34,9 +57,22 @@ export function App() {
         <p className={styles.tagline}>Расписание колледжей и вузов в одном месте</p>
       </header>
       <main className={styles.main}>
-        <p>Приложение в разработке. Скоро здесь можно будет выбрать группу или преподавателя.</p>
-        <h2 className={styles.heading}>Учебные заведения</h2>
-        <Sources state={state} />
+        {selection ? (
+          <Schedule key={toSearch(selection)} sel={selection} onChange={() => choose(undefined)} />
+        ) : index.kind === "loading" ? (
+          <p aria-live="polite">Загружаем…</p>
+        ) : index.kind !== "ready" ? (
+          <p role="alert">
+            {failedText(
+              index.kind === "failed" ? index.reason : "server",
+              "список учебных заведений",
+            )}
+          </p>
+        ) : index.data.sources.length === 0 ? (
+          <p>Пока ни одно расписание не опубликовано.</p>
+        ) : (
+          <Picker sources={index.data.sources} onPick={choose} />
+        )}
       </main>
       <footer className={styles.footer}>
         <p>
@@ -52,32 +88,4 @@ export function App() {
       </footer>
     </div>
   );
-}
-
-function Sources({ state }: { state: State }) {
-  switch (state.kind) {
-    case "loading":
-      return <p aria-live="polite">Загружаем…</p>;
-    case "failed":
-      return (
-        <p role="alert">
-          Не удалось загрузить список. Нет сети, а сохранённой копии на устройстве ещё нет: откройте
-          Orbit один раз с интернетом.
-        </p>
-      );
-    case "ready":
-      if (state.index.sources.length === 0) {
-        return <p>Пока ни одно расписание не опубликовано.</p>;
-      }
-      return (
-        <ul className={styles.list}>
-          {state.index.sources.map((s) => (
-            <li key={s.id}>
-              {s.name}
-              {s.shortName ? ` (${s.shortName})` : ""}
-            </li>
-          ))}
-        </ul>
-      );
-  }
 }

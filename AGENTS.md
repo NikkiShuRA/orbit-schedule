@@ -24,7 +24,9 @@
 - публикация по расписанию: днём каждые 10 минут, ночью раз в час, в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)); запускает её внешний таймер на Cloudflare Workers ([ADR 0011](docs/decisions/0011-external-trigger.md));
 - нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md)); всё это доступно как статичный API `api/v1` ([ADR 0008](docs/decisions/0008-versioned-data-api.md)) с описанием в OpenAPI 3.1 и схемами служебных файлов ([ADR 0009](docs/decisions/0009-api-description.md), [инструкция](docs/api.md)).
 
-Чего ещё нет: самого приложения — есть только заготовка в `app/` (оболочка, PWA, работа без сети), экраны впереди ([#11](https://github.com/NikkiShuRA/orbit-schedule/issues/11)). Решения для него приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); фреймворк и инструменты — [ADR 0010](docs/decisions/0010-app-stack.md) (React, Vite, PWA на Workbox, Biome, Vitest). Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
+- приложение (`app/`, первая версия): поиск группы или преподавателя, неделя с текущей и следующей парой, работа без сети с честной пометкой о сохранённой копии и возрасте данных.
+
+Чего ещё нет: нескольких расписаний сразу, свободных кабинетов и фоновой загрузки полных недель ([ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md)) — они в issues. Решения для приложения приняты: офлайн — [ADR 0005](docs/decisions/0005-offline-storage.md), полные недели и несколько расписаний — [ADR 0007](docs/decisions/0007-full-weeks-and-several-schedules.md); фреймворк и инструменты — [ADR 0010](docs/decisions/0010-app-stack.md) (React, Vite, PWA на Workbox, Biome, Vitest). Что в работе и что дальше — на доске [Orbit](https://github.com/users/NikkiShuRA/projects/9) и в issues; что уже сделано — в [CHANGELOG.md](CHANGELOG.md).
 
 Правила для кода:
 
@@ -54,6 +56,8 @@ npm run check                            # всё, что проверяет CI:
 npm run format                           # исправить форматирование и порядок импортов
 npm run build && npm run preview         # собранное приложение с service worker: http://localhost:4173
 ```
+
+Структура `app/src`: `api.ts` — типы читаемых файлов API и загрузка (ответ из кэша service worker помечен заголовком `x-orbit-from-cache`); `lib/` — логика без React (даты в часовом поясе учебного заведения, сборка недели из документа, поиск, выбор, возраст данных) с тестами `lib.test.ts`; `components/` — экраны; `hooks.ts` — загрузка файла и текущее время; `sw.ts` — service worker; `testdata.ts` — вымышленные данные для тестов. Логику пиши в `lib/` и проверяй тестами там, компоненты держи тонкими.
 
 Данные при разработке берутся по адресу `./api/v1/` рядом с приложением; другой адрес — `VITE_DATA_URL=https://nikkishura.github.io/orbit-schedule/api/v1/ npm run dev`. Бюджет веса — 100 КБ сжатого JS при первом открытии (`npm run size`); превышение — повод для обсуждения, а не для поднятия лимита.
 

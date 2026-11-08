@@ -1,0 +1,215 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.who {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.name {
+  font-size: 1.375rem;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.place {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+}
+
+.change {
+  flex: none;
+  font: inherit;
+  color: inherit;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.change:hover {
+  background: var(--surface);
+}
+
+.change:focus-visible,
+.tab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.problem {
+  margin: 1.5rem 0;
+}
+
+.fresh {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.offline,
+.notice {
+  margin: 0.75rem 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.75rem;
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.tabs {
+  min-inline-size: 0;
+  border: 0;
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  margin: 0 0 0.5rem;
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.tab {
+  flex: 1;
+  font: inherit;
+  color: inherit;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.tab[aria-pressed="true"] {
+  background: var(--bg);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+}
+
+.today {
+  margin: 1rem 0;
+  padding: 0.25rem 0.85rem 0.5rem;
+  border-left: 4px solid var(--coral);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+p.today {
+  padding: 0.7rem 0.85rem;
+}
+
+.todayHeading {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 0.6rem 0 0;
+}
+
+.day {
+  margin: 1.25rem 0;
+}
+
+.dayHeading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  margin: 0 0 0.25rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+}
+
+.lessons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lessons > li + li {
+  border-top: 1px solid var(--line);
+}
+
+.lesson {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+}
+
+.clock {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.bells {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+.body {
+  min-width: 0;
+}
+
+.subject {
+  margin: 0;
+  font-weight: 600;
+}
+
+.details {
+  margin: 0.1rem 0 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.note {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+@media (max-width: 360px) {
+  .lesson {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .time {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}
+
+/* Read by screen readers, not shown. */
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

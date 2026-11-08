@@ -34,17 +34,6 @@
   flex: 1;
 }
 
-.heading {
-  font-size: 1.125rem;
-  margin: 1.5rem 0 0.5rem;
-}
-
-.list {
-  margin: 0;
-  padding-left: 1.25rem;
-  line-height: 1.6;
-}
-
 .footer {
   padding: 1.5rem 0;
   font-size: 0.875rem;

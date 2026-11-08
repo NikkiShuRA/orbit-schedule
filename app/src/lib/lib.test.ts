@@ -1,0 +1,177 @@
+// SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+// Unit tests of the logic. All data here is made up.
+
+import { afterEach, describe, expect, test, vi } from "vitest";
+import { catalog, groupWeek, teacherWeek } from "../testdata";
+import { ago, isStale } from "./age";
+import { addDays, datesBetween, formatDay, minutesIn, mondayOf, todayIn } from "./dates";
+import { buildWeek, coverageState, findNow, lessonTime } from "./schedule";
+import { search } from "./search";
+import { fromSearch, loadSaved, save, toSearch } from "./selection";
+
+describe("dates", () => {
+  test("today is the institution's day, not the phone's", () => {
+    // 20:30 UTC on Sunday is already Monday 01:30 in UTC+5.
+    const now = new Date("2026-11-08T20:30:00Z");
+    expect(todayIn("Asia/Yekaterinburg", now)).toBe("2026-11-09");
+    expect(todayIn("Europe/London", now)).toBe("2026-11-08");
+    expect(minutesIn("Asia/Yekaterinburg", now)).toBe(90);
+  });
+
+  test("weeks start on Monday", () => {
+    expect(mondayOf("2026-11-09")).toBe("2026-11-09");
+    expect(mondayOf("2026-11-15")).toBe("2026-11-09");
+    expect(mondayOf("2026-11-01")).toBe("2026-10-26");
+    expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
+    expect(datesBetween("2026-11-09", "2026-11-11")).toEqual([
+      "2026-11-09",
+      "2026-11-10",
+      "2026-11-11",
+    ]);
+    expect(formatDay("2026-11-09")).toBe("понедельник, 9 ноября");
+  });
+});
+
+describe("age", () => {
+  const now = new Date("2026-11-09T10:00:00Z");
+  test("says how long ago in words", () => {
+    expect(ago("2026-11-09T09:59:40Z", now)).toBe("только что");
+    expect(ago("2026-11-09T09:55:00Z", now)).toBe("5 минут назад");
+    expect(ago("2026-11-09T12:00:00+05:00", now)).toBe("3 часа назад");
+    expect(ago("2026-11-08T09:00:00Z", now)).toBe("вчера");
+    expect(ago("not a date", now)).toBe("неизвестно когда");
+  });
+  test("marks data older than two hours", () => {
+    expect(isStale("2026-11-09T08:30:00Z", now)).toBe(false);
+    expect(isStale("2026-11-09T07:30:00Z", now)).toBe(true);
+    expect(isStale("not a date", now)).toBe(true);
+  });
+});
+
+describe("selection", () => {
+  afterEach(() => localStorage.clear());
+
+  test("round-trips through the address", () => {
+    const sel = { source: "example", kind: "teacher", id: "t-1" } as const;
+    expect(fromSearch(toSearch(sel))).toEqual(sel);
+    expect(fromSearch("?s=example&g=g-1")).toEqual({ source: "example", kind: "group", id: "g-1" });
+    expect(fromSearch("?g=g-1")).toBeUndefined();
+    expect(fromSearch("")).toBeUndefined();
+  });
+
+  test("survives broken or missing storage", () => {
+    localStorage.setItem("orbit.selection.v1", "{not json");
+    expect(loadSaved()).toEqual([]);
+    localStorage.setItem("orbit.selection.v1", JSON.stringify([{ source: "x" }, 5]));
+    expect(loadSaved()).toEqual([]);
+
+    const sel = { source: "example", kind: "group", id: "g-1" } as const;
+    save([sel]);
+    expect(loadSaved()).toEqual([sel]);
+
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("quota");
+    });
+    expect(() => save([sel])).not.toThrow();
+    vi.restoreAllMocks();
+  });
+});
+
+describe("search", () => {
+  test("finds groups and teachers, starts of names first", () => {
+    const found = search(catalog, "10");
+    expect(found.map((f) => f.title)).toEqual(["101", "102", "210"]);
+    expect(found[0]?.details).toBe("1 курс, Отделение примеров");
+  });
+  test("ignores case and ё", () => {
+    expect(search(catalog, "СЕМЕНОВ").map((f) => f.id)).toEqual(["t-2"]);
+    expect(search(catalog, "Иванов И.").map((f) => f.id)).toEqual(["t-1"]);
+  });
+  test("an empty query finds nothing", () => {
+    expect(search(catalog, "  ")).toEqual([]);
+  });
+});
+
+describe("week", () => {
+  const sel = { source: "example", kind: "group", id: "g-101" } as const;
+
+  test("takes the time from the lesson, or from the bells with a mark", () => {
+    expect(lessonTime({ date: "x", groups: [], start: "09:00", end: "10:30" }, [])).toEqual({
+      start: "09:00",
+      end: "10:30",
+      timeFromBells: false,
+    });
+    const bells = groupWeek.bellSchedules ?? [];
+    expect(lessonTime({ date: "x", groups: [], period: 2 }, bells)).toEqual({
+      start: "10:40",
+      timeFromBells: true,
+    });
+    expect(lessonTime({ date: "x", groups: [], period: 9 }, bells)).toEqual({
+      timeFromBells: false,
+    });
+  });
+
+  test("builds days in order, keeping placeholders and missing values", () => {
+    const week = buildWeek(groupWeek, sel, catalog);
+    expect(week.days.map((d) => d.date)).toEqual(datesBetween("2026-11-09", "2026-11-14"));
+    expect(week.coverage).toBe("covered");
+    expect(week.changedAt).toBe("2026-11-08T12:00:00+05:00");
+
+    const monday = week.days[0]?.lessons ?? [];
+    expect(monday.map((l) => [l.period, l.subgroup])).toEqual([
+      [1, undefined],
+      [2, 1],
+      [2, 2],
+    ]);
+    expect(monday[0]).toMatchObject({
+      start: "09:00",
+      timeFromBells: true,
+      subject: "Математика",
+      lessonType: "Лекция",
+      rooms: ["Кабинет 5"],
+      teachers: ["Иванов И. И."],
+      building: "Главный корпус",
+    });
+    expect(monday[2]?.teachers).toEqual(["ВАКАНСИЯ"]);
+    expect(monday[1]?.subject).toBeUndefined();
+    expect(week.days[1]?.lessons[0]?.note).toBe("Перенос с пятницы");
+    expect(week.days[2]?.lessons).toEqual([]);
+  });
+
+  test("a teacher sees groups and not themselves", () => {
+    const week = buildWeek(teacherWeek, { source: "example", kind: "teacher", id: "t-1" }, catalog);
+    const lesson = week.days[0]?.lessons[0];
+    expect(lesson?.groups).toEqual(["101", "102, подгруппа 2"]);
+    expect(lesson?.teachers).toEqual([]);
+  });
+
+  test("tells published, outside and partial coverage apart", () => {
+    const all = { institution: true } as const;
+    expect(coverageState(all, sel, catalog)).toBe("covered");
+    expect(coverageState({ buildingIds: ["b-main"] }, sel, catalog)).toBe("covered");
+    expect(coverageState({ buildingIds: ["b-other"] }, sel, catalog)).toBe("outside");
+    const teacher = { source: "example", kind: "teacher", id: "t-1" } as const;
+    expect(coverageState({ buildingIds: ["b-main"] }, teacher, catalog)).toBe("partial");
+    expect(coverageState({ buildingIds: ["b-main", "b-other"] }, teacher, catalog)).toBe("covered");
+  });
+
+  test("finds the lesson on now and the next one", () => {
+    const lessons = [
+      { key: "a", start: "09:00", end: "10:30", timeFromBells: false },
+      { key: "b", start: "10:40", timeFromBells: true },
+      { key: "c", start: "10:40", timeFromBells: true },
+      { key: "d", start: "12:00", end: "13:30", timeFromBells: false },
+    ].map((l) => ({ rooms: [], teachers: [], groups: [], ...l }));
+    const at = (m: number) => {
+      const now = findNow(lessons, m);
+      return [now.current.map((l) => l.key), now.next.map((l) => l.key)];
+    };
+    expect(at(8 * 60)).toEqual([[], ["a"]]);
+    expect(at(9 * 60 + 30)).toEqual([["a"], ["b", "c"]]);
+    // Without an end, a started lesson is not called "on now".
+    expect(at(11 * 60)).toEqual([[], ["d"]]);
+    expect(at(14 * 60)).toEqual([[], []]);
+  });
+});
