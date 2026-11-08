@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 
+	api "github.com/NikkiShuRA/orbit-schedule/api/v1"
 	"github.com/NikkiShuRA/orbit-schedule/internal/standard"
 )
 
@@ -139,9 +140,16 @@ func marshal(v any) ([]byte, error) {
 	return append(data, '\n'), nil
 }
 
-func writeJSON(path string, v any) error {
+// writeAPIFile writes a publication file (api.Index, api.Catalog or
+// api.Status) only if it matches its schema in the API description
+// (ADR 0009). A file that does not is a bug in orbit; the last good file
+// stays in place instead.
+func writeAPIFile(path, kind string, v any) error {
 	data, err := marshal(v)
 	if err != nil {
+		return err
+	}
+	if err := api.Validate(kind, data); err != nil {
 		return err
 	}
 	return writeFileAtomic(path, data)

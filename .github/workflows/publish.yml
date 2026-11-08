@@ -95,14 +95,20 @@ jobs:
 
       # The data is a static API; its path carries the version of the
       # contract (ADR 0008). A breaking change publishes api/v2 next to
-      # api/v1 instead of changing this path.
+      # api/v1 instead of changing this path. The description of the API
+      # (ADR 0009) is published with it, from the commit being run, so
+      # it always matches the orbit that wrote the files. The README of
+      # the data branch describes the branch, not the API: left out.
       - name: Assemble the site
         env:
           API: _site/api/v1
         run: |
           mkdir -p "$API"
-          rsync -a --exclude='.git*' data/ "$API/"
+          rsync -a --exclude='.git*' --exclude='/README.md' data/ "$API/"
           "$RUNNER_TEMP/orbit" slice --in data --out "$API"
+          cp code/api/v1/openapi.json "$API/"
+          mkdir -p "$API/schemas"
+          cp code/api/v1/schemas/*.schema.json "$API/schemas/"
           find "$API" -maxdepth 2 -type f | sort
           echo "$(find _site -type f | wc -l) files, $(du -sh _site | cut -f1)"
 

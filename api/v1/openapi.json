@@ -1,0 +1,285 @@
+{
+  "openapi": "3.1.1",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Orbit API",
+    "summary": "Открытое расписание колледжей и вузов в стандарте Orbit.",
+    "description": "Статичный API: готовые JSON-файлы на GitHub Pages, которые публикация обновляет днём каждые 10 минут и ночью раз в час. Только чтение, без ключей и регистрации.\n\nНачинайте с `index.json`: адреса остальных файлов строятся по нему и по `catalog.json` источника, а не угадываются.\n\n**Совместимость.** Версия — часть адреса (`/api/v1/`). Внутри `v1` появляются только новые необязательные поля, файлы и источники; незнакомые поля читатель должен пропускать. Несовместимые изменения выходят как `v2` рядом с `v1` (ADR 0008).\n\n**Кэш и CORS.** Файлы можно читать с любого сайта (`Access-Control-Allow-Origin: *`). Ответы кэшируются до 10 минут; для повторной проверки используйте `If-None-Match` с `ETag` — неизменившийся файл вернётся как `304`.\n\n**Честность данных.** Расписание — ровно то, что опубликовало учебное заведение. Вне охвата недели (`publication.coverage`) расписание неизвестно, а не пусто. Orbit не связан ни с одним учебным заведением.\n\nИнструкция: https://github.com/NikkiShuRA/orbit-schedule/blob/main/docs/api.md",
+    "version": "1.0.0",
+    "license": {
+      "name": "AGPL-3.0-or-later",
+      "identifier": "AGPL-3.0-or-later"
+    },
+    "contact": {
+      "name": "Orbit",
+      "url": "https://github.com/NikkiShuRA/orbit-schedule/issues"
+    }
+  },
+  "externalDocs": {
+    "description": "Стандарт расписания Orbit",
+    "url": "https://github.com/NikkiShuRA/orbit-schedule/tree/main/standard"
+  },
+  "servers": [
+    {
+      "url": "https://nikkishura.github.io/orbit-schedule/api/v1",
+      "description": "GitHub Pages"
+    }
+  ],
+  "tags": [
+    { "name": "Оглавление", "description": "С чего начать: источники, их состав и свежесть." },
+    { "name": "Расписание", "description": "Документы стандарта Orbit за неделю." }
+  ],
+  "paths": {
+    "/index.json": {
+      "get": {
+        "operationId": "getIndex",
+        "tags": ["Оглавление"],
+        "summary": "Список источников",
+        "description": "Входная точка API. Пути внутри — относительно index.json.",
+        "responses": {
+          "200": {
+            "description": "Оглавление.",
+            "headers": { "ETag": { "$ref": "#/components/headers/ETag" } },
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Index" },
+                "examples": {
+                  "twoSources": { "$ref": "#/components/examples/Index" }
+                }
+              }
+            }
+          },
+          "304": { "$ref": "#/components/responses/NotModified" }
+        }
+      }
+    },
+    "/{source}/status.json": {
+      "get": {
+        "operationId": "getStatus",
+        "tags": ["Оглавление"],
+        "summary": "Когда источник проверяли",
+        "description": "Время последней успешной проверки источника и итог по каждой неделе. Если `checkedAt` давно в прошлом, источник, скорее всего, недоступен, а опубликованные недели могли устареть.",
+        "parameters": [{ "$ref": "#/components/parameters/source" }],
+        "responses": {
+          "200": {
+            "description": "Статус проверки.",
+            "headers": { "ETag": { "$ref": "#/components/headers/ETag" } },
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Status" },
+                "examples": {
+                  "nextWeekNotYet": { "$ref": "#/components/examples/Status" }
+                }
+              }
+            }
+          },
+          "304": { "$ref": "#/components/responses/NotModified" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/{source}/catalog.json": {
+      "get": {
+        "operationId": "getCatalog",
+        "tags": ["Оглавление"],
+        "summary": "Недели, группы и преподаватели источника",
+        "description": "Для поиска группы или преподавателя и для адресов их файлов.",
+        "parameters": [{ "$ref": "#/components/parameters/source" }],
+        "responses": {
+          "200": {
+            "description": "Оглавление источника.",
+            "headers": { "ETag": { "$ref": "#/components/headers/ETag" } },
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Catalog" },
+                "examples": {
+                  "oneWeek": { "$ref": "#/components/examples/Catalog" }
+                }
+              }
+            }
+          },
+          "304": { "$ref": "#/components/responses/NotModified" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/{source}/{week}.json": {
+      "get": {
+        "operationId": "getWeek",
+        "tags": ["Расписание"],
+        "summary": "Неделя учебного заведения целиком",
+        "description": "Все пары недели, которые опубликовал источник. Большой файл (около 1,7 МБ, по сети около 130 КБ в сжатом виде): для одной группы или преподавателя берите их файлы.",
+        "parameters": [
+          { "$ref": "#/components/parameters/source" },
+          { "$ref": "#/components/parameters/week" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/Week" },
+          "304": { "$ref": "#/components/responses/NotModified" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/{source}/groups/{groupId}/{week}.json": {
+      "get": {
+        "operationId": "getGroupWeek",
+        "tags": ["Расписание"],
+        "summary": "Неделя группы",
+        "description": "Пары одной группы за неделю. Файл есть для каждой группы из catalog.json на каждую неделю, которая её охватывает, даже если пар нет: внутри охвата «пар нет» — это факт.",
+        "parameters": [
+          { "$ref": "#/components/parameters/source" },
+          { "$ref": "#/components/parameters/groupId" },
+          { "$ref": "#/components/parameters/week" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/Week" },
+          "304": { "$ref": "#/components/responses/NotModified" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/{source}/teachers/{teacherId}/{week}.json": {
+      "get": {
+        "operationId": "getTeacherWeek",
+        "tags": ["Расписание"],
+        "summary": "Неделя преподавателя",
+        "description": "Пары одного преподавателя за неделю, по тем же правилам, что и неделя группы.",
+        "parameters": [
+          { "$ref": "#/components/parameters/source" },
+          { "$ref": "#/components/parameters/teacherId" },
+          { "$ref": "#/components/parameters/week" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/Week" },
+          "304": { "$ref": "#/components/responses/NotModified" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Index": { "$ref": "schemas/index.schema.json" },
+      "Status": { "$ref": "schemas/status.schema.json" },
+      "Catalog": { "$ref": "schemas/catalog.schema.json" },
+      "Week": {
+        "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json"
+      }
+    },
+    "parameters": {
+      "source": {
+        "name": "source",
+        "in": "path",
+        "required": true,
+        "description": "Id источника из index.json.",
+        "schema": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "example": "spk"
+      },
+      "week": {
+        "name": "week",
+        "in": "path",
+        "required": true,
+        "description": "Понедельник недели, YYYY-MM-DD. Опубликованные недели перечислены в catalog.json.",
+        "schema": { "type": "string", "format": "date", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "example": "2026-11-09"
+      },
+      "groupId": {
+        "name": "groupId",
+        "in": "path",
+        "required": true,
+        "description": "Id группы из catalog.json.",
+        "schema": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" }
+      },
+      "teacherId": {
+        "name": "teacherId",
+        "in": "path",
+        "required": true,
+        "description": "Id преподавателя из catalog.json.",
+        "schema": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" }
+      }
+    },
+    "headers": {
+      "ETag": {
+        "description": "Версия файла. Передайте её в If-None-Match, чтобы получить 304, если файл не менялся.",
+        "schema": { "type": "string" }
+      }
+    },
+    "responses": {
+      "Week": {
+        "description": "Документ стандарта Orbit за неделю.",
+        "headers": { "ETag": { "$ref": "#/components/headers/ETag" } },
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Week" }
+          }
+        }
+      },
+      "NotModified": {
+        "description": "Файл не изменился с версии из If-None-Match."
+      },
+      "NotFound": {
+        "description": "Такого файла нет: неизвестный источник, id или неделя, которую не публиковали. Это не значит, что пар нет.",
+        "content": {
+          "text/html": {
+            "schema": { "type": "string" }
+          }
+        }
+      }
+    },
+    "examples": {
+      "Index": {
+        "summary": "Два источника",
+        "value": {
+          "sources": [
+            {
+              "id": "example",
+              "name": "Колледж «Пример»",
+              "shortName": "КП",
+              "catalog": "example/catalog.json",
+              "status": "example/status.json"
+            },
+            {
+              "id": "sample",
+              "name": "Институт «Образец»",
+              "catalog": "sample/catalog.json"
+            }
+          ]
+        }
+      },
+      "Status": {
+        "summary": "Текущая неделя без изменений, следующая ещё не опубликована",
+        "value": {
+          "source": "example",
+          "checkedAt": "2026-11-08T07:07:28+05:00",
+          "weeks": [
+            { "date": "2026-11-08", "result": "unchanged", "file": "2026-11-02.json" },
+            { "date": "2026-11-15", "result": "not-published" }
+          ]
+        }
+      },
+      "Catalog": {
+        "summary": "Одна неделя, одна группа и один преподаватель",
+        "value": {
+          "source": "example",
+          "institution": {
+            "id": "example",
+            "name": "Колледж «Пример»",
+            "shortName": "КП",
+            "timeZone": "Asia/Yekaterinburg"
+          },
+          "weeks": [
+            {
+              "start": "2026-11-09",
+              "end": "2026-11-15",
+              "file": "2026-11-09.json",
+              "coverage": { "institution": true }
+            }
+          ],
+          "buildings": [{ "id": "b-1", "name": "Главный корпус" }],
+          "groups": [{ "id": "g-1", "name": "ПР-21", "course": 2, "buildingId": "b-1" }],
+          "teachers": [{ "id": "t-1", "name": "Иванова Анна Сергеевна", "shortName": "Иванова А. С." }]
+        }
+      }
+    }
+  }
+}
