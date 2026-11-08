@@ -19,6 +19,8 @@
   letter-spacing: -0.015em;
   margin: 0;
   overflow-wrap: anywhere;
+  /* "Группа" / "ИС-23/9-2" on two lines, not "…9-" / "2". */
+  text-wrap: balance;
 }
 
 .place {

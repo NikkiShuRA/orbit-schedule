@@ -100,126 +100,140 @@ export function Calendar({
   const days: DayView[] =
     weekView?.days ??
     Array.from({ length: 6 }, (_, i) => ({ date: addDays(monday, i), lessons: [] }));
-  const dock = view === "day" && !wide;
+
+  // On a phone the controls sit at the bottom, under the thumb:
+  // switching days and weeks is what people do most.
+  const toolbar = (
+    <div className={styles.toolbar}>
+      <button
+        type="button"
+        className={styles.todayButton}
+        onClick={() => setDate(home)}
+        disabled={atHome}
+      >
+        Сегодня
+      </button>
+      <div className={styles.nav}>
+        <button
+          type="button"
+          className={styles.iconButton}
+          aria-label={view === "day" ? "Предыдущий день" : "Предыдущая неделя"}
+          onClick={() => step(-1)}
+        >
+          <Icon name="chevronLeft" />
+        </button>
+        <div className={styles.navLabel} aria-live="polite">
+          <span className={styles.navMain}>
+            {view === "day"
+              ? `${capitalize(formatWeekday(date))}, ${formatShortDate(date)}`
+              : formatRange(monday, addDays(monday, 6))}
+          </span>
+          <span className={atHome ? styles.navSub : `${styles.navSub} ${styles.awaySub}`}>
+            {weekName(monday, today) ?? " "}
+          </span>
+          {!atHome && (
+            // On a phone there is no room for a "today" button: the way
+            // back shows up right here, only when it is needed.
+            <button type="button" className={styles.back} onClick={() => setDate(home)}>
+              Вернуться к сегодня
+            </button>
+          )}
+        </div>
+        <button
+          type="button"
+          className={styles.iconButton}
+          aria-label={view === "day" ? "Следующий день" : "Следующая неделя"}
+          onClick={() => step(1)}
+        >
+          <Icon name="chevron" />
+        </button>
+      </div>
+      <fieldset className={styles.views}>
+        <legend className={styles.hidden}>Вид: {unit}</legend>
+        <button type="button" aria-pressed={view === "day"} onClick={() => setView("day")}>
+          <Icon name="day" />
+          <span className={styles.viewLabel}>День</span>
+        </button>
+        <button type="button" aria-pressed={view === "week"} onClick={() => setView("week")}>
+          <Icon name="week" />
+          <span className={styles.viewLabel}>Неделя</span>
+        </button>
+      </fieldset>
+    </div>
+  );
+  const tabs = view === "day" && (
+    <DayTabs
+      days={days}
+      selected={date}
+      today={today}
+      onSelect={setDate}
+      docked={!wide}
+      panelId="day-panel"
+    />
+  );
 
   return (
-    <div className={dock ? styles.withDock : undefined}>
+    <div className={wide ? undefined : tabs ? styles.withDockTall : styles.withDock}>
       <Freshness status={status} fromCache={fromCache} now={now} />
       {todayView && <Today day={todayView} minutes={minutes} kind={sel.kind} />}
 
-      <div className={styles.toolbar}>
-        <button
-          type="button"
-          className={styles.todayButton}
-          onClick={() => setDate(home)}
-          disabled={atHome}
-        >
-          Сегодня
-        </button>
-        <div className={styles.nav}>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label={view === "day" ? "Предыдущий день" : "Предыдущая неделя"}
-            onClick={() => step(-1)}
-          >
-            <Icon name="chevronLeft" />
-          </button>
-          <div className={styles.navLabel} aria-live="polite">
-            <span className={styles.navMain}>
-              {view === "day"
-                ? `${capitalize(formatWeekday(date))}, ${formatShortDate(date)}`
-                : formatRange(monday, addDays(monday, 6))}
-            </span>
-            <span className={atHome ? styles.navSub : `${styles.navSub} ${styles.awaySub}`}>
-              {weekName(monday, today) ?? " "}
-            </span>
-            {!atHome && (
-              // On a phone there is no room for a "today" button: the way
-              // back shows up right here, only when it is needed.
-              <button type="button" className={styles.back} onClick={() => setDate(home)}>
-                Вернуться к сегодня
-              </button>
-            )}
-          </div>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label={view === "day" ? "Следующий день" : "Следующая неделя"}
-            onClick={() => step(1)}
-          >
-            <Icon name="chevron" />
-          </button>
-        </div>
-        <fieldset className={styles.views}>
-          <legend className={styles.hidden}>Вид: {unit}</legend>
-          <button type="button" aria-pressed={view === "day"} onClick={() => setView("day")}>
-            <Icon name="day" />
-            <span className={styles.viewLabel}>День</span>
-          </button>
-          <button type="button" aria-pressed={view === "week"} onClick={() => setView("week")}>
-            <Icon name="week" />
-            <span className={styles.viewLabel}>Неделя</span>
-          </button>
-        </fieldset>
+      {wide && toolbar}
+
+      <div className={styles.panel}>
+        {wide && tabs}
+        {!entry ? (
+          <Notice icon="clock">
+            Расписание на неделю с {formatShortDate(monday)} ещё не опубликовано.
+          </Notice>
+        ) : week.kind === "loading" ? (
+          <Skeleton label="Загружаем неделю…" rows={4} />
+        ) : week.kind === "missing" ? (
+          <Notice icon="clock">Расписание на эту неделю ещё не опубликовано.</Notice>
+        ) : week.kind === "failed" ? (
+          <Notice tone="warn" role="alert">
+            {failedText(week.reason, "эту неделю")}
+          </Notice>
+        ) : (
+          weekView && (
+            <>
+              <CoverageNotice coverage={weekView.coverage} kind={sel.kind} />
+              {covered &&
+                (view === "day" ? (
+                  <DayPanel
+                    id="day-panel"
+                    day={weekView.days.find((d) => d.date === date) ?? { date, lessons: [] }}
+                    minutes={date === today ? minutes : undefined}
+                    coverage={weekView.coverage}
+                    kind={sel.kind}
+                    onSwipe={step}
+                  />
+                ) : wide ? (
+                  <WeekGrid
+                    view={weekView}
+                    today={today}
+                    minutes={minutes}
+                    kind={sel.kind}
+                    onOpenDay={(d) => {
+                      setDate(d);
+                      setView("day");
+                    }}
+                  />
+                ) : (
+                  <Agenda view={weekView} today={today} minutes={minutes} kind={sel.kind} />
+                ))}
+              <p className={styles.changed}>
+                Изменено в источнике {formatMoment(weekView.changedAt, tz)}
+              </p>
+            </>
+          )
+        )}
       </div>
 
-      {view === "day" && (
-        <DayTabs
-          days={days}
-          selected={date}
-          today={today}
-          onSelect={setDate}
-          docked={dock}
-          panelId="day-panel"
-        />
-      )}
-
-      {!entry ? (
-        <Notice icon="clock">
-          Расписание на неделю с {formatShortDate(monday)} ещё не опубликовано.
-        </Notice>
-      ) : week.kind === "loading" ? (
-        <Skeleton label="Загружаем неделю…" rows={4} />
-      ) : week.kind === "missing" ? (
-        <Notice icon="clock">Расписание на эту неделю ещё не опубликовано.</Notice>
-      ) : week.kind === "failed" ? (
-        <Notice tone="warn" role="alert">
-          {failedText(week.reason, "эту неделю")}
-        </Notice>
-      ) : (
-        weekView && (
-          <>
-            <CoverageNotice coverage={weekView.coverage} kind={sel.kind} />
-            {covered &&
-              (view === "day" ? (
-                <DayPanel
-                  id="day-panel"
-                  day={weekView.days.find((d) => d.date === date) ?? { date, lessons: [] }}
-                  minutes={date === today ? minutes : undefined}
-                  coverage={weekView.coverage}
-                  kind={sel.kind}
-                  onSwipe={step}
-                />
-              ) : wide ? (
-                <WeekGrid
-                  view={weekView}
-                  today={today}
-                  minutes={minutes}
-                  kind={sel.kind}
-                  onOpenDay={(d) => {
-                    setDate(d);
-                    setView("day");
-                  }}
-                />
-              ) : (
-                <Agenda view={weekView} today={today} minutes={minutes} kind={sel.kind} />
-              ))}
-            <p className={styles.changed}>
-              Изменено в источнике {formatMoment(weekView.changedAt, tz)}
-            </p>
-          </>
-        )
+      {!wide && (
+        <div className={styles.dock}>
+          {tabs}
+          {toolbar}
+        </div>
       )}
     </div>
   );
@@ -286,7 +300,7 @@ function DayTabs({
     );
   };
   return (
-    <div className={docked ? styles.dock : styles.tabsWrap}>
+    <div className={docked ? styles.dockTabs : styles.tabsWrap}>
       <div
         ref={list}
         role="tablist"
@@ -514,24 +528,10 @@ function WeekGrid({
         className={styles.grid}
         style={{ "--days": view.days.length, "--rows": rows } as CSSProperties}
       >
-        {periods.map((p) => (
-          <div
-            key={p}
-            className={styles.gridPeriod}
-            style={{ gridRow: rowOf(p) }}
-            aria-hidden="true"
-          >
-            <span>{p}</span>
-            <small>пара</small>
-          </div>
-        ))}
         {view.days.map((day, i) => {
-          const col = i + 2;
+          const col = i + 1;
           const isToday = day.date === today;
           const stateOf = stateIn(isToday ? timeline(day.lessons, minutes) : undefined);
-          const used = day.lessons.map((l) => l.period ?? 0);
-          const firstUsed = Math.min(...used);
-          const lastUsed = Math.max(...used);
           return (
             <section key={day.date} className={styles.gridDay} aria-label={formatDay(day.date)}>
               {isToday && <div className={styles.gridToday} style={{ gridColumn: col }} />}
@@ -564,20 +564,8 @@ function WeekGrid({
               ) : range ? (
                 periods.map((p) => {
                   const here = slots(day.lessons.filter((l) => l.period === p));
-                  if (here.length === 0) {
-                    // A gap inside the day is worth seeing; before the first
-                    // and after the last lesson it is just empty space.
-                    return p > firstUsed && p < lastUsed ? (
-                      <div
-                        key={p}
-                        className={styles.gridWindow}
-                        style={{ gridColumn: col, gridRow: rowOf(p) }}
-                        aria-hidden="true"
-                      >
-                        Окно
-                      </div>
-                    ) : null;
-                  }
+                  // Free periods are not drawn: the empty space says it.
+                  if (here.length === 0) return null;
                   return (
                     <div
                       key={p}

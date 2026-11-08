@@ -20,7 +20,10 @@ export interface LessonView {
   subject?: string;
   lessonType?: string;
   rooms: string[];
+  /** Short names ("Иванов И. И."), for tight places. */
   teachers: string[];
+  /** Full names, in the same order, where there is room. */
+  teacherNames: string[];
   groups: string[];
   /** The subgroup of the selected group, if the lesson is for one. */
   subgroup?: number;
@@ -125,6 +128,23 @@ export function buildWeek(doc: ScheduleDocument, sel: Selection, catalog: Catalo
   const buildings = byId(doc.buildings);
   const bells = doc.bellSchedules ?? [];
 
+  // Other teachers of a lesson: a teacher's own schedule leaves them out.
+  const people = (refs: NonNullable<Lesson["teachers"]>) => {
+    const others = refs.filter(
+      (t) => !(sel.kind === "teacher" && "teacherId" in t && t.teacherId === sel.id),
+    );
+    const found = others.map((t) => ("teacherId" in t ? teachers.get(t.teacherId) : undefined));
+    const missing = "преподаватель не найден";
+    return {
+      teachers: others.map((t, i) =>
+        "teacherId" in t ? (found[i]?.shortName ?? found[i]?.name ?? missing) : t.sourceText,
+      ),
+      teacherNames: others.map((t, i) =>
+        "teacherId" in t ? (found[i]?.name ?? missing) : t.sourceText,
+      ),
+    };
+  };
+
   const byDate = new Map<string, LessonView[]>();
   (doc.lessons ?? []).forEach((lesson, i) => {
     const own = lesson.groups.find((g) => sel.kind === "group" && g.groupId === sel.id);
@@ -135,13 +155,7 @@ export function buildWeek(doc: ScheduleDocument, sel: Selection, catalog: Catalo
       rooms: (lesson.rooms ?? []).map((r) =>
         "roomId" in r ? (label(rooms.get(r.roomId)) ?? "аудитория не найдена") : r.sourceText,
       ),
-      teachers: (lesson.teachers ?? [])
-        .filter((t) => !(sel.kind === "teacher" && "teacherId" in t && t.teacherId === sel.id))
-        .map((t) => {
-          if (!("teacherId" in t)) return t.sourceText;
-          const teacher = teachers.get(t.teacherId);
-          return teacher?.shortName ?? teacher?.name ?? "преподаватель не найден";
-        }),
+      ...people(lesson.teachers ?? []),
       groups:
         sel.kind === "teacher"
           ? lesson.groups.map((g) => {

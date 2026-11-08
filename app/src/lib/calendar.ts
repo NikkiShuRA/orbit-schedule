@@ -112,21 +112,6 @@ function stateOf(
   return undefined;
 }
 
-/** The number of subject colors (CSS: --hue-0 … in index.css). */
-export const SUBJECT_COLORS = 8;
-
-/**
- * A color for a subject, the same every time it appears, so the same
- * subject is recognised across the week at a glance. By name, so that
- * it stays the same across weeks and sources.
- */
-export function subjectColor(subject: string | undefined): number | undefined {
-  if (!subject) return undefined;
-  let h = 0;
-  for (const ch of subject) h = (h * 31 + (ch.codePointAt(0) ?? 0)) >>> 0;
-  return h % SUBJECT_COLORS;
-}
-
 /**
  * The periods a week grid needs: from the earliest to the latest used.
  * Undefined when some lesson has no period number: such a week cannot
@@ -191,6 +176,18 @@ export function saveView(view: View): void {
   } catch {
     // Private mode or full storage: the choice is just not remembered.
   }
+}
+
+/**
+ * Initials for a name tile: "Каюк Николай Васильевич" → "КН",
+ * "Каюк Н.В." → "КН". Empty for something that is not a name.
+ */
+export function initials(name: string): string {
+  const parts = name.split(/[\s.]+/).filter((p) => /^\p{Lu}/u.test(p));
+  return parts
+    .slice(0, 2)
+    .map((p) => p.charAt(0))
+    .join("");
 }
 
 /** "1 пара", "3 пары", "5 пар". */

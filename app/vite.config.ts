@@ -30,7 +30,7 @@ export default defineConfig({
       injectRegister: "script-defer",
       registerType: "autoUpdate",
       injectManifest: {
-        globPatterns: ["**/*.{html,js,css,svg,png,webmanifest}"],
+        globPatterns: ["**/*.{html,js,css,svg,png,webmanifest,woff2}"],
       },
       manifest: {
         name: "Orbit — расписание",

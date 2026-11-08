@@ -8,12 +8,11 @@ import { catalog, groupWeek, teacherWeek } from "../testdata";
 import { ago, isStale } from "./age";
 import {
   daySpan,
+  initials,
   periodRange,
-  SUBJECT_COLORS,
   slots,
   startDay,
   stepDay,
-  subjectColor,
   timeline,
   weekName,
 } from "./calendar";
@@ -162,6 +161,7 @@ describe("week", () => {
       lessonType: "Лекция",
       rooms: ["Кабинет 5"],
       teachers: ["Иванов И. И."],
+      teacherNames: ["Иванов Иван Иванович"],
       building: "Главный корпус",
     });
     expect(monday[2]?.teachers).toEqual(["ВАКАНСИЯ"]);
@@ -193,7 +193,7 @@ describe("week", () => {
       { key: "b", start: "10:40", timeFromBells: true },
       { key: "c", start: "10:40", timeFromBells: true },
       { key: "d", start: "12:00", end: "13:30", timeFromBells: false },
-    ].map((l) => ({ rooms: [], teachers: [], groups: [], ...l }));
+    ].map((l) => ({ rooms: [], teachers: [], teacherNames: [], groups: [], ...l }));
     const at = (m: number) => {
       const now = findNow(lessons, m);
       return [now.current.map((l) => l.key), now.next.map((l) => l.key)];
@@ -215,6 +215,7 @@ describe("calendar", () => {
     timeFromBells: false,
     rooms: [],
     teachers: [],
+    teacherNames: [],
     groups: [],
   });
 
@@ -261,12 +262,11 @@ describe("calendar", () => {
     expect(slots([lesson("x"), lesson("y")])).toHaveLength(2);
   });
 
-  test("a subject keeps its color", () => {
-    const c = subjectColor("Физическая культура");
-    expect(c).toBe(subjectColor("Физическая культура"));
-    expect(c).toBeGreaterThanOrEqual(0);
-    expect(c).toBeLessThan(SUBJECT_COLORS);
-    expect(subjectColor(undefined)).toBeUndefined();
+  test("initials of a full and a short name", () => {
+    expect(initials("Каюк Николай Васильевич")).toBe("КН");
+    expect(initials("Каюк Н.В.")).toBe("КН");
+    expect(initials("ВАКАНСИЯ")).toBe("В");
+    expect(initials("кафедра")).toBe("");
   });
 
   test("a week is lined up by periods only if every lesson has one", () => {
