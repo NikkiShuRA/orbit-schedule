@@ -1,20 +1,19 @@
 /* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
-.who {
+.schedule {
+  min-width: 0;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0.75rem 0 0.75rem;
+  flex-direction: column;
 }
 
-.whoText {
+.who {
   min-width: 0;
+  margin: 0.25rem 0 0.75rem;
 }
 
 .name {
-  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 2rem);
+  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 1.75rem);
   line-height: 1.15;
   letter-spacing: -0.015em;
   margin: 0;
@@ -25,15 +24,21 @@
 
 .place {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin: 0.3rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.placeName {
+  display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  margin: 0.35rem 0 0;
-  color: var(--muted);
-  font-size: 0.9375rem;
 }
 
 .mine {
-  margin-left: 0.35rem;
   padding: 0 0.5rem;
   border-radius: 999px;
   background: var(--accent);
@@ -43,33 +48,32 @@
   line-height: 1.5;
 }
 
-.whoActions {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
+/* A small chip, like "моё" next to it: a star, not a big round button. */
 .star {
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--card);
-  box-shadow: var(--shadow);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.55rem 0 0.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line);
   color: var(--muted);
-  font-size: 1.15rem;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 650;
+  line-height: 1.5;
   cursor: pointer;
 }
 
 .star:hover {
-  background: var(--fill);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--fill-strong);
 }
 
 .star[aria-pressed="true"] {
-  color: var(--coral);
+  color: var(--coral-text);
+  box-shadow: inset 0 0 0 1px var(--coral);
 }
 
 .primary {

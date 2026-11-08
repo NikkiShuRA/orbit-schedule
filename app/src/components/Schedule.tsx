@@ -23,8 +23,7 @@ export function Schedule({
   onStar,
   prefs,
   onPrefs,
-  lead,
-  tail,
+  topSlot,
 }: {
   sel: Selection;
   /** Choose another schedule, when this one cannot be shown. */
@@ -38,10 +37,8 @@ export function Schedule({
   onStar: (e: Entry) => void;
   prefs: Prefs;
   onPrefs: (p: Prefs) => void;
-  /** Before the name on a wide screen: the logo when the side panel is folded. */
-  lead: ReactNode;
-  /** After the controls on a wide screen: the profile button. */
-  tail: ReactNode;
+  /** On a wide screen the name and the controls go to the app's top bar. */
+  topSlot: HTMLElement | null;
 }) {
   const now = useNow();
   const catalog = useJSON<Catalog>(`${sel.source}/catalog.json`);
@@ -90,34 +87,32 @@ export function Schedule({
 
   const head = (
     <div className={styles.who}>
-      <div className={styles.whoText}>
-        <h2 id={headingId} className={styles.name}>
-          {entry.name}
-        </h2>
-        <p className={styles.place}>
+      <h2 id={headingId} className={styles.name}>
+        {entry.name}
+      </h2>
+      <p className={styles.place}>
+        <span className={styles.placeName}>
           <Icon name="building" />
           {place}
           {sel.kind === "teacher" && " · преподаватель"}
-          {mine && <span className={styles.mine}>моё</span>}
-        </p>
-      </div>
-      <div className={styles.whoActions}>
+        </span>
+        {mine && <span className={styles.mine}>моё</span>}
         <button
           type="button"
           className={styles.star}
           aria-pressed={starred}
           aria-label="В избранное"
-          title={starred ? "Убрать из избранного" : "В избранное"}
           onClick={() => onStar(entry)}
         >
           <Icon name="star" filled={starred} />
+          {starred ? "В избранном" : "В избранное"}
         </button>
-      </div>
+      </p>
     </div>
   );
 
   return (
-    <section aria-labelledby={headingId}>
+    <section aria-labelledby={headingId} className={styles.schedule}>
       <Calendar
         sel={sel}
         catalog={cat}
@@ -125,8 +120,7 @@ export function Schedule({
         catalogFromCache={catalog.fromCache}
         now={now}
         head={head}
-        lead={lead}
-        tail={tail}
+        topSlot={topSlot}
         place={place}
         startView={prefs.startView}
         subgroup={prefs.subgroups[keyOf(sel)]}

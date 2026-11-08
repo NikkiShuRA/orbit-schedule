@@ -1,13 +1,14 @@
 // SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-// The frame of the app, after «Мой Сиелом». On a wide screen: a card
-// with the logo and a side panel to choose a schedule on the left, the
-// schedule on the right; the panel folds away to give the week room.
+// The frame of the app, after «Мой Сиелом». On a wide screen: a top row
+// with the brand card and the top bar (name, controls, profile), and under
+// it the side panel to choose a schedule and the main card with the
+// schedule. The panel folds away, smoothly, to give the week room.
 // On a phone the same panel opens from a menu button. Why it is laid out
 // this way: docs/app-design.md.
 
-import { lazy, type ReactNode, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import styles from "./App.module.css";
 import type { Index } from "./api";
 import logo from "./assets/orbit-logo-ru.svg";
@@ -95,7 +96,19 @@ export function App() {
   const onStar = (e: Entry) => setProfile(toggleStar(profileStore.get(), e));
   const close = () => setPanel(undefined);
   const folded = wide && prefs.sideFolded && !!selection;
-  const fold = (sideFolded: boolean) => setPrefs({ ...prefsStore.get(), sideFolded });
+  // The side panel's content fades in one after another as it opens and
+  // out in reverse as it closes, like in «Мой Сиелом».
+  const [motion, setMotion] = useState<"expanding" | "collapsing">();
+  const motionTimer = useRef(0);
+  const fold = (sideFolded: boolean) => {
+    setPrefs({ ...prefsStore.get(), sideFolded });
+    setMotion(sideFolded ? "collapsing" : "expanding");
+    clearTimeout(motionTimer.current);
+    motionTimer.current = window.setTimeout(() => setMotion(undefined), 450);
+  };
+  useEffect(() => () => clearTimeout(motionTimer.current), []);
+  // Where the schedule puts its name and controls on a wide screen.
+  const [topSlot, setTopSlot] = useState<HTMLDivElement | null>(null);
 
   const finder = (autoFocus: boolean) =>
     index.kind === "loading" ? (
@@ -139,15 +152,10 @@ export function App() {
         <Icon name="gear" />
         Настройки
       </button>
-      <button type="button" className={styles.link} onClick={() => setPanel("profile")}>
-        <Icon name="person" />
-        Профиль
-      </button>
       <a className={styles.link} href="https://github.com/NikkiShuRA/orbit-schedule">
         <Icon name="open" />
         Исходный код
       </a>
-      <p className={styles.independent}>Независимый проект, не связан с учебными заведениями.</p>
     </div>
   );
   // The brand card: the way to fold the side panel and to bring it back.
@@ -168,7 +176,7 @@ export function App() {
     </div>
   );
 
-  const schedule = (lead: ReactNode) =>
+  const schedule = () =>
     selection && (
       <Schedule
         key={toSearch(selection)}
@@ -181,8 +189,7 @@ export function App() {
         onStar={onStar}
         prefs={prefs}
         onPrefs={setPrefs}
-        lead={lead}
-        tail={profileButton}
+        topSlot={wide ? topSlot : null}
       />
     );
 
@@ -216,36 +223,46 @@ export function App() {
   );
 
   if (wide) {
+    const app = [styles.app, folded && styles.folded, motion && styles[motion]]
+      .filter(Boolean)
+      .join(" ");
     return (
-      <div className={folded ? `${styles.shell} ${styles.folded}` : styles.shell}>
-        {!folded && (
-          <aside className={styles.side}>
-            {brand}
-            <nav className={styles.sidePanel} aria-label="Выбор расписания">
-              <div className={styles.sideFind}>{finder(false)}</div>
-              {links}
-            </nav>
-          </aside>
-        )}
-        <main className={styles.content}>
-          {selection ? (
-            schedule(folded ? brand : null)
-          ) : (
-            <div className={styles.welcome}>
-              <div className={styles.welcomeTop}>{profileButton}</div>
-              <div className={styles.welcomeBody}>
+      <div className={app}>
+        <div className={styles.head}>
+          {brand}
+          <div className={styles.topbar}>
+            <div ref={setTopSlot} className={styles.topSlot}>
+              {!selection && <h2 className={styles.topTitle}>Чьё расписание открыть?</h2>}
+            </div>
+            {profileButton}
+          </div>
+        </div>
+        <div className={styles.body}>
+          <nav
+            className={styles.sidebar}
+            aria-label="Выбор расписания"
+            aria-hidden={folded || undefined}
+            inert={folded}
+          >
+            <div className={styles.sideFind}>{finder(false)}</div>
+            {links}
+          </nav>
+          <main className={styles.main}>
+            {selection ? (
+              schedule()
+            ) : (
+              <div className={styles.welcome}>
                 <span className={styles.welcomeIcon} aria-hidden="true">
                   <Icon name="week" />
                 </span>
-                <h2 className={styles.welcomeTitle}>Чьё расписание открыть?</h2>
                 <p className={styles.welcomeText}>
-                  Выберите группу или преподавателя слева: по корпусу и курсу, по букве фамилии или
-                  поиском. Выбор запомнится на этом устройстве.
+                  Выберите группу или преподавателя слева: по учебному заведению, корпусу и курсу,
+                  по букве фамилии или поиском. Выбор запомнится на этом устройстве.
                 </p>
               </div>
-            </div>
-          )}
-        </main>
+            )}
+          </main>
+        </div>
         {sheets}
       </div>
     );
@@ -283,7 +300,7 @@ export function App() {
         </div>
       </header>
       {selection ? (
-        <main className={styles.main}>{schedule(null)}</main>
+        <main className={styles.phoneMain}>{schedule()}</main>
       ) : (
         <>
           <main className={styles.start}>

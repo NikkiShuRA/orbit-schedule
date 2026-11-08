@@ -15,6 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import type { Catalog, ScheduleDocument, Status } from "../api";
 import { type Loaded, useJSON, useMedia } from "../hooks";
 import { ago, isStale } from "../lib/age";
@@ -80,8 +81,7 @@ export function Calendar({
   catalogFromCache,
   now,
   head,
-  lead,
-  tail,
+  topSlot,
   place,
   startView,
   subgroup,
@@ -95,8 +95,8 @@ export function Calendar({
   now: Date;
   /** The name of the schedule with its buttons. */
   head: ReactNode;
-  lead: ReactNode;
-  tail: ReactNode;
+  /** On a wide screen the name and the controls go to the app's top bar. */
+  topSlot: HTMLElement | null;
   /** The institution's short name. */
   place: string;
   startView: StartView;
@@ -241,24 +241,34 @@ export function Calendar({
     />
   );
 
+  const subgroupPick = subgroups.length > 0 && (
+    <SubgroupPick all={subgroups} mine={mySubgroup} onChange={onSubgroup} />
+  );
+
   return (
-    <div className={wide ? undefined : tabs ? styles.withDockTall : styles.withDock}>
-      {wide ? (
-        <div className={styles.top}>
-          {lead}
-          <div className={styles.topHead}>{head}</div>
-          {toolbar}
-          {tail}
-        </div>
-      ) : (
-        head
-      )}
+    <div className={wide ? styles.fill : tabs ? styles.withDockTall : styles.withDock}>
+      {wide && topSlot
+        ? createPortal(
+            <div className={styles.top}>
+              <div className={styles.topHead}>{head}</div>
+              {subgroupPick}
+              {toolbar}
+            </div>,
+            topSlot,
+          )
+        : head}
       <Freshness status={status} fromCache={fromCache} now={now} />
       {todayView && <Today day={todayView} minutes={minutes} kind={sel.kind} />}
 
-      <div className={styles.panel}>
-        {subgroups.length > 0 && (
-          <Subgroups all={subgroups} mine={mySubgroup} hidden={hidden} onChange={onSubgroup} />
+      <div className={wide ? styles.panelFlat : styles.panel}>
+        {!wide && subgroupPick}
+        {mySubgroup !== undefined && hidden > 0 && (
+          <p className={styles.subNote}>
+            Показана только {mySubgroup}-я подгруппа: скрыто пар другой — {hidden}.{" "}
+            <button type="button" className={styles.subAll} onClick={() => onSubgroup(undefined)}>
+              Показать все
+            </button>
+          </p>
         )}
         {wide && tabs}
         {!entry ? (
@@ -346,45 +356,35 @@ export function Calendar({
 }
 
 /**
- * "My subgroup": the lessons of the other subgroups are hidden, never
- * silently: the count of hidden ones is on screen, and "Все" is one tap.
+ * "My subgroup" as one small choice. The lessons of the other subgroup
+ * are hidden, never silently: the panel says how many, with a way back.
  */
-function Subgroups({
+function SubgroupPick({
   all,
   mine,
-  hidden,
   onChange,
 }: {
   all: number[];
   mine: number | undefined;
-  hidden: number;
   onChange: (n: number | undefined) => void;
 }) {
   return (
-    <div className={styles.subgroups}>
-      <fieldset className={styles.subChoice}>
-        <legend className={styles.hidden}>Подгруппа</legend>
-        <span className={styles.subLabel} aria-hidden="true">
-          Подгруппа
-        </span>
-        {[undefined, ...all].map((n) => (
-          <button
-            key={n ?? "all"}
-            type="button"
-            aria-pressed={mine === n}
-            className={styles.subButton}
-            onClick={() => onChange(n)}
-          >
-            {n === undefined ? "Все" : n}
-          </button>
+    <label className={mine === undefined ? styles.subPick : `${styles.subPick} ${styles.subOn}`}>
+      <span className={styles.subLabel}>Подгруппа</span>
+      <select
+        className={styles.subSelect}
+        value={mine ?? ""}
+        onChange={(e) => onChange(e.target.value ? Number(e.target.value) : undefined)}
+      >
+        <option value="">все</option>
+        {all.map((n) => (
+          <option key={n} value={n}>
+            {n}-я
+          </option>
         ))}
-      </fieldset>
-      {mine !== undefined && hidden > 0 && (
-        <p className={styles.subNote}>
-          Показана {mine} подгруппа · скрыто пар других: {hidden}
-        </p>
-      )}
-    </div>
+      </select>
+      <Icon name="chevron" className={styles.subChevron} />
+    </label>
   );
 }
 
@@ -713,6 +713,7 @@ function WeekGrid({
                 >
                   <span className={styles.gridWeekday}>{formatWeekday(day.date)}</span>
                   <span className={styles.gridDate}>{dayOfMonth(day.date)}</span>
+                  <span className={styles.gridMonth}>{monthOf(day.date)}</span>
                 </button>
               </h3>
               {day.lessons.length === 0 ? (
@@ -840,6 +841,11 @@ function clock(minutes: number): string {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
+
+/** "ноября" of "9 ноября". */
+function monthOf(date: string): string {
+  return formatShortDate(date).replace(/^\d+\s*/, "");
 }
 
 function capitalize(text: string): string {

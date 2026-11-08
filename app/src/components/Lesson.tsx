@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { initials, type LessonState, type Slot } from "../lib/calendar";
+import { type ReactNode, useEffect, useRef } from "react";
+import { initials, type LessonState, roomLabel, type Slot } from "../lib/calendar";
 import type { LessonView } from "../lib/schedule";
 import type { Selection } from "../lib/selection";
 import styles from "./Lesson.module.css";
@@ -89,7 +90,7 @@ export function SlotCard({
           </p>
         )}
         {!compact && <State state={state} />}
-        {shared && <Subject lesson={shared} />}
+        {shared && <Subject lesson={shared} fit={compact} />}
         <ul className={styles.parts}>
           {slot.lessons.map((l) => (
             <Part key={l.key} lesson={l} kind={kind} withSubject={!shared} compact={compact} />
@@ -108,14 +109,44 @@ function State({ state, compact }: { state: LessonState | undefined; compact?: b
   return null;
 }
 
-function Subject({ lesson: l }: { lesson: LessonView }) {
+function Subject({ lesson: l, fit = false }: { lesson: LessonView; fit?: boolean }) {
+  const text = l.subject ?? <span className={styles.muted}>Предмет не указан</span>;
   return (
-    <div className={styles.head}>
-      <p className={styles.subject} title={l.subject}>
-        {l.subject ?? <span className={styles.muted}>Предмет не указан</span>}
-      </p>
+    <div className={fit ? `${styles.head} ${styles.fitHead}` : styles.head}>
+      {fit ? (
+        <FitText title={l.subject}>{text}</FitText>
+      ) : (
+        <p className={styles.subject} title={l.subject}>
+          {text}
+        </p>
+      )}
       {l.lessonType && <p className={styles.type}>{l.lessonType}</p>}
     </div>
+  );
+}
+
+/**
+ * A subject in the week grid: two lines at least, and as many more as
+ * the card has free room for, when a neighbour in the row is taller.
+ * The text never makes the card taller than two lines would.
+ */
+function FitText({ title, children }: { title: string | undefined; children: ReactNode }) {
+  const box = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    const el = box.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const fit = () => {
+      const line = Number.parseFloat(getComputedStyle(el).lineHeight) || 20;
+      el.style.setProperty("--lines", String(Math.max(2, Math.floor(el.clientHeight / line))));
+    };
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <p ref={box} className={`${styles.subject} ${styles.fit}`} title={title}>
+      <span className={styles.fitText}>{children}</span>
+    </p>
   );
 }
 
@@ -131,7 +162,8 @@ function Part({
   withSubject: boolean;
   compact: boolean;
 }) {
-  const room = l.rooms.join(", ");
+  const room = l.rooms.map((r) => roomLabel(r, l.building)).join(", ");
+  const fullRoom = l.rooms.join(", ");
   const teachers = compact ? l.teachers : l.teacherNames;
   return (
     <li className={styles.part}>
@@ -145,7 +177,11 @@ function Part({
                 <span className={styles.hidden}> подгруппа</span>
               </span>
             )}
-            {room && <span className={styles.room}>{room}</span>}
+            {room && (
+              <span className={styles.room} title={fullRoom}>
+                {room}
+              </span>
+            )}
           </span>
         )}
         <span className={styles.who}>

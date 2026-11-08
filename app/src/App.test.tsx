@@ -310,11 +310,11 @@ test("search moves through results with arrows and opens the first with Enter", 
 test("my subgroup hides the other's lessons and says how many", async () => {
   serve(files);
   open("?s=example&g=g-101");
-  const choice = await screen.findByRole("group", { name: "Подгруппа" });
-  fireEvent.click(within(choice).getByRole("button", { name: "1" }));
-  expect(screen.getByText(/Показана 1 подгруппа · скрыто пар других: \d+/)).toBeDefined();
-  fireEvent.click(within(choice).getByRole("button", { name: "Все" }));
-  expect(screen.queryByText(/скрыто пар других/)).toBeNull();
+  const choice = await screen.findByLabelText("Подгруппа");
+  fireEvent.change(choice, { target: { value: "1" } });
+  expect(screen.getByText(/Показана только 1-я подгруппа: скрыто пар другой — \d+/)).toBeDefined();
+  fireEvent.click(screen.getByRole("button", { name: "Показать все" }));
+  expect(screen.queryByText(/Показана только/)).toBeNull();
 });
 
 test("the side panel lists groups by building and course, opening where the group is", async () => {
@@ -327,8 +327,46 @@ test("the side panel lists groups by building and course, opening where the grou
   fireEvent.click(within(side).getByRole("button", { name: "Преподаватели" }));
   expect(within(side).getByRole("list", { name: "Первая буква фамилии" })).toBeDefined();
   fireEvent.click(screen.getByRole("button", { name: "Скрыть панель" }));
+  // Still in the page, to slide away smoothly, but hidden from everyone.
   expect(screen.queryByRole("navigation", { name: "Выбор расписания" })).toBeNull();
   expect(JSON.parse(localStorage.getItem("orbit.prefs.v1") ?? "{}").sideFolded).toBe(true);
   fireEvent.click(screen.getByRole("button", { name: "Показать панель" }));
   expect(screen.getByRole("navigation", { name: "Выбор расписания" })).toBeDefined();
+});
+
+test("with several institutions, the institution is the first step and search covers all", async () => {
+  screenWidth(true);
+  const other: Catalog = {
+    ...catalog,
+    source: "other",
+    institution: {
+      ...catalog.institution,
+      id: "other",
+      name: "Техникум «Другой»",
+      shortName: "ТД",
+    },
+    groups: [{ id: "g-901", name: "901", course: 1 }],
+    teachers: [],
+  };
+  serve({
+    ...files,
+    "index.json": {
+      sources: [...index.sources, { id: "other", name: "Техникум «Другой»", shortName: "ТД" }],
+    },
+    "other/catalog.json": other,
+  });
+  open("");
+  const side = await screen.findByRole("navigation", { name: "Выбор расписания" });
+  fireEvent.click(await within(side).findByRole("button", { name: /^ТД/ }));
+  const crumbs = await within(side).findByRole("navigation", { name: "Где вы в списке" });
+  expect(within(crumbs).getByText("ТД").getAttribute("aria-current")).toBe("location");
+  expect(await within(side).findByRole("button", { name: /^901/ })).toBeDefined();
+  fireEvent.click(within(crumbs).getByRole("button", { name: "Учебные заведения" }));
+  expect(await within(side).findByRole("button", { name: /^КП/ })).toBeDefined();
+
+  fireEvent.change(within(side).getByLabelText("Группа или преподаватель"), {
+    target: { value: "1" },
+  });
+  expect(await within(side).findByText("КП · найдено: 3")).toBeDefined();
+  expect(await within(side).findByText("ТД · найдено: 1")).toBeDefined();
 });

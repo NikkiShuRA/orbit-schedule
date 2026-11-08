@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { type Slot, slots } from "../lib/calendar";
+import { roomLabel, type Slot, slots } from "../lib/calendar";
 import { formatMinutes, toMinutes } from "../lib/dates";
 import { type DayView, findNow, type LessonView } from "../lib/schedule";
 import type { Selection } from "../lib/selection";
@@ -121,7 +121,7 @@ function Place({
   withSubject: boolean;
 }) {
   const people = kind === "teacher" ? l.groups : l.teachers;
-  const room = l.rooms.join(", ");
+  const room = l.rooms.map((r) => roomLabel(r, l.building)).join(", ");
   return (
     <li className={styles.place}>
       {l.subgroup !== undefined && <span className={styles.subgroup}>{l.subgroup} подгр.</span>}

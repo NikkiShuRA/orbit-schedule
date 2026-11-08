@@ -245,11 +245,11 @@
 
 /* On a wide screen the name and the controls share one row. */
 .top {
+  flex: 1;
+  min-width: 0;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem 1.5rem;
-  margin: 0.25rem 0 0.75rem;
+  gap: 0.75rem;
 }
 
 .topHead {
@@ -261,65 +261,101 @@
   margin: 0;
 }
 
+/* In the top bar the name keeps to one line, as the bar has a fixed height. */
+.topHead h2 {
+  overflow: hidden;
+  font-size: 1.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .top .toolbar {
   margin: 0;
 }
 
-/* ── My subgroup ───────────────────────────────────────────── */
+/* ── My subgroup: one small choice ───────────────────────── */
 
-.subgroups {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 0.85rem;
-  margin: 0 0 0.85rem;
-}
-
-.subChoice {
-  margin: 0;
-  border: 0;
-  min-inline-size: 0;
+.subPick {
+  position: relative;
+  flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.2rem;
-  padding: 0.2rem;
+  gap: 0.35rem;
+  min-height: 2.5rem;
+  padding: 0 0.75rem 0 0.9rem;
   border-radius: 999px;
   background: var(--surface);
-}
-
-.subLabel {
-  padding: 0 0.5rem 0 0.6rem;
-  font-size: 0.8125rem;
-  color: var(--muted);
-}
-
-.subButton {
-  min-width: 2.25rem;
-  min-height: 2rem;
-  padding: 0.2rem 0.7rem;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--text);
-  font: inherit;
   font-size: 0.875rem;
-  font-weight: 650;
   cursor: pointer;
 }
 
-.subButton:hover {
-  background: var(--fill);
+.panel > .subPick {
+  margin: 0 0 0.75rem;
 }
 
-.subButton[aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--on-accent);
+.subOn {
+  box-shadow: inset 0 0 0 1.5px var(--coral);
+}
+
+.subLabel {
+  color: var(--muted);
+}
+
+/* The native list: right for a phone, readable by screen readers. */
+.subSelect {
+  padding: 0 1.1rem 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.subSelect:focus-visible {
+  outline: none;
+}
+
+.subPick:has(.subSelect:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.subSelect option {
+  background: var(--card);
+  color: var(--text);
+}
+
+.subChevron {
+  position: absolute;
+  right: 0.7rem;
+  rotate: 90deg;
+  font-size: 0.85rem;
+  color: var(--muted);
+  pointer-events: none;
 }
 
 .subNote {
-  margin: 0;
-  font-size: 0.8125rem;
+  margin: 0 0 0.85rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-small);
+  background: var(--surface);
+  font-size: 0.875rem;
   color: var(--muted);
+}
+
+.subAll {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
 }
 
 /* ── The panel that holds the schedule ────────────────────── */
@@ -329,6 +365,21 @@
   border-radius: var(--radius-panel);
   background: var(--card);
   box-shadow: var(--shadow);
+}
+
+/* On a wide screen the app's main card is the panel. */
+/* On a wide screen the week fills the main card down to its bottom. */
+.fill {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.panelFlat {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 @media (max-width: 639px) {
@@ -711,8 +762,12 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(var(--days), minmax(0, 1fr));
-  grid-template-rows: auto repeat(var(--rows), minmax(6.5rem, auto));
+  grid-template-rows: auto repeat(var(--rows), minmax(6.5rem, 1fr));
   gap: 0.6rem;
+}
+
+.panelFlat > .grid {
+  flex: 1 0 auto;
 }
 
 .gridDay {
@@ -776,6 +831,12 @@
   font-size: 1.125rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+.gridMonth {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .gridHeadToday .gridDate {

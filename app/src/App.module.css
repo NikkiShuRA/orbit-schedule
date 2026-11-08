@@ -82,91 +82,194 @@
   color: var(--text);
 }
 
-.independent {
-  margin: 0.35rem 0.6rem 0;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
+/* ── Wide screen: laid out like «Мой Сиелом» ───────────────
+   A top row (brand card + top bar) and a body row (side panel + main
+   card). The page itself does not scroll: the list and the schedule
+   scroll inside their cards. */
 
-/* ── Wide screen: brand card and side panel on the left ────── */
-
-.shell {
-  display: grid;
-  grid-template-columns: 22.5rem minmax(0, 1fr);
-  gap: 0.75rem;
-  min-height: 100dvh;
-  padding: 0.75rem;
-}
-
-.folded {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.side {
-  position: sticky;
-  top: 0.75rem;
-  height: calc(100dvh - 1.5rem);
+.app {
+  --side-w: 22.5rem;
+  --brand-w: 14.25rem;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  min-width: 0;
+  height: 100dvh;
+  padding: 0.75rem;
 }
 
-/* The logo on a card of its own, with the button that folds the panel. */
+.head {
+  flex: none;
+  display: flex;
+  gap: 0.75rem;
+  height: 4.25rem;
+}
+
+/* The logo on a card of its own, with the button that folds the panel.
+   It narrows when the panel folds, so the top bar gets the room. */
 .brand {
   flex: none;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 4rem;
+  width: var(--side-w);
   padding: 0 1rem 0 0.75rem;
   border-radius: var(--radius-panel);
   background: var(--card);
   box-shadow: var(--shadow);
+  transition: width 0.3s var(--ease);
 }
 
-.sidePanel {
+.folded .brand {
+  width: var(--brand-w);
+}
+
+.topbar {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topSlot {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.topTitle {
+  margin: 0 0 0 0.25rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.015em;
+}
+
+.body {
   flex: 1;
   min-height: 0;
   display: flex;
+  gap: 0.75rem;
+  transition: gap 0.3s var(--ease);
+}
+
+.folded .body {
+  gap: 0;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
   flex-direction: column;
+  padding: 1rem;
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.main > * {
+  flex: 1 0 auto;
+}
+
+.sidebar {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: var(--side-w);
+  min-height: 0;
+  padding: 0.75rem;
   border-radius: var(--radius-panel);
   background: var(--card);
   box-shadow: var(--shadow);
   overflow: hidden;
+  transition:
+    width 0.3s var(--ease),
+    padding 0.3s var(--ease);
 }
 
-/* The list scrolls inside the panel; the tabs and field stay on top. */
+/* Folded: no width, and gone for the keyboard and screen readers too
+   (inert), but only after the panel has finished closing. */
+.folded .sidebar {
+  width: 0;
+  padding-inline: 0;
+  box-shadow: none;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    width 0.3s var(--ease),
+    padding 0.3s var(--ease),
+    visibility 0s 0.35s;
+}
+
+/* The content keeps its width while the panel narrows, so it is cut
+   off rather than squeezed. */
+.sidebar > * {
+  min-width: calc(var(--side-w) - 1.5rem);
+}
+
+.expanding .sidebar > * {
+  animation: side-in 0.25s var(--ease) both;
+}
+
+.expanding .sidebar > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.collapsing .sidebar > * {
+  animation: side-out 0.2s ease both;
+}
+
+.collapsing .sidebar > :nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+@keyframes side-in {
+  from {
+    opacity: 0;
+    transform: translateX(-0.75rem);
+  }
+}
+
+@keyframes side-out {
+  to {
+    opacity: 0;
+    transform: translateX(-0.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand,
+  .body,
+  .sidebar,
+  .folded .sidebar {
+    transition: none;
+  }
+
+  .expanding .sidebar > *,
+  .collapsing .sidebar > * {
+    animation: none;
+  }
+}
+
+/* The finder fills the panel; its list scrolls inside its own box. */
 .sideFind {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0.75rem 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.content {
-  min-width: 0;
+.sidebar .links {
+  padding: 0.5rem 0 0;
 }
 
 /* Before a schedule is chosen: an invitation where the week will be. */
 .welcome {
-  min-height: calc(100dvh - 1.5rem);
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--radius-panel);
-  background: var(--card);
-  box-shadow: var(--shadow);
-}
-
-.welcomeTop {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.75rem;
-}
-
-.welcomeBody {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -185,12 +288,6 @@
   background: var(--surface);
   color: var(--muted);
   font-size: 1.75rem;
-}
-
-.welcomeTitle {
-  margin: 0 0 0.5rem;
-  font-size: 1.75rem;
-  letter-spacing: -0.02em;
 }
 
 .welcomeText {
@@ -229,7 +326,7 @@
   padding: 0 0.75rem;
 }
 
-.main {
+.phoneMain {
   flex: 1;
   width: 100%;
   padding: 0 1rem 1rem;

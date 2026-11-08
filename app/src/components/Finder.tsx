@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 // Choosing a schedule, as in «Мой Сиелом»: "Моё" holds my schedule,
-// starred and recent ones; "Все расписания" goes step by step (building,
-// course, group; or letter, teacher) or finds by typing.
+// starred and recent ones; "Все расписания" goes step by step
+// (institution, building, course, group; or institution, letter, teacher)
+// or finds by typing, in all institutions at once.
 
 import { type KeyboardEvent, type ReactNode, useRef, useState } from "react";
 import type { Catalog, Source } from "../api";
@@ -37,6 +38,9 @@ interface Nav {
   letter: string | undefined;
 }
 
+type Crumb = { label: string; onGo: () => void };
+type MakeRow = (source: string, f: Found, query?: string) => ReactNode;
+
 export function Finder({
   sources,
   current,
@@ -53,8 +57,12 @@ export function Finder({
   autoFocus?: boolean;
 }) {
   const [tab, setTab] = useState<Tab>("all");
+  // No institution chosen yet: the first step is to choose one. With only
+  // one there is nothing to choose.
   const [source, setSource] = useState(
-    () => sources.find((s) => s.id === current?.source)?.id ?? sources[0]?.id,
+    () =>
+      sources.find((s) => s.id === current?.source)?.id ??
+      (sources.length === 1 ? sources[0]?.id : undefined),
   );
   const [query, setQuery] = useState("");
   const [navState, setNav] = useState<Nav>();
@@ -82,22 +90,21 @@ export function Finder({
         };
   const go = (next: Partial<Nav>) => setNav({ ...nav, ...next });
 
-  const place = (id: string) => {
+  const short = (id: string) => {
     const s = sources.find((x) => x.id === id);
     return s?.shortName ?? s?.name ?? id;
   };
-  const toEntry = (f: Found): Entry => ({
-    source: source ?? "",
-    kind: f.kind,
-    id: f.id,
-    name: f.kind === "group" ? `Группа ${f.title}` : f.title,
-    place: place(source ?? ""),
-  });
-  const row = (f: Found, q?: string) => {
-    const e = toEntry(f);
+  const row: MakeRow = (src, f, q) => {
+    const e: Entry = {
+      source: src,
+      kind: f.kind,
+      id: f.id,
+      name: f.kind === "group" ? `Группа ${f.title}` : f.title,
+      place: short(src),
+    };
     return (
       <Row
-        key={`${f.kind}-${f.id}`}
+        key={`${src}-${f.kind}-${f.id}`}
         entry={e}
         details={f.details}
         {...(q ? { query: q } : {})}
@@ -110,8 +117,9 @@ export function Finder({
   };
 
   // Arrows move between the results, as in any list; Enter opens one.
+  const picks = () => [...(list.current?.querySelectorAll<HTMLElement>("[data-pick]") ?? [])];
   const focusAt = (from: Element | null, delta: 1 | -1) => {
-    const items = [...(list.current?.querySelectorAll<HTMLElement>("[data-pick]") ?? [])];
+    const items = picks();
     const i = from ? items.indexOf(from as HTMLElement) : -1;
     const next = items[i + delta];
     if (next) next.focus();
@@ -125,7 +133,35 @@ export function Finder({
   };
 
   const q = query.trim();
-  const found = cat && q ? search(cat, q) : [];
+  const crumbs = trail();
+
+  /** Where the person is in the list, a step per crumb; the last one is here. */
+  function trail(): Crumb[] {
+    const out: Crumb[] = [];
+    const many = sources.length > 1;
+    if (many) out.push({ label: "Учебные заведения", onGo: () => setSource(undefined) });
+    if (!source || !cat) return out;
+    const top = () => go({ path: {}, letter: undefined });
+    if (many) out.push({ label: short(source), onGo: top });
+    if (nav.kind === "teacher") {
+      if (!many) out.push({ label: "Преподаватели", onGo: top });
+      if (nav.letter) out.push({ label: nav.letter, onGo: () => {} });
+      return out;
+    }
+    if (!many) {
+      const first = pathSteps(cat, nav.path)[0];
+      const kind = placeKind(cat) === "department" ? "Отделения" : "Корпуса";
+      out.push({ label: first === "place" ? kind : "Курсы", onGo: top });
+    }
+    const { place, course } = nav.path;
+    if (place !== undefined) {
+      out.push({ label: placeName(cat, place), onGo: () => go({ path: { place } }) });
+    }
+    if (course !== undefined) {
+      out.push({ label: course === null ? "Без курса" : `${course} курс`, onGo: () => {} });
+    }
+    return out;
+  }
 
   return (
     <div className={styles.finder}>
@@ -142,24 +178,6 @@ export function Finder({
 
         {tab === "all" && (
           <>
-            {sources.length > 1 && (
-              <fieldset className={styles.sources}>
-                <legend className={styles.hidden}>Учебное заведение</legend>
-                {sources.map((s) => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    aria-pressed={source === s.id}
-                    title={s.name}
-                    className={styles.sourceChip}
-                    onClick={() => setSource(s.id)}
-                  >
-                    <Icon name="building" />
-                    {s.shortName ?? s.name}
-                  </button>
-                ))}
-              </fieldset>
-            )}
             <div className={styles.field}>
               <Icon name="search" className={styles.fieldIcon} />
               <input
@@ -181,13 +199,13 @@ export function Finder({
                   if (e.key === "ArrowDown") {
                     e.preventDefault();
                     focusAt(null, 1);
-                  } else if (e.key === "Enter" && found[0]) {
-                    onPick(toEntry(found[0]));
+                  } else if (e.key === "Enter" && q) {
+                    picks()[0]?.click();
                   }
                 }}
               />
             </div>
-            {!q && (
+            {!q && source && (
               <fieldset className={styles.kinds}>
                 <legend className={styles.hidden}>Что выбрать</legend>
                 <button
@@ -206,6 +224,7 @@ export function Finder({
                 </button>
               </fieldset>
             )}
+            {!q && crumbs.length > 1 && <Crumbs crumbs={crumbs} />}
           </>
         )}
       </div>
@@ -220,7 +239,34 @@ export function Finder({
             onStar={onStar}
             onAll={() => setTab("all")}
           />
-        ) : catalog.kind === "loading" && source ? (
+        ) : q ? (
+          <div className={styles.results}>
+            {sources.map((s) => (
+              <SourceFound
+                key={s.id}
+                source={s.id}
+                {...(s.id === source && cat ? { loaded: cat } : {})}
+                title={sources.length > 1 ? short(s.id) : undefined}
+                query={q}
+                row={row}
+              />
+            ))}
+            <p className={styles.none} aria-live="polite">
+              Ничего не нашлось. Проверьте, как написано, или сотрите запрос и выберите из списка.
+            </p>
+          </div>
+        ) : !source ? (
+          <ul className={styles.rows}>
+            {sources.map((s) => (
+              <Step
+                key={s.id}
+                name={s.shortName ?? s.name}
+                {...(s.shortName ? { details: s.name } : {})}
+                onOpen={() => setSource(s.id)}
+              />
+            ))}
+          </ul>
+        ) : catalog.kind === "loading" ? (
           <Skeleton label="Загружаем список групп и преподавателей…" rows={3} />
         ) : catalog.kind === "missing" || catalog.kind === "failed" ? (
           <Notice tone="warn" role="alert">
@@ -229,27 +275,84 @@ export function Finder({
               "список групп и преподавателей",
             )}
           </Notice>
-        ) : !cat ? null : q ? (
-          found.length === 0 ? (
-            <p className={styles.hint} aria-live="polite">
-              Ничего не нашлось. Проверьте, как написано, или сотрите запрос и выберите из списка.
-            </p>
-          ) : (
-            <Section title={`Найдено: ${found.length}`}>{found.map((f) => row(f, q))}</Section>
-          )
-        ) : nav.kind === "group" ? (
-          <Groups catalog={cat} path={nav.path} onPath={(path) => go({ path })} row={row} />
+        ) : !cat ? null : nav.kind === "group" ? (
+          <Groups
+            catalog={cat}
+            path={nav.path}
+            onPath={(path) => go({ path })}
+            row={(f) => row(source, f)}
+          />
         ) : (
           <Teachers
             catalog={cat}
             letter={nav.letter}
             onLetter={(letter) => go({ letter })}
-            row={row}
+            row={(f) => row(source, f)}
           />
         )}
       </div>
     </div>
   );
+}
+
+/** The path above the list: each step but the last goes back to it. */
+function Crumbs({ crumbs }: { crumbs: Crumb[] }) {
+  const up = crumbs[crumbs.length - 2];
+  return (
+    <nav className={styles.crumbs} aria-label="Где вы в списке">
+      <button type="button" className={styles.back} aria-label="Назад" onClick={up?.onGo}>
+        <Icon name="chevronLeft" />
+      </button>
+      {crumbs.map((c, i) => (
+        <span key={c.label} className={styles.crumbPart}>
+          {i > 0 && <span aria-hidden="true">/</span>}
+          {i === crumbs.length - 1 ? (
+            <span className={styles.crumbHere} aria-current="location">
+              {c.label}
+            </span>
+          ) : (
+            <button type="button" className={styles.crumb} onClick={c.onGo}>
+              {c.label}
+            </button>
+          )}
+        </span>
+      ))}
+    </nav>
+  );
+}
+
+/** What one institution has for the query; nothing when it has nothing. */
+function SourceFound({
+  source,
+  loaded,
+  title,
+  query,
+  row,
+}: {
+  source: string;
+  /** The list already loaded for the open institution: no need to wait for it again. */
+  loaded?: Catalog;
+  title: string | undefined;
+  query: string;
+  row: MakeRow;
+}) {
+  const fetched = useJSON<Catalog>(loaded ? null : `${source}/catalog.json`);
+  const data = loaded ?? (fetched.kind === "ready" ? fetched.data : undefined);
+  if (!data) {
+    if (fetched.kind === "loading") return <Skeleton label="Ищем…" rows={1} />;
+    return (
+      <Notice tone="warn">
+        {failedText(
+          fetched.kind === "failed" ? fetched.reason : "server",
+          title ? `список групп и преподавателей ${title}` : "список групп и преподавателей",
+        )}
+      </Notice>
+    );
+  }
+  const found = search(data, query);
+  if (found.length === 0) return null;
+  const head = title ? `${title} · найдено: ${found.length}` : `Найдено: ${found.length}`;
+  return <Section title={head}>{found.map((f) => row(source, f, query))}</Section>;
 }
 
 function Groups({
@@ -264,76 +367,29 @@ function Groups({
   row: (f: Found) => ReactNode;
 }) {
   const level = groupLevel(catalog, path);
-  const steps = pathSteps(catalog, path);
-  const root =
-    steps[0] === "place"
-      ? placeKind(catalog) === "department"
-        ? "Отделения"
-        : "Корпуса"
-      : "Курсы";
   const placeOnly: GroupPath = path.place !== undefined ? { place: path.place } : {};
-  const crumbs: { label: string; to: GroupPath }[] = [];
-  if (path.place !== undefined) {
-    crumbs.push({ label: placeName(catalog, path.place), to: placeOnly });
-  }
-  if (path.course !== undefined) {
-    crumbs.push({ label: path.course === null ? "Без курса" : `${path.course} курс`, to: path });
-  }
-  const up = crumbs.length > 1 ? (crumbs[crumbs.length - 2]?.to ?? {}) : {};
-
   return (
-    <>
-      {crumbs.length > 0 && (
-        <nav className={styles.crumbs} aria-label="Где вы в списке">
-          <button
-            type="button"
-            className={styles.back}
-            aria-label="Назад"
-            onClick={() => onPath(up)}
-          >
-            <Icon name="chevronLeft" />
-          </button>
-          <button type="button" className={styles.crumb} onClick={() => onPath({})}>
-            {root}
-          </button>
-          {crumbs.map((c, i) => (
-            <span key={c.label} className={styles.crumbPart}>
-              <span aria-hidden="true">/</span>
-              {i === crumbs.length - 1 ? (
-                <span className={styles.crumbHere} aria-current="location">
-                  {c.label}
-                </span>
-              ) : (
-                <button type="button" className={styles.crumb} onClick={() => onPath(c.to)}>
-                  {c.label}
-                </button>
-              )}
-            </span>
-          ))}
-        </nav>
-      )}
-      <ul className={styles.rows}>
-        {level.kind === "places"
-          ? level.places.map((p) => (
+    <ul className={styles.rows}>
+      {level.kind === "places"
+        ? level.places.map((p) => (
+            <Step
+              key={p.id || "none"}
+              name={p.name}
+              count={p.count}
+              onOpen={() => onPath({ place: p.id })}
+            />
+          ))
+        : level.kind === "courses"
+          ? level.courses.map((c) => (
               <Step
-                key={p.id || "none"}
-                name={p.name}
-                count={p.count}
-                onOpen={() => onPath({ place: p.id })}
+                key={c.course ?? "none"}
+                name={c.course === null ? "Без курса" : `${c.course} курс`}
+                count={c.count}
+                onOpen={() => onPath({ ...placeOnly, course: c.course })}
               />
             ))
-          : level.kind === "courses"
-            ? level.courses.map((c) => (
-                <Step
-                  key={c.course ?? "none"}
-                  name={c.course === null ? "Без курса" : `${c.course} курс`}
-                  count={c.count}
-                  onOpen={() => onPath({ ...placeOnly, course: c.course })}
-                />
-              ))
-            : level.groups.map((g) => row({ kind: "group", id: g.id, title: g.name }))}
-      </ul>
-    </>
+          : level.groups.map((g) => row({ kind: "group", id: g.id, title: g.name }))}
+    </ul>
   );
 }
 
@@ -371,35 +427,24 @@ function Teachers({
     );
   }
   return (
-    <>
-      <nav className={styles.crumbs} aria-label="Где вы в списке">
-        <button
-          type="button"
-          className={styles.back}
-          aria-label="Назад"
-          onClick={() => onLetter(undefined)}
-        >
-          <Icon name="chevronLeft" />
-        </button>
-        <button type="button" className={styles.crumb} onClick={() => onLetter(undefined)}>
-          Преподаватели
-        </button>
-        <span className={styles.crumbPart}>
-          <span aria-hidden="true">/</span>
-          <span className={styles.crumbHere} aria-current="location">
-            {letter}
-          </span>
-        </span>
-      </nav>
-      <ul className={styles.rows}>
-        {teachersBy(catalog, letter).map((t) => row({ kind: "teacher", id: t.id, title: t.name }))}
-      </ul>
-    </>
+    <ul className={styles.rows}>
+      {teachersBy(catalog, letter).map((t) => row({ kind: "teacher", id: t.id, title: t.name }))}
+    </ul>
   );
 }
 
-/** A step down the list: a building, a department or a course. */
-function Step({ name, count, onOpen }: { name: string; count: number; onOpen: () => void }) {
+/** A step down the list: an institution, a building, a department or a course. */
+function Step({
+  name,
+  details,
+  count,
+  onOpen,
+}: {
+  name: string;
+  details?: string;
+  count?: number;
+  onOpen: () => void;
+}) {
   const { badge, rest } = badgeOf(name);
   return (
     <li className={styles.rowItem}>
@@ -412,8 +457,9 @@ function Step({ name, count, onOpen }: { name: string; count: number; onOpen: ()
         <span className={styles.badge}>{badge ?? <Icon name="building" />}</span>
         <span className={styles.text}>
           <span className={styles.title}>{rest}</span>
+          {details && <span className={styles.details}>{details}</span>}
         </span>
-        <span className={styles.count}>{count}</span>
+        {count !== undefined && <span className={styles.count}>{count}</span>}
         <Icon name="chevron" className={styles.chevron} />
       </button>
     </li>

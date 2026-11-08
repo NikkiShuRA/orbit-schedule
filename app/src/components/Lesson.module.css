@@ -194,7 +194,9 @@
   font-size: 0.9375rem;
   font-weight: 700;
   line-height: 1.3;
-  overflow-wrap: anywhere;
+  /* "Информацион-/ные", by the rules of Russian, not "Информационны/е". */
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .full .subject {
@@ -380,8 +382,35 @@
 
 .compact .subject {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The subject takes the free height of the card: its own text never
+   makes the card taller than two lines (FitText in Lesson.tsx). */
+.fitHead {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.compact .fit {
+  display: block;
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 2lh;
+  overflow: visible;
+}
+
+.fitText {
+  position: absolute;
+  inset: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--lines, 2);
+  line-clamp: var(--lines, 2);
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

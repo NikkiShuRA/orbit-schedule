@@ -6,6 +6,7 @@
 // between a known end and a known start, nothing is stretched or
 // guessed.
 
+import { badgeOf } from "./browse";
 import { addDays, mondayOf, toMinutes } from "./dates";
 import { type DayView, findNow, type LessonView } from "./schedule";
 
@@ -198,4 +199,19 @@ export function countLessons(n: number): string {
   if (d === 1 && dd !== 11) return `${n} пара`;
   if (d >= 2 && d <= 4 && (dd < 12 || dd > 14)) return `${n} пары`;
   return `${n} пар`;
+}
+
+/**
+ * A room as people say it, "208 • №7": its number and the building's
+ * number. The building comes from the lesson; without one, the code the
+ * source put in brackets ("103 (МК) Кабинет …" gives "103 • МК"). A name
+ * without a number ("Спортзал") is shown as is. The full name is in the
+ * lesson details.
+ */
+export function roomLabel(room: string, building?: string): string {
+  const m = /^([^\s(]+)\s*(?:\(([^)]*)\))?/.exec(room.trim());
+  const number = m?.[1];
+  if (!number || !/\d/.test(number)) return room;
+  const code = (building ? badgeOf(building).badge : undefined) ?? m?.[2]?.trim();
+  return code ? `${number} • ${code}` : number;
 }

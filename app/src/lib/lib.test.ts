@@ -11,6 +11,7 @@ import {
   daySpan,
   initials,
   periodRange,
+  roomLabel,
   slots,
   startDay,
   stepDay,
@@ -422,5 +423,18 @@ describe("browse", () => {
       rest: "Отделение строительства",
     });
     expect(badgeOf("301")).toEqual({ rest: "301" });
+  });
+});
+
+describe("roomLabel", () => {
+  test("puts the building's number after the room", () => {
+    expect(roomLabel("208 (Пролетарский)", "№7, Пролетарский,3")).toBe("208 • №7");
+  });
+  test("takes the code in brackets when there is no building", () => {
+    expect(roomLabel("103 (МК) Кабинет информатики")).toBe("103 • МК");
+    expect(roomLabel("5")).toBe("5");
+  });
+  test("leaves a room without a number as it is", () => {
+    expect(roomLabel("Спортзал", "№7, Пролетарский,3")).toBe("Спортзал");
   });
 });
