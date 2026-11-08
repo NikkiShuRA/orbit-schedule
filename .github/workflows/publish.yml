@@ -7,7 +7,10 @@ name: Publish
 
 on:
   schedule:
-    - cron: "17 * * * *" # hourly; :17 avoids the busy top of the hour
+    # Times are UTC; Surgut is UTC+5. Minutes avoid the busy top of the
+    # hour, when GitHub delays and drops scheduled runs the most.
+    - cron: "3-59/10 2-15 * * *" # every 10 minutes, 07:00-21:00 in Surgut
+    - cron: "17 0,1,16-23 * * *" # hourly at night
     - cron: "43 2 * * 1" # weekly keepalive, see the keepalive job
   workflow_dispatch:
   pull_request:
@@ -25,7 +28,7 @@ jobs:
   fetch:
     # Only main publishes. Runs from other branches and PRs are dry runs:
     # they fetch and validate, but push and deploy nothing.
-    if: github.event_name != 'schedule' || github.event.schedule == '17 * * * *'
+    if: github.event_name != 'schedule' || github.event.schedule != '43 2 * * 1'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
