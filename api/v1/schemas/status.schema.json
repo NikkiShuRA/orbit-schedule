@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nikkishura.github.io/orbit-schedule/api/v1/schemas/status.schema.json",
+  "title": "Статус проверки источника",
+  "description": "<источник>/status.json — когда публикация в последний раз проверяла источник и что вышло с каждой неделей. Обновляется при каждой успешной проверке, даже если расписание не изменилось; после неудачной проверки остаётся прежним. Время изменения самого расписания — provenance.retrievedAt документа недели. Схема открыта для новых необязательных полей (ADR 0008).",
+  "type": "object",
+  "required": ["source", "checkedAt", "weeks"],
+  "properties": {
+    "source": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Id источника, как в index.json."
+    },
+    "checkedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Когда закончилась проверка, RFC 3339 со смещением часового пояса учебного заведения."
+    },
+    "weeks": {
+      "type": "array",
+      "description": "Проверенные недели по порядку, начиная с текущей.",
+      "items": { "$ref": "#/$defs/week" }
+    }
+  },
+  "$defs": {
+    "week": {
+      "type": "object",
+      "required": ["date", "result"],
+      "properties": {
+        "date": {
+          "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/date",
+          "description": "День, за неделю которого спрашивали источник. Не обязательно понедельник."
+        },
+        "result": {
+          "enum": ["updated", "unchanged", "not-published"],
+          "description": "updated — расписание новое или изменилось, файл перезаписан; unchanged — то же, что в файле; not-published — источник ещё не опубликовал эту неделю. Новое значение появится только в новой версии API."
+        },
+        "file": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}\\.json$",
+          "description": "Файл недели относительно каталога источника. Есть, если неделя опубликована."
+        }
+      },
+      "if": {
+        "properties": { "result": { "enum": ["updated", "unchanged"] } }
+      },
+      "then": { "required": ["file"] },
+      "else": { "not": { "required": ["file"] } }
+    }
+  }
+}

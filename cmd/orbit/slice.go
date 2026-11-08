@@ -15,6 +15,7 @@ import (
 	"regexp"
 	"time"
 
+	api "github.com/NikkiShuRA/orbit-schedule/api/v1"
 	"github.com/NikkiShuRA/orbit-schedule/internal/slice"
 	"github.com/NikkiShuRA/orbit-schedule/internal/standard"
 )
@@ -78,27 +79,40 @@ func sliceCmd(args []string, stdout, stderr io.Writer) int {
 			continue
 		}
 		src := e.Name()
-		entry, err := sliceSource(filepath.Join(*in, src), filepath.Join(*out, src), src, *from, stdout, stderr)
+		entry, ok, err := sliceSource(filepath.Join(*in, src), filepath.Join(*out, src), src, *from, stdout, stderr)
 		if err != nil {
 			fmt.Fprintf(stderr, "%s: %v\n", src, err)
 			return exitError
 		}
-		index.Sources = append(index.Sources, entry)
+		if ok {
+			index.Sources = append(index.Sources, entry)
+		}
 	}
-	if err := writeJSON(filepath.Join(*out, "index.json"), index); err != nil {
+	if err := writeAPIFile(filepath.Join(*out, "index.json"), api.Index, index); err != nil {
 		fmt.Fprintln(stderr, err)
 		return exitError
 	}
 	return 0
 }
 
-func sliceSource(inDir, outDir, src, from string, stdout, stderr io.Writer) (IndexSource, error) {
-	weeks, err := readWeeks(inDir, from)
+// sliceSource slices one source. ok is false when the source has no
+// weeks at all yet: then there is nothing to put in the catalog, not
+// even the name of the institution, and the source is left out of the
+// index until its first week is published.
+func sliceSource(inDir, outDir, src, from string, stdout, stderr io.Writer) (entry IndexSource, ok bool, err error) {
+	weeks, latest, err := readWeeks(inDir, from)
 	if err != nil {
-		return IndexSource{}, err
+		return IndexSource{}, false, err
+	}
+	if latest == nil {
+		fmt.Fprintf(stderr, "warning: %s: no weeks published yet; left out of the index\n", src)
+		return IndexSource{}, false, nil
 	}
 	fileOf := func(d *standard.Document) string { return d.Publication.Period.Start + ".json" }
 	cat := slice.NewCatalog(src, weeks, fileOf)
+	// With no recent weeks the catalog is empty but still says whose
+	// it is.
+	cat.Institution = latest.Institution
 
 	files, skipped := 0, map[string]bool{}
 	write := func(kind, id string, doc *standard.Document) error {
@@ -123,7 +137,7 @@ func sliceSource(inDir, outDir, src, from string, stdout, stderr io.Writer) (Ind
 			}
 			if doc, ok := slice.ForGroup(w, g); ok {
 				if err := write("groups", g.ID, doc); err != nil {
-					return IndexSource{}, err
+					return IndexSource{}, false, err
 				}
 			}
 		}
@@ -133,7 +147,7 @@ func sliceSource(inDir, outDir, src, from string, stdout, stderr io.Writer) (Ind
 			}
 			if doc, ok := slice.ForTeacher(w, t); ok {
 				if err := write("teachers", t.ID, doc); err != nil {
-					return IndexSource{}, err
+					return IndexSource{}, false, err
 				}
 			}
 		}
@@ -141,43 +155,73 @@ func sliceSource(inDir, outDir, src, from string, stdout, stderr io.Writer) (Ind
 	for s := range skipped {
 		fmt.Fprintf(stderr, "warning: %s: id is not safe for a file name; not sliced\n", s)
 	}
-	if err := writeJSON(filepath.Join(outDir, "catalog.json"), cat); err != nil {
-		return IndexSource{}, err
+	if err := writeAPIFile(filepath.Join(outDir, "catalog.json"), api.Catalog, cat); err != nil {
+		return IndexSource{}, false, err
 	}
 	fmt.Fprintf(stdout, "%s: %d weeks, %d groups, %d teachers, %d files\n",
 		src, len(weeks), len(cat.Groups), len(cat.Teachers), files)
 
-	entry := IndexSource{ID: src, Name: cat.Institution.Name, ShortName: cat.Institution.ShortName, Catalog: src + "/catalog.json"}
+	entry = IndexSource{ID: src, Name: cat.Institution.Name, ShortName: cat.Institution.ShortName, Catalog: src + "/catalog.json"}
 	if _, err := os.Stat(filepath.Join(inDir, statusFile)); err == nil {
 		entry.Status = src + "/" + statusFile
 	}
-	return entry, nil
+	return entry, true, nil
 }
 
 // readWeeks reads the week documents in dir that end on or after from.
-func readWeeks(dir, from string) ([]*standard.Document, error) {
+// If there are none, it also returns the latest older week, so the
+// catalog can still name the institution, for example over the summer
+// break. latest is nil when the source has no weeks at all.
+func readWeeks(dir, from string) (weeks []*standard.Document, latest *standard.Document, err error) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	var weeks []*standard.Document
-	for _, e := range entries {
-		if e.IsDir() || !weekFile.MatchString(e.Name()) {
-			continue
-		}
-		data, err := os.ReadFile(filepath.Join(dir, e.Name()))
+	read := func(name string) (*standard.Document, error) {
+		data, err := os.ReadFile(filepath.Join(dir, name))
 		if err != nil {
 			return nil, err
 		}
 		var d standard.Document
 		if err := json.Unmarshal(data, &d); err != nil {
-			return nil, fmt.Errorf("%s: %w", e.Name(), err)
+			return nil, fmt.Errorf("%s: %w", name, err)
 		}
-		if d.Publication.Period.End >= from {
-			weeks = append(weeks, &d)
+		return &d, nil
+	}
+	// File names are Mondays, and ReadDir sorts them, so the weeks come
+	// in date order. The history grows every week, so files that cannot
+	// be recent are not read: a week ends six days after its Monday.
+	first := ""
+	if f, err := time.Parse(time.DateOnly, from); err == nil {
+		first = f.AddDate(0, 0, -6).Format(time.DateOnly)
+	}
+	var names []string
+	for _, e := range entries {
+		if !e.IsDir() && weekFile.MatchString(e.Name()) {
+			names = append(names, e.Name())
 		}
 	}
-	return weeks, nil
+	for _, name := range names {
+		if name < first {
+			continue
+		}
+		d, err := read(name)
+		if err != nil {
+			return nil, nil, err
+		}
+		if d.Publication.Period.End >= from {
+			weeks = append(weeks, d)
+		}
+	}
+	switch {
+	case len(weeks) > 0:
+		latest = weeks[len(weeks)-1]
+	case len(names) > 0:
+		if latest, err = read(names[len(names)-1]); err != nil {
+			return nil, nil, err
+		}
+	}
+	return weeks, latest, nil
 }
 
 // writeValid writes a document only if it passes the standard cleanly.

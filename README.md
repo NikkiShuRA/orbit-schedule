@@ -8,7 +8,7 @@
 
 - **[Стандарт данных](standard/)** версии 0.2: схема, примеры и проверка документов.
 - **Коннекторы СИЭУиП и СПК**: днём каждые 10 минут, ночью раз в час забирают текущую и следующую недели и сохраняют [историю изменений](https://github.com/NikkiShuRA/orbit-schedule/commits/data).
-- **Открытые данные** на [GitHub Pages](https://nikkishura.github.io/orbit-schedule/api/v1/index.json) — статичный API с версией в адресе ([ADR 0008](docs/decisions/0008-versioned-data-api.md)): неделя целиком, неделя каждой группы и каждого преподавателя, оглавление для поиска.
+- **Открытые данные** на [GitHub Pages](https://nikkishura.github.io/orbit-schedule/api/v1/index.json) — статичный API с версией в адресе: неделя целиком, неделя каждой группы и каждого преподавателя, оглавление для поиска. Как пользоваться — в [инструкции](docs/api.md); описание в OpenAPI 3.1 — [`openapi.json`](https://nikkishura.github.io/orbit-schedule/api/v1/openapi.json).
 
 Что делается сейчас и что дальше — на [доске проекта](https://github.com/users/NikkiShuRA/projects/9); что уже сделано — в [журнале изменений](CHANGELOG.md).
 

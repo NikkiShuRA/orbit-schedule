@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nikkishura.github.io/orbit-schedule/api/v1/schemas/index.schema.json",
+  "title": "Оглавление API Orbit",
+  "description": "index.json — входная точка API: какие источники опубликованы и где их файлы. Пути — относительно index.json. Схема открыта для новых необязательных полей (ADR 0008): читатель пропускает незнакомые.",
+  "type": "object",
+  "required": ["sources"],
+  "properties": {
+    "sources": {
+      "type": "array",
+      "description": "Опубликованные источники, по одному на учебное заведение.",
+      "items": { "$ref": "#/$defs/source" }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["id", "name", "catalog"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Id источника. Он же каталог источника в адресах: <id>/catalog.json."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Полное название учебного заведения."
+        },
+        "shortName": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Краткое название, если оно есть."
+        },
+        "catalog": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Путь к catalog.json источника относительно index.json."
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Путь к status.json источника относительно index.json. Нет, если источник ещё ни разу не проверяли."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nikkishura.github.io/orbit-schedule/api/v1/schemas/catalog.schema.json",
+  "title": "Оглавление источника",
+  "description": "<источник>/catalog.json — что источник опубликовал за последние недели: недели с их охватом и все группы, преподаватели, корпуса и подразделения из них. По нему строится поиск и находятся файлы групп и преподавателей. Если запись отличается между неделями, в оглавлении — версия из самой поздней недели. Записи с одинаковым названием различаются только id (ADR 0007). Схема открыта для новых необязательных полей (ADR 0008).",
+  "type": "object",
+  "required": ["source", "institution", "weeks"],
+  "properties": {
+    "source": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Id источника, как в index.json."
+    },
+    "institution": {
+      "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/institution"
+    },
+    "weeks": {
+      "type": "array",
+      "description": "Опубликованные недели по возрастанию даты. Старые недели остаются доступны целиком, но в оглавление и нарезку не попадают.",
+      "items": { "$ref": "#/$defs/week" }
+    },
+    "buildings": {
+      "type": "array",
+      "items": { "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/building" }
+    },
+    "departments": {
+      "type": "array",
+      "items": { "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/department" }
+    },
+    "groups": {
+      "type": "array",
+      "description": "Файлы группы: <источник>/groups/<id>/<понедельник>.json.",
+      "items": { "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/group" }
+    },
+    "teachers": {
+      "type": "array",
+      "description": "Файлы преподавателя: <источник>/teachers/<id>/<понедельник>.json.",
+      "items": { "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/teacher" }
+    }
+  },
+  "$defs": {
+    "week": {
+      "type": "object",
+      "required": ["start", "end", "file", "coverage"],
+      "properties": {
+        "start": {
+          "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/date",
+          "description": "Понедельник."
+        },
+        "end": {
+          "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/date",
+          "description": "Воскресенье."
+        },
+        "file": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}\\.json$",
+          "description": "Неделя целиком, относительно каталога источника."
+        },
+        "coverage": {
+          "$ref": "https://raw.githubusercontent.com/NikkiShuRA/orbit-schedule/main/standard/schema/schedule.schema.json#/$defs/publication/properties/coverage",
+          "description": "Что неделя охватывает: всё учебное заведение или часть. Вне охвата расписание неизвестно, а не пусто."
+        }
+      }
+    }
+  }
+}

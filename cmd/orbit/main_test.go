@@ -13,6 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/NikkiShuRA/orbit-schedule/internal/slice"
 )
 
 // fakeSIEUiP serves the connector's fictional fixtures: the week of
@@ -245,6 +247,37 @@ func TestSliceSkipsOldWeeks(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(site, "sieup", "groups")); !os.IsNotExist(err) {
 		t.Error("a week that ended before --from was sliced")
+	}
+	// Over a break the catalog has no weeks, but it still says whose it
+	// is, and the source stays in the index.
+	var cat slice.Catalog
+	readJSON(t, filepath.Join(site, "sieup", "catalog.json"), &cat)
+	if len(cat.Weeks) != 0 || cat.Institution.Name == "" {
+		t.Errorf("catalog = %d weeks, institution %q; want no weeks and the institution named", len(cat.Weeks), cat.Institution.Name)
+	}
+	var index Index
+	readJSON(t, filepath.Join(site, "index.json"), &index)
+	if len(index.Sources) != 1 || index.Sources[0].Name != cat.Institution.Name {
+		t.Errorf("index = %+v, want sieup listed", index)
+	}
+}
+
+func TestSliceLeavesOutSourceWithoutWeeks(t *testing.T) {
+	api, data, site := fakeSIEUiP(t), t.TempDir(), t.TempDir()
+	if code, log := orbit(t, "fetch", "sieup", "--out", data, "--base", api, "--date", "2026-12-01"); code != exitNotPublished {
+		t.Fatalf("fetch: exit %d, want %d:\n%s", code, exitNotPublished, log)
+	}
+	code, log := orbit(t, "slice", "--in", data, "--out", site)
+	if code != 0 {
+		t.Fatalf("slice: exit %d:\n%s", code, log)
+	}
+	if !strings.Contains(log, "no weeks published yet") {
+		t.Errorf("no warning about the source without weeks:\n%s", log)
+	}
+	var index Index
+	readJSON(t, filepath.Join(site, "index.json"), &index)
+	if len(index.Sources) != 0 {
+		t.Errorf("index = %+v, want no sources", index)
 	}
 }
 

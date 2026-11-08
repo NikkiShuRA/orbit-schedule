@@ -26,6 +26,7 @@ import (
 	"time"
 	_ "time/tzdata" // embed time zones: the binary must work where the OS has none (Windows, minimal containers)
 
+	api "github.com/NikkiShuRA/orbit-schedule/api/v1"
 	"github.com/NikkiShuRA/orbit-schedule/internal/standard"
 )
 
@@ -147,7 +148,7 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	}
 
 	st.CheckedAt = time.Now().In(loc).Format(time.RFC3339)
-	if err := writeJSON(filepath.Join(dir, statusFile), st); err != nil {
+	if err := writeAPIFile(filepath.Join(dir, statusFile), api.Status, st); err != nil {
 		fmt.Fprintln(stderr, err)
 		return exitError
 	}
