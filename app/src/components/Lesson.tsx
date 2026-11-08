@@ -36,15 +36,19 @@ export function SlotCard({
   state,
   time = false,
   compact = false,
+  onOpen,
 }: {
   slot: Slot;
   kind: Kind;
   state?: LessonState | undefined;
   time?: boolean;
   compact?: boolean;
+  /** Opens the details; the whole card is the target. */
+  onOpen?: () => void;
 }) {
   const subjects = new Set(slot.lessons.map((l) => l.subject));
   const shared = subjects.size === 1 ? slot.lessons[0] : undefined;
+  const label = `Подробнее: ${shared ? (shared.subject ?? "предмет не указан") : "пары подгрупп"}${slot.start ? `, ${slot.start}` : ""}`;
   return (
     <article
       className={[styles.card, compact ? styles.compact : styles.full, time && styles.withTime]
@@ -52,6 +56,9 @@ export function SlotCard({
         .join(" ")}
       data-state={state}
     >
+      {onOpen && (
+        <button type="button" className={styles.open} aria-label={label} onClick={onOpen} />
+      )}
       {time && (
         <div className={styles.time}>
           {slot.start ? <span className={styles.start}>{slot.start}</span> : null}

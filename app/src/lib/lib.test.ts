@@ -27,8 +27,17 @@ import {
   mondayOf,
   todayIn,
 } from "./dates";
+import {
+  type Entry,
+  parsePrefs,
+  parseProfile,
+  setMine,
+  setSubgroup,
+  toggleStar,
+  visit,
+} from "./profile";
 import { buildWeek, coverageState, findNow, type LessonView, lessonTime } from "./schedule";
-import { search } from "./search";
+import { browse, search } from "./search";
 import { fromSearch, loadSaved, save, toSearch } from "./selection";
 
 describe("dates", () => {
@@ -162,9 +171,12 @@ describe("week", () => {
       rooms: ["Кабинет 5"],
       teachers: ["Иванов И. И."],
       teacherNames: ["Иванов Иван Иванович"],
+      teacherIds: ["t-1"],
       building: "Главный корпус",
     });
     expect(monday[2]?.teachers).toEqual(["ВАКАНСИЯ"]);
+    // A placeholder has no id to open a schedule by.
+    expect(monday[2]?.teacherIds).toEqual([undefined]);
     expect(monday[1]?.subject).toBeUndefined();
     expect(week.days[1]?.lessons[0]?.note).toBe("Перенос с пятницы");
     expect(week.days[2]?.lessons).toEqual([]);
@@ -193,7 +205,16 @@ describe("week", () => {
       { key: "b", start: "10:40", timeFromBells: true },
       { key: "c", start: "10:40", timeFromBells: true },
       { key: "d", start: "12:00", end: "13:30", timeFromBells: false },
-    ].map((l) => ({ rooms: [], teachers: [], teacherNames: [], groups: [], ...l }));
+    ].map((l) => ({
+      rooms: [],
+      teachers: [],
+      teacherNames: [],
+      teacherIds: [],
+      groups: [],
+      groupIds: [],
+      together: [],
+      ...l,
+    }));
     const at = (m: number) => {
       const now = findNow(lessons, m);
       return [now.current.map((l) => l.key), now.next.map((l) => l.key)];
@@ -216,6 +237,9 @@ describe("calendar", () => {
     rooms: [],
     teachers: [],
     teacherNames: [],
+    teacherIds: [],
+    groupIds: [],
+    together: [],
     groups: [],
   });
 
@@ -295,5 +319,68 @@ describe("calendar", () => {
     expect(startDay("2026-11-11")).toBe("2026-11-11");
     expect(weekName("2026-11-16", "2026-11-11")).toBe("Следующая неделя");
     expect(weekName("2026-11-23", "2026-11-11")).toBeUndefined();
+  });
+});
+
+describe("profile", () => {
+  const a: Entry = { source: "x", kind: "group", id: "1", name: "Группа 1", place: "X" };
+  const b: Entry = { source: "x", kind: "teacher", id: "2", name: "Петров П. П.", place: "X" };
+
+  test("broken or foreign values give an empty profile, never an error", () => {
+    expect(parseProfile(undefined)).toEqual({ starred: [], recent: [] });
+    expect(
+      parseProfile({ mine: { id: 1 }, starred: "x", recent: [a, a, { kind: "cat" }] }),
+    ).toEqual({ starred: [], recent: [a] });
+    expect(
+      parsePrefs({ theme: "pink", startView: "week", subgroups: { k: 2, j: -1, z: "1" } }),
+    ).toEqual({ theme: "system", startView: "week", subgroups: { k: 2 } });
+  });
+
+  test("the first visit becomes mine; recent is newest first without repeats", () => {
+    let p = visit(parseProfile(undefined), a);
+    p = visit(p, b);
+    p = visit(p, a);
+    expect(p.mine).toEqual(a);
+    expect(p.recent).toEqual([a, b]);
+    expect(setMine(p, b).mine).toEqual(b);
+    expect(setMine(p, undefined).mine).toBeUndefined();
+  });
+
+  test("a star toggles, a subgroup is kept per schedule", () => {
+    const p = toggleStar(parseProfile(undefined), a);
+    expect(p.starred).toEqual([a]);
+    expect(toggleStar(p, a).starred).toEqual([]);
+    const prefs = setSubgroup(parsePrefs(undefined), a, 2);
+    expect(prefs.subgroups).toEqual({ "x/group/1": 2 });
+    expect(setSubgroup(prefs, a, undefined).subgroups).toEqual({});
+  });
+});
+
+describe("browse", () => {
+  test("groups by course and teachers by letter, in natural order", () => {
+    const parts = browse(
+      {
+        ...catalog,
+        groups: [
+          { id: "g10", name: "10", course: 2 },
+          { id: "g9", name: "9", course: 2 },
+          { id: "g1", name: "1", course: 1 },
+        ],
+        teachers: [
+          { id: "t1", name: "Смирнова А. А." },
+          { id: "t2", name: "Андреев Б. Б." },
+        ],
+      },
+      "all",
+    );
+    expect(parts.map((p) => [p.title, p.items.map((i) => i.title)])).toEqual([
+      ["1 курс", ["1"]],
+      ["2 курс", ["9", "10"]],
+      ["Преподаватели · А", ["Андреев Б. Б."]],
+      ["Преподаватели · С", ["Смирнова А. А."]],
+    ]);
+    expect(
+      browse(catalog, "teacher").every((p) => p.items.every((i) => i.kind === "teacher")),
+    ).toBe(true);
   });
 });

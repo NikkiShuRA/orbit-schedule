@@ -24,7 +24,14 @@ export interface LessonView {
   teachers: string[];
   /** Full names, in the same order, where there is room. */
   teacherNames: string[];
+  /** Catalog ids in the same order; none for a placeholder ("ВАКАНСИЯ"). */
+  teacherIds: (string | undefined)[];
+  /** The groups of the lesson, in a teacher's schedule. */
   groups: string[];
+  /** Catalog ids of `groups`, in the same order. */
+  groupIds: string[];
+  /** Other groups at the same lesson, in a group's schedule (a joint lecture). */
+  together: { id: string; name: string }[];
   /** The subgroup of the selected group, if the lesson is for one. */
   subgroup?: number;
   building?: string;
@@ -142,6 +149,7 @@ export function buildWeek(doc: ScheduleDocument, sel: Selection, catalog: Catalo
       teacherNames: others.map((t, i) =>
         "teacherId" in t ? (found[i]?.name ?? missing) : t.sourceText,
       ),
+      teacherIds: others.map((t) => ("teacherId" in t ? t.teacherId : undefined)),
     };
   };
 
@@ -162,6 +170,17 @@ export function buildWeek(doc: ScheduleDocument, sel: Selection, catalog: Catalo
               const name = label(groups.get(g.groupId)) ?? "группа не найдена";
               return g.subgroup ? `${name}, подгруппа ${g.subgroup}` : name;
             })
+          : [],
+      groupIds: sel.kind === "teacher" ? lesson.groups.map((g) => g.groupId) : [],
+      together:
+        sel.kind === "group"
+          ? lesson.groups
+              .filter((g) => g.groupId !== sel.id)
+              .map((g) => ({
+                id: g.groupId,
+                name: label(groups.get(g.groupId)) ?? "группа не найдена",
+              }))
+              .filter((g, i, all) => all.findIndex((o) => o.id === g.id) === i)
           : [],
     };
     const subject = lesson.subjectId && label(subjects.get(lesson.subjectId));

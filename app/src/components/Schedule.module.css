@@ -32,6 +32,46 @@
   font-size: 0.9375rem;
 }
 
+.mine {
+  margin-left: 0.35rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.whoActions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.star {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  color: var(--muted);
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.star:hover {
+  background: var(--fill);
+}
+
+.star[aria-pressed="true"] {
+  color: var(--coral);
+}
+
 .change {
   flex: none;
   display: inline-flex;

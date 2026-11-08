@@ -1,0 +1,261 @@
+/* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+.finder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-height: 0;
+}
+
+/* The field and filters stay on top while the list scrolls. */
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-bottom: 0.4rem;
+  background: var(--card);
+}
+
+.sources,
+.filters {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.sourceChip,
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.85rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.sourceChip:hover,
+.filter:hover {
+  background: var(--fill);
+  color: var(--text);
+}
+
+.sourceChip[aria-pressed="true"],
+.filter[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.field {
+  position: relative;
+}
+
+.fieldIcon {
+  position: absolute;
+  left: 0.95rem;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 1.2rem;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  font: inherit;
+  font-size: 1rem;
+  min-height: 3rem;
+  padding: 0.65rem 1rem 0.65rem 2.75rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1.5px transparent;
+  transition: box-shadow 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.input:focus {
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.list {
+  min-height: 0;
+}
+
+.hint {
+  margin: 0.75rem 0.25rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.section + .section {
+  margin-top: 0.85rem;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0.4rem 0.35rem 0.3rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.count {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rowItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.row {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0.45rem 3rem 0.45rem 0.5rem;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.row:hover,
+.row:focus-visible {
+  background: var(--surface);
+}
+
+.row:focus-visible {
+  outline-offset: -2px;
+}
+
+.row[aria-current="page"] {
+  background: var(--surface);
+  box-shadow: inset 3px 0 0 var(--coral);
+}
+
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.65rem;
+  background: var(--fill);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.avatar svg {
+  font-size: 1.1rem;
+}
+
+.text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.title {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.details {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mark {
+  background: color-mix(in srgb, var(--coral) 30%, transparent);
+  color: inherit;
+  border-radius: 0.2em;
+}
+
+/* The star sits over the row's right edge, a target of its own. */
+.star {
+  position: absolute;
+  right: 0.25rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fill-strong);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.star:hover {
+  background: var(--fill);
+  color: var(--muted);
+}
+
+.star[aria-pressed="true"] {
+  color: var(--coral);
+}
+
+/* Read by screen readers, not shown. */
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

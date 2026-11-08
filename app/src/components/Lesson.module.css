@@ -14,6 +14,29 @@
 }
 
 /* Now: ringed in coral, the one thing that should catch the eye. */
+/* The card is one button for its details, laid over the content so
+   the text stays plain text for screen readers. */
+.open {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.open:hover {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+}
+
+.open:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .card[data-state="now"] {
   background: var(--card);
   box-shadow:
@@ -225,15 +248,6 @@
   font-size: 0.875rem;
 }
 
-/* Side by side when there is room, the name under the room when not. */
-.full .who {
-  flex: 1 1 12rem;
-}
-
-.full .room {
-  white-space: nowrap;
-}
-
 /* The subgroup number and its room never part. */
 .where {
   display: flex;
@@ -281,6 +295,7 @@
 
 .full .room {
   padding: 0.15rem 0.55rem;
+  white-space: nowrap;
 }
 
 .who {
@@ -292,7 +307,9 @@
   color: var(--muted);
 }
 
+/* Side by side when there is room, the name under the room when not. */
 .full .who {
+  flex: 1 1 12rem;
   color: var(--text);
   padding-top: 0;
 }

@@ -243,6 +243,82 @@
   padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px));
 }
 
+/* On a wide screen the name and the controls share one row. */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.top > :first-child {
+  flex: 1 1 18rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.top .toolbar {
+  margin: 0;
+}
+
+/* ── My subgroup ───────────────────────────────────────────── */
+
+.subgroups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.85rem;
+  margin: 0 0 0.85rem;
+}
+
+.subChoice {
+  margin: 0;
+  border: 0;
+  min-inline-size: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.subLabel {
+  padding: 0 0.5rem 0 0.6rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.subButton {
+  min-width: 2.25rem;
+  min-height: 2rem;
+  padding: 0.2rem 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.subButton:hover {
+  background: var(--fill);
+}
+
+.subButton[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.subNote {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
 /* ── The panel that holds the schedule ────────────────────── */
 
 .panel {

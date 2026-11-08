@@ -5,7 +5,16 @@
 // periods on a wide screen and as a list on a phone. The design notes
 // with the reasons are in docs/app-design.md.
 
-import { type CSSProperties, type KeyboardEvent, type TouchEvent, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type KeyboardEvent,
+  lazy,
+  type ReactNode,
+  Suspense,
+  type TouchEvent,
+  useRef,
+  useState,
+} from "react";
 import type { Catalog, ScheduleDocument, Status } from "../api";
 import { type Loaded, useJSON, useMedia } from "../hooks";
 import { ago, isStale } from "../lib/age";
@@ -38,6 +47,7 @@ import {
   mondayOf,
   todayIn,
 } from "../lib/dates";
+import type { Entry, StartView } from "../lib/profile";
 import { buildWeek, type CoverageState, type DayView, type WeekView } from "../lib/schedule";
 import type { Selection } from "../lib/selection";
 import styles from "./Calendar.module.css";
@@ -51,18 +61,45 @@ type Kind = Selection["kind"];
 
 const WIDE = "(min-width: 1024px)";
 
+// Lesson details are loaded on the first tap (ADR 0010 budget).
+const Details = lazy(() => import("./Details"));
+
+/** Opens the details of a slot of a day. */
+type OpenSlot = (slot: Slot, date: string, state: LessonState | undefined) => void;
+
+interface Opened {
+  slot: Slot;
+  date: string;
+  state: LessonState | undefined;
+}
+
 export function Calendar({
   sel,
   catalog,
   status,
   catalogFromCache,
   now,
+  head,
+  place,
+  startView,
+  subgroup,
+  onSubgroup,
+  onOpen,
 }: {
   sel: Selection;
   catalog: Catalog;
   status: Loaded<Status>;
   catalogFromCache: boolean;
   now: Date;
+  /** The name of the schedule with its buttons. */
+  head: ReactNode;
+  /** The institution's short name. */
+  place: string;
+  startView: StartView;
+  /** My subgroup in this schedule; undefined shows all. */
+  subgroup: number | undefined;
+  onSubgroup: (n: number | undefined) => void;
+  onOpen: (e: Entry) => void;
 }) {
   const tz = catalog.institution.timeZone;
   const today = todayIn(tz, now);
@@ -70,7 +107,11 @@ export function Calendar({
   const wide = useMedia(WIDE);
 
   const [date, setDate] = useState(() => startDay(today));
-  const [view, setViewState] = useState<View>(() => loadView() ?? (wide ? "week" : "day"));
+  const [view, setViewState] = useState<View>(() =>
+    startView === "last" ? (loadView() ?? (wide ? "week" : "day")) : startView,
+  );
+  const [opened, setOpened] = useState<Opened>();
+  const open: OpenSlot = (slot, date, state) => setOpened({ slot, date, state });
   const setView = (v: View) => {
     setViewState(v);
     saveView(v);
@@ -82,7 +123,31 @@ export function Calendar({
   const week = useJSON<ScheduleDocument>(
     entry ? `${sel.source}/${folder}/${encodeURIComponent(sel.id)}/${entry.file}` : null,
   );
-  const weekView = week.kind === "ready" ? buildWeek(week.data, sel, catalog) : undefined;
+  const full = week.kind === "ready" ? buildWeek(week.data, sel, catalog) : undefined;
+  // A group's subgroups this week. With "my subgroup" chosen, the lessons
+  // of the others are hidden, and the screen says how many.
+  const subgroups =
+    sel.kind === "group" && full
+      ? [...new Set(full.days.flatMap((d) => d.lessons.flatMap((l) => l.subgroup ?? [])))].sort(
+          (a, b) => a - b,
+        )
+      : [];
+  const mySubgroup = subgroup !== undefined && subgroups.includes(subgroup) ? subgroup : undefined;
+  const weekView: WeekView | undefined =
+    full && mySubgroup !== undefined
+      ? {
+          ...full,
+          days: full.days.map((d) => ({
+            ...d,
+            lessons: d.lessons.filter((l) => l.subgroup === undefined || l.subgroup === mySubgroup),
+          })),
+        }
+      : full;
+  const hidden =
+    full && weekView
+      ? full.days.reduce((n, d) => n + d.lessons.length, 0) -
+        weekView.days.reduce((n, d) => n + d.lessons.length, 0)
+      : 0;
   const fromCache =
     catalogFromCache ||
     (status.kind === "ready" && status.fromCache) ||
@@ -174,12 +239,21 @@ export function Calendar({
 
   return (
     <div className={wide ? undefined : tabs ? styles.withDockTall : styles.withDock}>
+      {wide ? (
+        <div className={styles.top}>
+          {head}
+          {toolbar}
+        </div>
+      ) : (
+        head
+      )}
       <Freshness status={status} fromCache={fromCache} now={now} />
       {todayView && <Today day={todayView} minutes={minutes} kind={sel.kind} />}
 
-      {wide && toolbar}
-
       <div className={styles.panel}>
+        {subgroups.length > 0 && (
+          <Subgroups all={subgroups} mine={mySubgroup} hidden={hidden} onChange={onSubgroup} />
+        )}
         {wide && tabs}
         {!entry ? (
           <Notice icon="clock">
@@ -206,6 +280,7 @@ export function Calendar({
                     coverage={weekView.coverage}
                     kind={sel.kind}
                     onSwipe={step}
+                    onOpen={open}
                   />
                 ) : wide ? (
                   <WeekGrid
@@ -213,13 +288,20 @@ export function Calendar({
                     today={today}
                     minutes={minutes}
                     kind={sel.kind}
+                    onOpen={open}
                     onOpenDay={(d) => {
                       setDate(d);
                       setView("day");
                     }}
                   />
                 ) : (
-                  <Agenda view={weekView} today={today} minutes={minutes} kind={sel.kind} />
+                  <Agenda
+                    view={weekView}
+                    today={today}
+                    minutes={minutes}
+                    kind={sel.kind}
+                    onOpen={open}
+                  />
                 ))}
               <p className={styles.changed}>
                 Изменено в источнике {formatMoment(weekView.changedAt, tz)}
@@ -229,11 +311,72 @@ export function Calendar({
         )}
       </div>
 
+      {opened && weekView && (
+        <Suspense fallback={null}>
+          <Details
+            slot={opened.slot}
+            date={opened.date}
+            state={opened.state}
+            sel={sel}
+            place={place}
+            changed={`Изменено в источнике ${formatMoment(weekView.changedAt, tz)}`}
+            onOpen={(e) => {
+              setOpened(undefined);
+              onOpen(e);
+            }}
+            onClose={() => setOpened(undefined)}
+          />
+        </Suspense>
+      )}
+
       {!wide && (
         <div className={styles.dock}>
           {tabs}
           {toolbar}
         </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * "My subgroup": the lessons of the other subgroups are hidden, never
+ * silently: the count of hidden ones is on screen, and "Все" is one tap.
+ */
+function Subgroups({
+  all,
+  mine,
+  hidden,
+  onChange,
+}: {
+  all: number[];
+  mine: number | undefined;
+  hidden: number;
+  onChange: (n: number | undefined) => void;
+}) {
+  return (
+    <div className={styles.subgroups}>
+      <fieldset className={styles.subChoice}>
+        <legend className={styles.hidden}>Подгруппа</legend>
+        <span className={styles.subLabel} aria-hidden="true">
+          Подгруппа
+        </span>
+        {[undefined, ...all].map((n) => (
+          <button
+            key={n ?? "all"}
+            type="button"
+            aria-pressed={mine === n}
+            className={styles.subButton}
+            onClick={() => onChange(n)}
+          >
+            {n === undefined ? "Все" : n}
+          </button>
+        ))}
+      </fieldset>
+      {mine !== undefined && hidden > 0 && (
+        <p className={styles.subNote}>
+          Показана {mine} подгруппа · скрыто пар других: {hidden}
+        </p>
       )}
     </div>
   );
@@ -347,6 +490,7 @@ function DayPanel({
   coverage,
   kind,
   onSwipe,
+  onOpen,
 }: {
   id: string;
   day: DayView;
@@ -355,6 +499,7 @@ function DayPanel({
   coverage: CoverageState;
   kind: Kind;
   onSwipe: (delta: 1 | -1) => void;
+  onOpen: OpenSlot;
 }) {
   const touch = useRef<{ x: number; y: number } | undefined>(undefined);
   const onTouchStart = (e: TouchEvent) => {
@@ -420,7 +565,12 @@ function DayPanel({
                 <SlotTime slot={item.slot} />
                 <span className={styles.node} aria-hidden="true" />
                 <div className={styles.itemBody}>
-                  <SlotCard slot={item.slot} kind={kind} state={item.state} />
+                  <SlotCard
+                    slot={item.slot}
+                    kind={kind}
+                    state={item.state}
+                    onOpen={() => onOpen(item.slot, day.date, item.state)}
+                  />
                 </div>
               </li>
             ),
@@ -448,11 +598,13 @@ function Agenda({
   today,
   minutes,
   kind,
+  onOpen,
 }: {
   view: WeekView;
   today: string;
   minutes: number;
   kind: Kind;
+  onOpen: OpenSlot;
 }) {
   return (
     <>
@@ -483,7 +635,13 @@ function Agenda({
               <ol className={styles.agendaList}>
                 {slots(day.lessons).map((slot) => (
                   <li key={slot.key}>
-                    <SlotCard slot={slot} kind={kind} state={stateOf(slot.key)} time />
+                    <SlotCard
+                      slot={slot}
+                      kind={kind}
+                      state={stateOf(slot.key)}
+                      time
+                      onOpen={() => onOpen(slot, day.date, stateOf(slot.key))}
+                    />
                   </li>
                 ))}
               </ol>
@@ -506,12 +664,14 @@ function WeekGrid({
   today,
   minutes,
   kind,
+  onOpen,
   onOpenDay,
 }: {
   view: WeekView;
   today: string;
   minutes: number;
   kind: Kind;
+  onOpen: OpenSlot;
   onOpenDay: (date: string) => void;
 }) {
   const range = periodRange(view.days);
@@ -579,6 +739,7 @@ function WeekGrid({
                           kind={kind}
                           state={stateOf(slot.key)}
                           compact
+                          onOpen={() => onOpen(slot, day.date, stateOf(slot.key))}
                         />
                       ))}
                     </div>
@@ -593,6 +754,7 @@ function WeekGrid({
                       kind={kind}
                       state={stateOf(slot.key)}
                       compact
+                      onOpen={() => onOpen(slot, day.date, stateOf(slot.key))}
                     />
                   ))}
                 </div>

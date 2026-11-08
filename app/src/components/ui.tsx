@@ -3,7 +3,7 @@
 
 // Small building blocks shared by the screens.
 
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useId, useRef } from "react";
 import { Icon, type IconName } from "./Icon";
 import styles from "./ui.module.css";
 
@@ -39,5 +39,71 @@ export function Skeleton({ label, rows = 3 }: { label: string; rows?: number }) 
         <div key={i} className={styles.block} />
       ))}
     </div>
+  );
+}
+
+/**
+ * A panel over the page: a sheet from the bottom on a phone, a panel at
+ * the side on a wide screen. A native modal dialog: focus stays inside,
+ * Esc and a tap outside close it, the page behind is inert.
+ */
+export function Sheet({
+  title,
+  onClose,
+  children,
+  wide = false,
+}: {
+  title: ReactNode;
+  onClose: () => void;
+  children: ReactNode;
+  /** Wider panel, for lesson details with long names. */
+  wide?: boolean;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    if (!d.open) {
+      if (typeof d.showModal === "function") d.showModal();
+      else d.setAttribute("open", "");
+    }
+    return () => {
+      if (d.open && typeof d.close === "function") d.close();
+    };
+  }, []);
+  return (
+    <dialog
+      ref={ref}
+      className={`${styles.sheet} ${wide ? styles.sheetWide : ""}`}
+      aria-labelledby={titleId}
+      onClose={onClose}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      // A click on the dim backdrop lands on the dialog itself.
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          onClose();
+        }
+      }}
+    >
+      <div className={styles.sheetInner}>
+        <header className={styles.sheetHead}>
+          <h2 id={titleId} className={styles.sheetTitle}>
+            {title}
+          </h2>
+          <button type="button" className={styles.close} aria-label="Закрыть" onClick={onClose}>
+            <Icon name="close" />
+          </button>
+        </header>
+        <div className={styles.sheetBody}>{children}</div>
+      </div>
+    </dialog>
   );
 }

@@ -1,8 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { type Fetched, getJSON, NotFoundError, ServerError } from "./api";
+import type { Store } from "./lib/store";
 
 export type Loaded<T> =
   | { kind: "loading" }
@@ -103,4 +104,10 @@ export function useMedia(query: string): boolean {
     return () => mq.removeEventListener("change", update);
   }, [query]);
   return matches;
+}
+
+/** A value kept on the device (lib/store.ts), following its changes. */
+export function useStore<T>(store: Store<T>): [T, (value: T) => void] {
+  const value = useSyncExternalStore(store.subscribe, store.get, store.get);
+  return [value, store.set];
 }

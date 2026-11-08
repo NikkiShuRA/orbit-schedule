@@ -77,13 +77,14 @@
   --radius-panel: 1.5rem;
   --radius: 0.875rem;
   --radius-small: 0.625rem;
+  --font:
+    "Wix Madefor Display", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    sans-serif;
   --font-ui: Inter, system-ui, sans-serif;
   --header-height: 3.5rem;
   --safe-top: env(safe-area-inset-top, 0px);
 
-  font-family:
-    "Wix Madefor Display", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font);
   font-weight: 500;
   font-size: 100%;
   line-height: 1.5;
@@ -95,8 +96,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark: as the system says, unless the person chose a theme in the
+   settings (data-theme on <html>, set before the first paint). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #0d0f1d;
     --card: #161a2e;
     --surface: #1f2340;
@@ -122,6 +125,60 @@
     --shadow-raised:
       0 0 0 1px rgb(255 255 255 / 0.07), 0 2px 4px rgb(0 0 0 / 0.3), 0 6px 16px rgb(0 0 0 / 0.35);
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d0f1d;
+  --card: #161a2e;
+  --surface: #1f2340;
+  --text: #f3f3f0;
+  --muted: #a5a9bf;
+  --line: #2a2f4d;
+  --fill: #272c4b;
+  --fill-strong: #3b4166;
+  --accent: var(--coral);
+  --on-accent: var(--night);
+  --coral-text: #ff9b80;
+  --link: var(--coral);
+  --focus: var(--coral);
+  --hero-bg: #262b4d;
+  --hero-text: #ffffff;
+  --hero-muted: #b9bcd2;
+  --hero-fill: rgb(255 255 255 / 0.08);
+  --warn-bg: #36241f;
+  --warn-line: #573427;
+  --warn-text: #ffd7c9;
+  --ok: #4fd18b;
+  --shadow: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-raised:
+    0 0 0 1px rgb(255 255 255 / 0.07), 0 2px 4px rgb(0 0 0 / 0.3), 0 6px 16px rgb(0 0 0 / 0.35);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* The logo comes in a light and a dark version; the page shows one. */
+.logo-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .logo-light {
+    display: none;
+  }
+  :root:not([data-theme="light"]) .logo-dark {
+    display: block;
+  }
+}
+
+:root[data-theme="dark"] .logo-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .logo-dark {
+  display: block;
 }
 
 *,

@@ -23,18 +23,32 @@ const paths = {
     "M3 3l18 18M8 8a5 5 0 0 0-1.9 9.6M17.5 17.5H8m10-1.2A4 4 0 0 0 16 9h-.3A6 6 0 0 0 10.6 6",
   clock: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-13v4l3 2",
   info: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-5v-5m0-3v.01",
+  star: "m12 3.5 2.6 5.3 5.9.9-4.25 4.1 1 5.8L12 16.9l-5.25 2.7 1-5.8L3.5 9.7l5.9-.9L12 3.5Z",
+  gear: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7.4-1.6.1-1.4-.1-1.4 2-1.6-2-3.4-2.4.9a7.5 7.5 0 0 0-2.4-1.4L14 2.5h-4l-.6 2.6A7.5 7.5 0 0 0 7 6.5l-2.4-.9-2 3.4 2 1.6-.1 1.4.1 1.4-2 1.6 2 3.4 2.4-.9a7.5 7.5 0 0 0 2.4 1.4l.6 2.6h4l.6-2.6a7.5 7.5 0 0 0 2.4-1.4l2.4.9 2-3.4-2-1.6Z",
+  close: "M6 6l12 12M18 6 6 18",
+  open: "M14 4h6v6m0-6-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5",
+  home: "M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1v-8Z",
 } as const;
 
 export type IconName = keyof typeof paths;
 
-export function Icon({ name, className }: { name: IconName; className?: string | undefined }) {
+export function Icon({
+  name,
+  className,
+  filled = false,
+}: {
+  name: IconName;
+  className?: string | undefined;
+  /** Filled shape: a chosen star. */
+  filled?: boolean;
+}) {
   return (
     <svg
       className={className}
       viewBox="0 0 24 24"
       width="1em"
       height="1em"
-      fill="none"
+      fill={filled ? "currentColor" : "none"}
       stroke="currentColor"
       strokeWidth="1.8"
       strokeLinecap="round"

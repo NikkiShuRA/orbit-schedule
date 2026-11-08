@@ -1,6 +1,61 @@
 /* SPDX-FileCopyrightText: 2026 Orbit contributors <https://github.com/NikkiShuRA/orbit-schedule> */
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 
+.brand {
+  margin: 0;
+  line-height: 0;
+}
+
+.brand img {
+  height: 1.75rem;
+  width: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.action {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.action:hover {
+  background: var(--fill);
+}
+
+.me {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 1.05rem;
+}
+
+.me:hover {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--fill-strong);
+}
+
+.initials {
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+/* ── Phone, and any screen before a schedule is chosen ─────── */
+
 .page {
   display: flex;
   flex-direction: column;
@@ -22,21 +77,11 @@
 .bar {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
   height: var(--header-height);
   max-width: 80rem;
   margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.title {
-  margin: 0;
-  line-height: 0;
-}
-
-.title img {
-  display: block;
-  height: 1.75rem;
-  width: auto;
+  padding: 0 0.75rem 0 1rem;
 }
 
 .main {
@@ -44,16 +89,46 @@
   width: 100%;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 0.5rem 1rem 2rem;
+  padding: 0 1rem 1rem;
 }
 
-.narrow {
+.start {
+  flex: 1;
+  width: 100%;
   max-width: 36rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+}
+
+.startTitle {
+  margin: 0.5rem 0 0.35rem;
+  font-size: clamp(1.6rem, 1.3rem + 1.5vw, 2.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.startText {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+.startCard {
+  padding: 1rem;
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 639px) {
+  .startCard {
+    margin: 0 -0.5rem;
+    padding: 0.85rem 0.75rem;
+  }
 }
 
 .footer {
   width: 100%;
-  max-width: 80rem;
+  max-width: 36rem;
   margin: 0 auto;
   padding: 1.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
   font-size: 0.8125rem;
@@ -63,9 +138,64 @@
 
 .footer p {
   margin: 0 0 0.4rem;
-  max-width: 40rem;
 }
 
 .footer a {
   color: inherit;
+}
+
+/* ── Wide screen with a schedule: search on the side ───────── */
+
+.shell {
+  display: grid;
+  grid-template-columns: 20rem minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+@media (min-width: 1440px) {
+  .shell {
+    grid-template-columns: 22rem minmax(0, 1fr);
+  }
+}
+
+.side {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+  background: var(--card);
+}
+
+.sideHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 4rem;
+  padding: 0 0.75rem 0 1.25rem;
+  flex: none;
+}
+
+/* The list scrolls inside the panel; the search field stays on top. */
+.sideFind {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 0.75rem 1rem;
+}
+
+.sideNote {
+  flex: none;
+  margin: 0;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.content {
+  min-width: 0;
+  padding: 0.75rem 1.5rem 2rem;
 }

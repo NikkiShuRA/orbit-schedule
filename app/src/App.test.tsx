@@ -8,6 +8,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testi
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { App } from "./App";
 import type { Catalog } from "./api";
+import { forgetAll } from "./lib/store";
 import { catalog, groupWeek, index, status, teacherWeek } from "./testdata";
 
 type Files = Record<string, unknown>;
@@ -66,7 +67,9 @@ afterEach(() => {
   cleanup();
   vi.useRealTimers();
   vi.unstubAllGlobals();
+  forgetAll();
   localStorage.clear();
+  delete document.documentElement.dataset.theme;
   globalThis.history.replaceState(null, "", "/");
 });
 
@@ -246,4 +249,68 @@ test("a wide screen opens the week as a grid of periods", async () => {
   // A day's header opens that day.
   fireEvent.click(within(wednesday).getByRole("button", { name: /11/ }));
   expect(screen.getByRole("tabpanel", { name: "Среда, 11 ноября" })).toBeDefined();
+});
+
+test("a tap on a lesson opens its details, and a teacher's name opens their schedule", async () => {
+  serve(files);
+  open("?s=example&g=g-101");
+  const cards = await screen.findAllByRole("button", { name: /^Подробнее:/ });
+  fireEvent.click(cards[0] as HTMLElement);
+  const dialog = await screen.findByRole("dialog");
+  expect(within(dialog).getByText(/Данные — как их опубликовало учебное заведение/)).toBeDefined();
+  fireEvent.click(within(dialog).getByRole("button", { name: /Иванов Иван Иванович/ }));
+  expect(await screen.findByRole("heading", { name: "Иванов Иван Иванович" })).toBeDefined();
+  expect(globalThis.location.search).toBe("?s=example&t=t-1");
+});
+
+test("the first schedule becomes mine, starred ones are listed in the profile", async () => {
+  serve(files);
+  open("?s=example&g=g-101");
+  await screen.findByRole("heading", { name: "Группа 101" });
+  fireEvent.click(screen.getByRole("button", { name: "В избранное" }));
+  expect(screen.getByRole("button", { name: "В избранное" }).getAttribute("aria-pressed")).toBe(
+    "true",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Профиль" }));
+  const dialog = await screen.findByRole("dialog", { name: "Профиль" });
+  expect(
+    within(dialog).getByText("хранится только на этом устройстве", { exact: false }),
+  ).toBeDefined();
+  expect(within(dialog).getAllByText("Группа 101").length).toBeGreaterThan(1);
+  expect(JSON.parse(localStorage.getItem("orbit.profile.v1") ?? "{}").mine.id).toBe("g-101");
+});
+
+test("the theme chosen in the settings is applied and remembered", async () => {
+  serve(files);
+  open("?s=example&g=g-101");
+  await screen.findByRole("heading", { name: "Группа 101" });
+  fireEvent.click(screen.getByRole("button", { name: "Настройки" }));
+  const dialog = await screen.findByRole("dialog", { name: "Настройки" });
+  fireEvent.click(within(dialog).getByRole("radio", { name: "Тёмная" }));
+  expect(document.documentElement.dataset.theme).toBe("dark");
+  expect(JSON.parse(localStorage.getItem("orbit.prefs.v1") ?? "{}").theme).toBe("dark");
+  fireEvent.click(within(dialog).getByRole("radio", { name: "Как в системе" }));
+  expect(document.documentElement.dataset.theme).toBeUndefined();
+});
+
+test("search moves through results with arrows and opens the first with Enter", async () => {
+  serve(files);
+  open("");
+  const input = await screen.findByLabelText("Группа или преподаватель");
+  await screen.findAllByRole("button", { name: /^101/ });
+  fireEvent.change(input, { target: { value: "Иван" } });
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+  expect(document.activeElement?.textContent).toMatch(/Иванов/);
+  fireEvent.keyDown(input, { key: "Enter" });
+  expect(await screen.findByRole("heading", { name: "Иванов Иван Иванович" })).toBeDefined();
+});
+
+test("my subgroup hides the other's lessons and says how many", async () => {
+  serve(files);
+  open("?s=example&g=g-101");
+  const choice = await screen.findByRole("group", { name: "Подгруппа" });
+  fireEvent.click(within(choice).getByRole("button", { name: "1" }));
+  expect(screen.getByText(/Показана 1 подгруппа · скрыто пар других: \d+/)).toBeDefined();
+  fireEvent.click(within(choice).getByRole("button", { name: "Все" }));
+  expect(screen.queryByText(/скрыто пар других/)).toBeNull();
 });
