@@ -1,17 +1,16 @@
-# Fetches schedules on a timer, commits real changes to the data branch
-# and publishes the data to GitHub Pages. See ADR 0004.
+# Fetches schedules, commits real changes to the data branch and
+# publishes the data to GitHub Pages. See ADR 0004.
 #
 # This file is a thin wrapper around `orbit fetch`: all logic lives in
 # the CLI, so the same thing can run on any server with cron.
+#
+# It has no schedule of its own: GitHub ran it hours late or not at
+# all. An external timer starts it through workflow_dispatch: every 10
+# minutes from 07:00 to 21:00 in Surgut, hourly at night (ops/trigger,
+# ADR 0011). A daily check in freshness.yml notices if the timer stops.
 name: Publish
 
 on:
-  schedule:
-    # Times are UTC; Surgut is UTC+5. Minutes avoid the busy top of the
-    # hour, when GitHub delays and drops scheduled runs the most.
-    - cron: "3-59/10 2-15 * * *" # every 10 minutes, 07:00-21:00 in Surgut
-    - cron: "17 0,1,16-23 * * *" # hourly at night
-    - cron: "43 2 * * 1" # weekly keepalive, see the keepalive job
   workflow_dispatch:
   pull_request:
     paths: [".github/workflows/publish.yml"]
@@ -28,7 +27,6 @@ jobs:
   fetch:
     # Only main publishes. Runs from other branches and PRs are dry runs:
     # they fetch and validate, but push and deploy nothing.
-    if: github.event_name != 'schedule' || github.event.schedule != '43 2 * * 1'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -155,17 +153,3 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@v5
-
-  # GitHub turns off scheduled workflows in a repository with no activity
-  # for 60 days, which would happen every summer break. Re-enabling the
-  # workflow through the API resets that timer without dummy commits.
-  keepalive:
-    if: github.event_name == 'schedule' && github.event.schedule == '43 2 * * 1'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      actions: write
-    steps:
-      - run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/publish.yml/enable"
-        env:
-          GH_TOKEN: ${{ github.token }}
