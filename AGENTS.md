@@ -22,7 +22,7 @@
 - черновик 0.2 стандарта данных в `standard/` (JSON Schema, примеры, валидатор на Node.js) и такой же валидатор на Go;
 - коннекторы СИЭУиП и СПК и CLI `orbit` (см. «Команды»). Основной адрес API СИЭУиП с ноября 2026 недоступен, данные идут с временного резервного зеркала ([#15](https://github.com/NikkiShuRA/orbit-schedule/issues/15)).
 
-- публикация по расписанию: раз в час в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)).
+- публикация по расписанию: днём каждые 10 минут, ночью раз в час, в ветку `data` и на GitHub Pages ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)).
 
 - нарезка для приложения: неделя каждой группы и преподавателя отдельным файлом и оглавление (`orbit slice`).
 
@@ -66,7 +66,7 @@ go run ./cmd/orbit slice --in data --out site    # нарезка для при�
 
 CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go.yml` (gofmt, vet, тесты с `-race`, govulncheck).
 
-Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` раз в час запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages (`https://nikkishura.github.io/orbit-schedule/data/`). Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
+Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` днём каждые 10 минут, ночью раз в час запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages (`https://nikkishura.github.io/orbit-schedule/data/`). Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
 
 ## Принципы, которые нельзя нарушать
 
