@@ -86,7 +86,7 @@ CI: `.github/workflows/standard.yml` (Node, `npm test`) и `.github/workflows/go
 1. Issue с метками `connector` и `source:<id>` (новую метку источника создай). Изучи источник и дополни [требования](docs/standard/requirements.md).
 2. Пакет `internal/<id>` по образцу `internal/sieup` или `internal/spk`: `api.go` — типы ответа источника, `client.go` — HTTP-клиент, `connector.go` — `Fetch` и чистая функция `convert`, `ErrNotPublished` для «неделя ещё не опубликована». Документ — одна неделя с понедельника; охват — то, что реально опубликовано.
 3. Тесты в пакете на вымышленных фикстурах: правильный документ, странности источника, «не опубликовано», ошибки источника.
-4. Регистрация в `cmd/orbit/sources.go` и тест CLI в `cmd/orbit/main_test.go` с поддельным сервером.
+4. Регистрация в `cmd/orbit/sources.go` и тест CLI в `cmd/orbit/main_test.go` с поддельным сервером. Id источника — строчные латинские буквы, цифры и дефис; он становится частью адреса API и не может быть `schemas`, `openapi` или `index` (это проверяет тест).
 5. Шаг в `.github/workflows/publish.yml` по образцу соседних: свой `id`, `continue-on-error: true`, код выхода 3 — не ошибка; добавь шаг в условие «Fail if a source failed».
 6. Живой прогон и `orbit validate`, затем «Команды» здесь, README и CHANGELOG.
 
