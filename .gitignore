@@ -15,6 +15,7 @@ desktop.ini
 node_modules/
 dist/
 dev-dist/
+*.tsbuildinfo
 build/
 coverage/
 __pycache__/
