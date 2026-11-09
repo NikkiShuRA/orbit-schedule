@@ -31,7 +31,6 @@ jobs:
             echo "| Source | URL | HTTP code, seconds, bytes |"
             echo "|---|---|---|"
           } >> "$GITHUB_STEP_SUMMARY"
-          probe "SIEUiP main"   "https://sielom.ru/schedule/api/divisions"
-          probe "SIEUiP mirror" "https://timetable.sieup.ru/api/divisions"
+          probe "SIEUiP API"    "https://timetable.sielom.ru/api/divisions"
           probe "SPK site"      "https://schedule.surpk.ru/week/"
           probe "SPK API"       "https://surpk.ru/api/schedule/index"
