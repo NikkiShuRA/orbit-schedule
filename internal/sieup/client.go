@@ -23,19 +23,16 @@ type Base struct {
 
 // DefaultBases are the API addresses, tried in order.
 //
-// The main address is the institute's own. Since November 2026 it is down
-// together with the institute's hosting, and the institute raised a
-// temporary backup mirror in a hurry. The mirror is a stopgap, not a
-// second home of the API: it may lag behind, change or disappear once
-// the main site is back. So:
-//   - the main address always stays first, and the connector switches
-//     back to it by itself as soon as it answers;
-//   - data from the mirror is named as such in provenance, so the app and
-//     the git history show where every file came from;
-//   - addresses can be replaced with --base without changing code.
+// In November 2026 the institute moved the schedule from
+// sielom.ru/schedule to its own host, timetable.sielom.ru: the old path
+// answers 404, and the temporary mirror timetable.sieup.ru, used while
+// the institute's hosting was down, now permanently redirects there. So
+// there is one address again. The list stays a list: if the institute
+// raises a backup again, it goes after the main address, with a name
+// that says it is a backup, so provenance shows where every file came
+// from. Addresses can be replaced with --base without changing code.
 var DefaultBases = []Base{
-	{URL: "https://sielom.ru/schedule/api", Name: "API расписания СИЭУиП"},
-	{URL: "https://timetable.sieup.ru/api", Name: "API расписания СИЭУиП, временное резервное зеркало"},
+	{URL: "https://timetable.sielom.ru/api", Name: "API расписания СИЭУиП"},
 }
 
 // CustomBaseName names an address given by hand (orbit fetch --base) in
