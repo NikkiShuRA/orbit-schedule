@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-09T14:34:26+05:00"
+    "retrievedAt": "2026-11-09T21:18:40+05:00"
   },
   "buildings": [
     {
@@ -20037,11 +20037,11 @@
           "groupId": "e4500597-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "f99c907c-1533-11e1-a851-0024bed8d4e7",
+      "subjectId": "43c167c1-8ab5-11e6-81f5-00155d009401",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "4475e52d-47e2-11ee-b991-f70bcbf7a02d"
+          "teacherId": "fdbc2d7e-f1ce-11f0-b9e5-80550b2059df"
         }
       ],
       "rooms": [
@@ -22721,16 +22721,16 @@
           "groupId": "4e2de5bb-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "f99c907c-1533-11e1-a851-0024bed8d4e7",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "subjectId": "947ac599-2497-11e1-bceb-00e04d1e1a0d",
+      "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "4475e52d-47e2-11ee-b991-f70bcbf7a02d"
+          "teacherId": "fb3be784-2ab7-11ed-a310-873ca62c3139"
         }
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc1-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "f76f4702-5bcd-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -25230,16 +25230,16 @@
           "groupId": "f72ce55d-33f0-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "f99c907c-1533-11e1-a851-0024bed8d4e7",
+      "subjectId": "43c167c1-8ab5-11e6-81f5-00155d009401",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "4475e52d-47e2-11ee-b991-f70bcbf7a02d"
+          "teacherId": "fdbc2d7e-f1ce-11f0-b9e5-80550b2059df"
         }
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc1-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "a83d9631-9870-11e7-a8ac-00155d009401"
         }
       ]
     },
