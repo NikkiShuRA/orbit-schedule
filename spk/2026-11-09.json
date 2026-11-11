@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-11T16:04:16+05:00"
+    "retrievedAt": "2026-11-11T16:54:16+05:00"
   },
   "buildings": [
     {
@@ -27078,28 +27078,6 @@
       "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
       "groups": [
         {
-          "groupId": "aac3953c-33f1-11f1-b9ef-f9763b56004d"
-        }
-      ],
-      "subjectId": "947ac598-2497-11e1-bceb-00e04d1e1a0d",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
-      "teachers": [
-        {
-          "teacherId": "d912ae93-1b1d-11e1-b018-0021856c2fb8"
-        }
-      ],
-      "rooms": [
-        {
-          "roomId": "cd9f7a53-9870-11e7-a8ac-00155d009401"
-        }
-      ]
-    },
-    {
-      "date": "2026-11-10",
-      "period": 5,
-      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
-      "groups": [
-        {
           "groupId": "36d47058-33f2-11f1-b9ef-f9763b56004d"
         }
       ],
@@ -52791,16 +52769,16 @@
           "groupId": "aac3953c-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac598-2497-11e1-bceb-00e04d1e1a0d",
+      "subjectId": "947ac594-2497-11e1-bceb-00e04d1e1a0d",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "d912ae93-1b1d-11e1-b018-0021856c2fb8"
+          "teacherId": "b332e15f-d8d5-11e8-a162-00155d009401"
         }
       ],
       "rooms": [
         {
-          "roomId": "cd9f7a53-9870-11e7-a8ac-00155d009401"
+          "roomId": "c4a9f0c3-9870-11e7-a8ac-00155d009401"
         }
       ]
     },
@@ -63328,6 +63306,28 @@
       "rooms": [
         {
           "roomId": "59214a55-76fd-11ef-b9bc-985d77e5752f"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "period": 4,
+      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
+      "groups": [
+        {
+          "groupId": "aac3953c-33f1-11f1-b9ef-f9763b56004d"
+        }
+      ],
+      "subjectId": "947ac597-2497-11e1-bceb-00e04d1e1a0d",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "teachers": [
+        {
+          "teacherId": "38969a6e-1b21-11e1-b018-0021856c2fb8"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "dd8d7dcd-1bd4-11e1-98dd-001d608894f0"
         }
       ]
     },
