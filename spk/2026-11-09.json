@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-11T13:54:20+05:00"
+    "retrievedAt": "2026-11-11T16:04:16+05:00"
   },
   "buildings": [
     {
@@ -32379,7 +32379,7 @@
       ],
       "rooms": [
         {
-          "roomId": "96f6e1fb-1c97-11e1-a990-001d608894f0"
+          "roomId": "96f6e1f0-1c97-11e1-a990-001d608894f0"
         }
       ]
     },
@@ -37918,7 +37918,7 @@
       ],
       "rooms": [
         {
-          "roomId": "96f6e1fb-1c97-11e1-a990-001d608894f0"
+          "roomId": "96f6e1f0-1c97-11e1-a990-001d608894f0"
         }
       ]
     },
@@ -44370,7 +44370,7 @@
       ],
       "rooms": [
         {
-          "roomId": "96f6e1f2-1c97-11e1-a990-001d608894f0"
+          "roomId": "96f6e1ee-1c97-11e1-a990-001d608894f0"
         }
       ]
     },
@@ -46907,7 +46907,7 @@
       ],
       "rooms": [
         {
-          "roomId": "96f6e1f2-1c97-11e1-a990-001d608894f0"
+          "roomId": "96f6e1ee-1c97-11e1-a990-001d608894f0"
         }
       ]
     },
@@ -49262,6 +49262,28 @@
       "rooms": [
         {
           "roomId": "3a6aecbf-1bef-11e1-801c-001d608894f0"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-12",
+      "period": 4,
+      "buildingId": "0ae1878b-1532-11e1-a851-0024bed8d4e7",
+      "groups": [
+        {
+          "groupId": "109d47c3-d830-11ed-a323-fe089044170e"
+        }
+      ],
+      "subjectId": "5cf7a44e-29aa-11ed-a310-873ca62c3139",
+      "lessonTypeId": "0c0f840a-69ee-11eb-a2ce-ac1f6bba5385",
+      "teachers": [
+        {
+          "teacherId": "38969a79-1b21-11e1-b018-0021856c2fb8"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "6be4c1bf-44bc-11ed-a313-8c96b071c3da"
         }
       ]
     },
@@ -61638,28 +61660,6 @@
       "rooms": [
         {
           "roomId": "96f6e1f0-1c97-11e1-a990-001d608894f0"
-        }
-      ]
-    },
-    {
-      "date": "2026-11-13",
-      "period": 4,
-      "buildingId": "0ae1878b-1532-11e1-a851-0024bed8d4e7",
-      "groups": [
-        {
-          "groupId": "109d47c3-d830-11ed-a323-fe089044170e"
-        }
-      ],
-      "subjectId": "5cf7a44e-29aa-11ed-a310-873ca62c3139",
-      "lessonTypeId": "0c0f840a-69ee-11eb-a2ce-ac1f6bba5385",
-      "teachers": [
-        {
-          "teacherId": "38969a79-1b21-11e1-b018-0021856c2fb8"
-        }
-      ],
-      "rooms": [
-        {
-          "roomId": "6be4c1bf-44bc-11ed-a313-8c96b071c3da"
         }
       ]
     },
