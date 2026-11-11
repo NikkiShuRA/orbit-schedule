@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-11T16:54:16+05:00"
+    "retrievedAt": "2026-11-11T20:34:20+05:00"
   },
   "buildings": [
     {
@@ -43143,7 +43143,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdedf-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "a72bdede-1bcc-11e1-98dd-001d608894f0"
         }
       ]
     },
@@ -43222,16 +43222,16 @@
           "groupId": "763488b3-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "79cfd971-5cbc-11e8-a255-00155d009401",
+      "subjectId": "947ac591-2497-11e1-bceb-00e04d1e1a0d",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "4e3341c1-0fa0-11ec-a2d8-ac1f6bba5385"
+          "teacherId": "ee617bcd-c3bb-11f1-ba05-e4ae7f3c02a1"
         }
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc8-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "a72bdedf-1bcc-11e1-98dd-001d608894f0"
         }
       ]
     },
@@ -63228,16 +63228,16 @@
           "groupId": "763488b3-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac591-2497-11e1-bceb-00e04d1e1a0d",
+      "subjectId": "79cfd971-5cbc-11e8-a255-00155d009401",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "ee617bcd-c3bb-11f1-ba05-e4ae7f3c02a1"
+          "teacherId": "4e3341c1-0fa0-11ec-a2d8-ac1f6bba5385"
         }
       ],
       "rooms": [
         {
-          "roomId": "a72bdedf-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "dd8d7dc8-1bd4-11e1-98dd-001d608894f0"
         }
       ]
     },
