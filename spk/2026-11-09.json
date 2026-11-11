@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-10T17:04:21+05:00"
+    "retrievedAt": "2026-11-11T13:34:23+05:00"
   },
   "buildings": [
     {
@@ -470,6 +470,11 @@
       "id": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385",
       "name": "Дистанционное занятие",
       "code": "Дистант"
+    },
+    {
+      "id": "89fc8adc-e8ff-11ef-b9ce-eb7659da2f72",
+      "name": "Дистанционное обучение",
+      "code": "ДистСП3"
     },
     {
       "id": "74283337-039c-11eb-a2c1-ac1f6bba5384",
@@ -38245,7 +38250,7 @@
     {
       "date": "2026-11-11",
       "period": 4,
-      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "b57cfe1d-33f0-11f1-b9ef-f9763b56004d"
@@ -38260,7 +38265,7 @@
       ],
       "rooms": [
         {
-          "roomId": "f76f4702-5bcd-11e2-a812-000e0ca43ba5"
+          "roomId": "89fc8adc-e8ff-11ef-b9ce-eb7659da2f72"
         }
       ]
     },
@@ -38282,7 +38287,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dce-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38304,7 +38309,7 @@
       ],
       "rooms": [
         {
-          "roomId": "3199f5f6-9870-11e7-a8ac-00155d009401"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38326,7 +38331,7 @@
       ],
       "rooms": [
         {
-          "roomId": "b0a6794f-9870-11e7-a8ac-00155d009401"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38348,7 +38353,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdedf-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38370,7 +38375,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdedb-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38392,7 +38397,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dbe-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38414,14 +38419,14 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdedd-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
     {
       "date": "2026-11-11",
       "period": 4,
-      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "67766caa-33f1-11f1-b9ef-f9763b56004d"
@@ -38436,7 +38441,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdedc-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "89fc8adc-e8ff-11ef-b9ce-eb7659da2f72"
         }
       ]
     },
@@ -38458,7 +38463,7 @@
       ],
       "rooms": [
         {
-          "roomId": "cd9f7a53-9870-11e7-a8ac-00155d009401"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38480,7 +38485,7 @@
       ],
       "rooms": [
         {
-          "roomId": "b889d447-9870-11e7-a8ac-00155d009401"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38502,7 +38507,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdee0-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38524,7 +38529,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdede-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38546,7 +38551,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a83d9631-9870-11e7-a8ac-00155d009401"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38568,7 +38573,7 @@
       ],
       "rooms": [
         {
-          "roomId": "c4a9f0c3-9870-11e7-a8ac-00155d009401"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38590,7 +38595,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc8-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38612,7 +38617,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dcc-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38635,7 +38640,7 @@
       ],
       "rooms": [
         {
-          "roomId": "09bd855f-4a71-11f0-b9df-f93448a2e6dc"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38658,7 +38663,7 @@
       ],
       "rooms": [
         {
-          "roomId": "9b87b92e-5711-11eb-a2cc-ac1f6bba5384"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38680,7 +38685,7 @@
       ],
       "rooms": [
         {
-          "roomId": "59214a55-76fd-11ef-b9bc-985d77e5752f"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38702,7 +38707,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dcb-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38724,14 +38729,14 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dcf-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
     {
       "date": "2026-11-11",
       "period": 4,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
       "groups": [
         {
           "groupId": "a85d1a58-33f2-11f1-b9ef-f9763b56004d"
@@ -38746,14 +38751,14 @@
       ],
       "rooms": [
         {
-          "roomId": "75eacd5b-3323-11ed-a311-ba5fdf56e295"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
     {
       "date": "2026-11-11",
       "period": 4,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
       "groups": [
         {
           "groupId": "236b8a07-33f2-11f1-b9ef-f9763b56004d"
@@ -38768,7 +38773,7 @@
       ],
       "rooms": [
         {
-          "roomId": "5929b1f3-a8a3-11ef-b9c1-cf41d4d3b4b8"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38790,7 +38795,7 @@
       ],
       "rooms": [
         {
-          "roomId": "e42d10b7-1aa4-11e1-b4b5-0024bed8d4e7"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38812,7 +38817,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc1-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38834,7 +38839,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc9-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38856,7 +38861,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dd4-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38878,7 +38883,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dca-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -39986,7 +39991,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dd4-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40008,7 +40013,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdede-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40030,7 +40035,7 @@
       ],
       "rooms": [
         {
-          "roomId": "59214a55-76fd-11ef-b9bc-985d77e5752f"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40053,7 +40058,7 @@
       ],
       "rooms": [
         {
-          "roomId": "9b87b92e-5711-11eb-a2cc-ac1f6bba5384"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40076,7 +40081,7 @@
       ],
       "rooms": [
         {
-          "roomId": "09bd855f-4a71-11f0-b9df-f93448a2e6dc"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40098,7 +40103,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dbe-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40120,7 +40125,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dca-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40142,7 +40147,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a83d9631-9870-11e7-a8ac-00155d009401"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40164,7 +40169,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dce-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -40186,7 +40191,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdedd-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -41120,7 +41125,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a72bdedd-1bcc-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -41142,7 +41147,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dce-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -41165,7 +41170,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dbf-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -41188,7 +41193,7 @@
       ],
       "rooms": [
         {
-          "roomId": "09bd855f-4a71-11f0-b9df-f93448a2e6dc"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -41210,7 +41215,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dcc-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
