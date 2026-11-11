@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-11T13:34:23+05:00"
+    "retrievedAt": "2026-11-11T13:54:20+05:00"
   },
   "buildings": [
     {
@@ -470,11 +470,6 @@
       "id": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385",
       "name": "Дистанционное занятие",
       "code": "Дистант"
-    },
-    {
-      "id": "89fc8adc-e8ff-11ef-b9ce-eb7659da2f72",
-      "name": "Дистанционное обучение",
-      "code": "ДистСП3"
     },
     {
       "id": "74283337-039c-11eb-a2c1-ac1f6bba5384",
@@ -38250,7 +38245,7 @@
     {
       "date": "2026-11-11",
       "period": 4,
-      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
       "groups": [
         {
           "groupId": "b57cfe1d-33f0-11f1-b9ef-f9763b56004d"
@@ -38265,7 +38260,7 @@
       ],
       "rooms": [
         {
-          "roomId": "89fc8adc-e8ff-11ef-b9ce-eb7659da2f72"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
@@ -38426,7 +38421,7 @@
     {
       "date": "2026-11-11",
       "period": 4,
-      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "2f49fa4a-14b3-11e1-abee-6c626de26f31",
       "groups": [
         {
           "groupId": "67766caa-33f1-11f1-b9ef-f9763b56004d"
@@ -38441,7 +38436,7 @@
       ],
       "rooms": [
         {
-          "roomId": "89fc8adc-e8ff-11ef-b9ce-eb7659da2f72"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
