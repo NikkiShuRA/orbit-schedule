@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-13T10:24:32+05:00"
+    "retrievedAt": "2026-11-13T10:44:18+05:00"
   },
   "buildings": [
     {
@@ -1329,6 +1329,10 @@
     {
       "id": "a3bd2f0c-b964-11e3-8684-00155d009401",
       "name": "Методика и практика архивоведения"
+    },
+    {
+      "id": "c6d335e5-5df1-11ef-b9b8-a8f43a541249",
+      "name": "Методика обучения технологии с практикумом"
     },
     {
       "id": "0100e898-fb95-11e3-9a45-00155d009401",
@@ -7732,6 +7736,28 @@
       "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
+          "groupId": "295deb84-d833-11ed-a323-fe089044170e"
+        }
+      ],
+      "subjectId": "5b444ebd-5df1-11ef-b9b8-a8f43a541249",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "teachers": [
+        {
+          "teacherId": "7e527102-1b24-11e1-80be-00167641f657"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "3a6aecc6-1bef-11e1-801c-001d608894f0"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "period": 2,
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
+      "groups": [
+        {
           "groupId": "db702bf3-d842-11ed-a323-fe089044170e"
         }
       ],
@@ -10264,28 +10290,6 @@
       "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
-          "groupId": "295deb84-d833-11ed-a323-fe089044170e"
-        }
-      ],
-      "subjectId": "5b444ebd-5df1-11ef-b9b8-a8f43a541249",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
-      "teachers": [
-        {
-          "teacherId": "7e527102-1b24-11e1-80be-00167641f657"
-        }
-      ],
-      "rooms": [
-        {
-          "roomId": "3a6aecc6-1bef-11e1-801c-001d608894f0"
-        }
-      ]
-    },
-    {
-      "date": "2026-11-19",
-      "period": 1,
-      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
-      "groups": [
-        {
           "groupId": "db702bf3-d842-11ed-a323-fe089044170e"
         }
       ],
@@ -11981,6 +11985,28 @@
       "rooms": [
         {
           "roomId": "61fe33c9-95f0-11eb-a2d1-ac1f6bba5385"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-19",
+      "period": 4,
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
+      "groups": [
+        {
+          "groupId": "295deb84-d833-11ed-a323-fe089044170e"
+        }
+      ],
+      "subjectId": "c6d335e5-5df1-11ef-b9b8-a8f43a541249",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "teachers": [
+        {
+          "teacherId": "f2d187b6-47e9-11ee-b991-f70bcbf7a02d"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "3a6aeccc-1bef-11e1-801c-001d608894f0"
         }
       ]
     },
@@ -14776,6 +14802,28 @@
       "rooms": [
         {
           "roomId": "3a6aecbf-1bef-11e1-801c-001d608894f0"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "period": 4,
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
+      "groups": [
+        {
+          "groupId": "295deb84-d833-11ed-a323-fe089044170e"
+        }
+      ],
+      "subjectId": "2edcc27c-243d-11ed-a30c-c73bc0680cfd",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "teachers": [
+        {
+          "teacherId": "9fbf1620-734e-11ef-b9bc-985d77e5752f"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "3a6aeccc-1bef-11e1-801c-001d608894f0"
         }
       ]
     },
