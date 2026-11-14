@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-14T10:34:19+05:00"
+    "retrievedAt": "2026-11-14T17:34:43+05:00"
   },
   "buildings": [
     {
@@ -3792,46 +3792,6 @@
     {
       "id": "700cc3df-5d54-11ea-a2ad-ac1f6bba5384",
       "name": "Учебная практика"
-    }
-  ],
-  "bellSchedules": [
-    {
-      "id": "site",
-      "name": "Начало пар по сайту расписания schedule.surpk.ru",
-      "periods": [
-        {
-          "period": 1,
-          "start": "08:30"
-        },
-        {
-          "period": 2,
-          "start": "10:00"
-        },
-        {
-          "period": 3,
-          "start": "12:00"
-        },
-        {
-          "period": 4,
-          "start": "13:30"
-        },
-        {
-          "period": 5,
-          "start": "15:00"
-        },
-        {
-          "period": 6,
-          "start": "16:30"
-        },
-        {
-          "period": 7,
-          "start": "18:00"
-        },
-        {
-          "period": 8,
-          "start": "19:30"
-        }
-      ]
     }
   ],
   "lessons": [
