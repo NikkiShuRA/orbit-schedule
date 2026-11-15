@@ -87,7 +87,7 @@ go run ./cmd/orbit validate data/sieup/*.json    # проверить докум
 go run ./cmd/orbit slice --in data --out site    # нарезка для приложения: site/index.json, site/<источник>/catalog.json, groups/, teachers/
 ```
 
-Коды выхода `orbit`: 0 — успех, 1 — ошибка, 2 — неверные аргументы, 3 — ни одна из запрошенных недель ещё не опубликована. После успешного `fetch` рядом с документами лежит `status.json` — когда источник проверяли и что вышло с каждой неделей.
+Коды выхода `orbit`: 0 — успех, 1 — ошибка, 2 — неверные аргументы, 3 — ни одна из запрошенных недель ещё не опубликована, 4 — источник не ответил совсем (в публикации это предупреждение, а не сбой, [ADR 0012](docs/decisions/0012-unreachable-source.md)). После успешного `fetch` рядом с документами лежит `status.json` — когда источник проверяли и что вышло с каждой неделей.
 
 Структура: `cmd/orbit` — CLI; `internal/standard` — типы документа и валидатор (схема + ссылки); `internal/sieup` — коннектор СИЭУиП; `internal/spk` — коннектор СПК (никогда не вызывает `update-schedule` у API: это меняет состояние источника); `cmd/orbit/sources.go` — список источников для `fetch`; `internal/slice` — нарезка недель на группы и преподавателей и оглавление; `standard/schema/embed.go` встраивает схему в Go; `api/v1` — описание API: `openapi.json` и `schemas/` (публикуются как есть) и пакет Go, который их встраивает и проверяет служебные файлы (`index.json`, `catalog.json`, `status.json`) перед записью.
 
@@ -97,7 +97,7 @@ CI: `.github/workflows/standard.yml` (Node, `npm test`), `.github/workflows/go.y
 
 Публикация ([ADR 0004](docs/decisions/0004-scheduled-publishing.md)): `.github/workflows/publish.yml` запускает `orbit fetch` для каждого источника (сбой одного не мешает публикации остальных, но задача в итоге падает), коммитит изменения в ветку `data`, нарезает данные для приложения (`orbit slice`, [ADR 0006](docs/decisions/0006-coverage-and-slices.md); нарезка не коммитится) и выкладывает всё на Pages как статичный API (`https://nikkishura.github.io/orbit-schedule/api/v1/`, [ADR 0008](docs/decisions/0008-versioned-data-api.md)). Выкладывает не `actions/deploy-pages`, а свой шаг: у каждой выкладки своё имя, а после неё проверяется, что живой сайт отдаёт `deploy.txt` этого запуска ([ADR 0013](docs/decisions/0013-pages-deploy.md)). Не возвращай действие: с одним коммитом на сотни запусков оно сообщает об успехе, даже когда сайт не обновился. Несовместимое изменение раскладки или служебных файлов — только новой версией рядом со старой, не правкой `v1`. Публикует только `main`; из других веток — пробный запуск. Ветку `data` руками не правь.
 
-Своего расписания у `publish.yml` нет: GitHub выполнял его с опозданием на часы. Его запускает через `workflow_dispatch` воркер Cloudflare из `ops/trigger/` — днём каждые 10 минут, ночью раз в час ([ADR 0011](docs/decisions/0011-external-trigger.md)). Расписание воркера — в `ops/trigger/wrangler.toml`; меняется только через ADR. Выкладывает воркер владелец (`ops/trigger/README.md`): ни у агентов, ни у CI нет доступа к Cloudflare и токена. `.github/workflows/freshness.yml` раз в день проверяет `status.json` на сайте и падает, если источник не проверяли дольше 2 часов. Не возвращай расписание в `publish.yml`: два таймера опрашивали бы источники вдвое чаще.
+Своего расписания у `publish.yml` нет: GitHub выполнял его с опозданием на часы. Его запускает через `workflow_dispatch` воркер Cloudflare из `ops/trigger/` — днём каждые 10 минут, ночью раз в час ([ADR 0011](docs/decisions/0011-external-trigger.md)). Расписание воркера — в `ops/trigger/wrangler.toml`; меняется только через ADR. Выкладывает воркер владелец (`ops/trigger/README.md`): ни у агентов, ни у CI нет доступа к Cloudflare и токена. `.github/workflows/freshness.yml` раз в день проверяет `status.json` на сайте и падает, если источник не проверяли дольше 2 часов; так же сообщается о долго недоступном источнике ([ADR 0012](docs/decisions/0012-unreachable-source.md)). Не возвращай расписание в `publish.yml`: два таймера опрашивали бы источники вдвое чаще.
 
 ## Работа с источниками
 
@@ -116,7 +116,7 @@ CI: `.github/workflows/standard.yml` (Node, `npm test`), `.github/workflows/go.y
 2. Пакет `internal/<id>` по образцу `internal/sieup` или `internal/spk`: `api.go` — типы ответа источника, `client.go` — HTTP-клиент, `connector.go` — `Fetch` и чистая функция `convert`, `ErrNotPublished` для «неделя ещё не опубликована». Документ — одна неделя с понедельника; охват — то, что реально опубликовано.
 3. Тесты в пакете на вымышленных фикстурах: правильный документ, странности источника, «не опубликовано», ошибки источника.
 4. Регистрация в `cmd/orbit/sources.go` и тест CLI в `cmd/orbit/main_test.go` с поддельным сервером. Id источника — строчные латинские буквы, цифры и дефис; он становится частью адреса API и не может быть `schemas`, `openapi` или `index` (это проверяет тест).
-5. Шаг в `.github/workflows/publish.yml` по образцу соседних: свой `id`, `continue-on-error: true`, код выхода 3 — не ошибка; добавь шаг в условие «Fail if a source failed».
+5. Шаг в `.github/workflows/publish.yml` по образцу соседних: свой `id`, `continue-on-error: true`, коды выхода 3 и 4 — не ошибка; добавь шаг в условие «Fail if a source failed».
 6. Живой прогон и `orbit validate`, затем «Команды» здесь, README и CHANGELOG.
 
 ## Принципы, которые нельзя нарушать

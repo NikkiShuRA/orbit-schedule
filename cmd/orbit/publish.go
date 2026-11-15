@@ -11,6 +11,8 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"net"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -95,6 +97,28 @@ func fetchWeek(ctx context.Context, src source, dir, day string, stdout, stderr 
 	fmt.Fprintf(stdout, "%s: updated (%s)\n", path, summary)
 	res.Result = resultUpdated
 	return res, nil
+}
+
+// unreachable reports whether err means the source did not answer at
+// all: the connection or the TLS handshake failed or timed out, the name
+// did not resolve, or the request timed out. Such an outage is the
+// institution's, not a bug in Orbit, and says nothing about the data, so
+// the caller reports it with its own exit code (ADR 0012).
+//
+// An answer the source did give, even a broken one (an HTTP error, bad
+// JSON, an invalid document), is not "unreachable": that may be a change
+// on the source's side that the connector has to follow.
+func unreachable(err error) bool {
+	// http.Client wraps every failure to send a request or to read the
+	// response headers in *url.Error. errors.As looks through wrapping
+	// and errors.Join, so a failure of every SIEUiP address counts too.
+	var ue *url.Error
+	if errors.As(err, &ue) {
+		return true
+	}
+	// A timeout while reading the body comes as a net.Error.
+	var ne net.Error
+	return errors.As(err, &ne) && ne.Timeout()
 }
 
 // sameSchedule reports whether the file at path holds the same document

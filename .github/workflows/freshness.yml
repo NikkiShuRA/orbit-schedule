@@ -38,19 +38,27 @@ jobs:
 
       # Every source in index.json must have been checked recently.
       # status.json is only written after a successful fetch (ADR 0004),
-      # so a source that keeps failing goes stale too.
+      # so a source that keeps failing goes stale too. The data branch
+      # does not keep it, so after a failed run the source has no status
+      # at all: that is stale as well. This check is how a source that is
+      # unreachable for long gets reported (ADR 0012).
       - name: Check when each source was last checked
         shell: bash # -eo pipefail: a failed download fails the check
         run: |
           get() { curl -sS --fail --retry 3 --max-time 30 "$API/$1"; }
-          statuses=$(get index.json | jq -r '.sources[].status')
-          if [ -z "$statuses" ]; then
+          sources=$(get index.json | jq -r '.sources[] | "\(.id) \(.status // "")"')
+          if [ -z "$sources" ]; then
             echo "::error::index.json lists no sources"
             exit 1
           fi
           now=$(date +%s)
           stale=0
-          for status in $statuses; do
+          while read -r id status; do
+            if [ -z "$status" ]; then
+              echo "::error::$id has no status: its last fetch failed. Is the source down?"
+              stale=1
+              continue
+            fi
             checked=$(get "$status" | jq -er '.checkedAt')
             age=$(( (now - $(date -d "$checked" +%s)) / 60 ))
             echo "$status: checked at $checked, $age min ago"
@@ -58,5 +66,5 @@ jobs:
               echo "::error::$status was last checked $age minutes ago (limit ${MAX_AGE_HOURS} h). Is the timer in ops/trigger running?"
               stale=1
             fi
-          done
+          done <<< "$sources"
           exit "$stale"
