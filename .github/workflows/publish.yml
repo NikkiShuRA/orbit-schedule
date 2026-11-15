@@ -161,41 +161,14 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
-    env:
-      GH_TOKEN: ${{ github.token }}
-      ARTIFACT_ID: ${{ needs.fetch.outputs.site }}
     steps:
-      # The same calls as actions/deploy-pages, but with a build version
-      # of its own for every run (ADR 0013). The action names the
-      # deployment by the commit, and main rarely moves while this runs
-      # ~100 times a day: it then polls an old deployment of the same
-      # commit and reports success at once, even when GitHub never
-      # serves the new upload (#55).
-      - name: Deploy to Pages
-        id: deploy
-        run: |
-          version="$GITHUB_SHA-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
-          # The OIDC token proves to Pages that this run made the upload.
-          oidc=$(curl -sS --fail -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN"             "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -er .value)
-          echo "::add-mask::$oidc"
-          created=$(gh api -X POST "repos/$GITHUB_REPOSITORY/pages/deployments"             -F artifact_id="$ARTIFACT_ID" -f pages_build_version="$version" -f oidc_token="$oidc")
-          id=$(jq -er '.id // (.status_url | split("/") | last)' <<< "$created")
-          page_url=$(jq -r '.page_url // empty' <<< "$created")
-          [ -n "$page_url" ] || page_url=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq .html_url)
-          echo "page_url=$page_url" >> "$GITHUB_OUTPUT"
-          echo "Deployment $id for build version $version"
-          for _ in $(seq 120); do
-            sleep 5
-            state=$(gh api "repos/$GITHUB_REPOSITORY/pages/deployments/$id" --jq .status || echo unknown_status)
-            case "$state" in
-              succeed) echo "Pages reports the deployment done."; exit 0 ;;
-              deployment_failed|deployment_content_failed|deployment_cancelled|deployment_lost)
-                echo "::error::Pages deployment $id: $state"; exit 1 ;;
-              *) echo "status: $state" ;;
-            esac
-          done
-          echo "::error::Pages deployment $id did not finish in 10 minutes"
-          exit 1
+      # actions/deploy-pages names the deployment by the commit and polls
+      # it by that name. main rarely moves while this runs ~100 times a
+      # day, so its "success" may be an old deployment of the same commit
+      # (#55). A build version of its own per run was tried and Pages
+      # answered 404 (ADR 0013), so the next step checks the live site.
+      - id: deploy
+        uses: actions/deploy-pages@v5
 
       # Trust the live site, not the API: check that it serves the stamp
       # of this run. Each read has its own query string, so no cache
@@ -215,5 +188,5 @@ jobs:
             echo "The site still serves: ${got:-nothing}"
             sleep 10
           done
-          echo "::error::GitHub reports the deployment done, but after 5 minutes the site still serves an older one (${got:-nothing}). The data on the site is stale."
+          echo "::error::GitHub reports the deployment done, but after 5 minutes the site still serves an older one (${got:-nothing}). The data on the site is stale. A new commit on main has unfrozen Pages before (#55)."
           exit 1
