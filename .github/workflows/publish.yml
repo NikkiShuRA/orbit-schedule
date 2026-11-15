@@ -71,6 +71,12 @@ jobs:
       # Sources are independent: one being down must not stop the others
       # from being published. A failed source still fails the job at the
       # end ("Fail if a source failed"), so the failure is not missed.
+      # Exit codes 3 (nothing published yet) and 4 (the source did not
+      # answer at all) are not failures: an outage at the institution is
+      # not a bug in Orbit, and failing every 10 minutes would only flood
+      # the owner with emails. A long outage is reported once a day by
+      # freshness.yml, since the status of such a source gets old
+      # (ADR 0012).
       - name: Fetch SIEUiP
         id: sieup
         continue-on-error: true
@@ -78,7 +84,7 @@ jobs:
           set +e
           "$RUNNER_TEMP/orbit" fetch sieup --out data --weeks 2
           code=$?
-          # 3 means nothing is published yet: not a failure.
+          if [ "$code" -eq 4 ]; then echo "::warning::SIEUiP is unreachable; its last data stays published"; exit 0; fi
           if [ "$code" -ne 0 ] && [ "$code" -ne 3 ]; then exit "$code"; fi
 
       - name: Fetch SPK
@@ -88,6 +94,7 @@ jobs:
           set +e
           "$RUNNER_TEMP/orbit" fetch spk --out data --weeks 2
           code=$?
+          if [ "$code" -eq 4 ]; then echo "::warning::SPK is unreachable; its last data stays published"; exit 0; fi
           if [ "$code" -ne 0 ] && [ "$code" -ne 3 ]; then exit "$code"; fi
 
       - name: Commit changes

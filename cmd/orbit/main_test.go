@@ -7,12 +7,15 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/NikkiShuRA/orbit-schedule/internal/slice"
 )
@@ -184,6 +187,51 @@ func TestFailedRunWritesNoStatus(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(out, "sieup", statusFile)); !os.IsNotExist(err) {
 		t.Errorf("a failed run wrote %s (err = %v); it must not look like a fresh check", statusFile, err)
+	}
+}
+
+// A source that does not answer at all is an outage, not a bug: its own
+// exit code, so publishing can warn instead of failing (ADR 0012). Like
+// any failed run, it writes no status.
+func TestUnreachableSource(t *testing.T) {
+	dead := httptest.NewServer(http.NotFoundHandler())
+	addr := dead.URL
+	dead.Close() // nothing listens on addr now: connection refused
+	out := t.TempDir()
+
+	for _, src := range []string{"sieup", "spk"} {
+		code, log := orbit(t, "fetch", src, "--out", out, "--base", addr, "--date", "2026-11-11")
+		if code != exitUnreachable {
+			t.Errorf("%s: exit %d, want %d:\n%s", src, code, exitUnreachable, log)
+		}
+		if _, err := os.Stat(filepath.Join(out, src, statusFile)); !os.IsNotExist(err) {
+			t.Errorf("%s: an unreachable source wrote %s (err = %v)", src, statusFile, err)
+		}
+	}
+}
+
+func TestUnreachable(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Nanosecond)
+	defer cancel()
+	<-ctx.Done()
+	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, "http://example.invalid/", nil)
+	_, timeout := http.DefaultClient.Do(req) // fails at once: the context is already over
+
+	tests := []struct {
+		name string
+		err  error
+		want bool
+	}{
+		{"request failed", fmt.Errorf("week: %w", timeout), true},
+		{"every address failed", errors.Join(fmt.Errorf("a: %w", timeout), fmt.Errorf("b: %w", timeout)), true},
+		{"body read timed out", fmt.Errorf("decode JSON: %w", os.ErrDeadlineExceeded), true},
+		{"HTTP error", errors.New("https://example.org: HTTP 502"), false},
+		{"invalid document", errors.New("document is invalid; nothing written"), false},
+	}
+	for _, tt := range tests {
+		if got := unreachable(tt.err); got != tt.want {
+			t.Errorf("%s: unreachable(%v) = %v, want %v", tt.name, tt.err, got, tt.want)
+		}
 	}
 }
 

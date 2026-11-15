@@ -9,7 +9,8 @@
 //	orbit validate file.json...
 //
 // Exit codes: 0 ok, 1 error, 2 bad usage, 3 none of the requested weeks
-// is published yet.
+// is published yet, 4 the source could not be reached (it did not answer
+// at all; see unreachable).
 package main
 
 import (
@@ -34,6 +35,7 @@ const (
 	exitError        = 1
 	exitUsage        = 2
 	exitNotPublished = 3
+	exitUnreachable  = 4
 )
 
 func main() {
@@ -139,6 +141,9 @@ func fetch(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 			// like a fresh check. Files already written are complete and
 			// valid, so they may stay.
 			fmt.Fprintf(stderr, "week of %s: %v\n", day, err)
+			if ctx.Err() == nil && unreachable(err) {
+				return exitUnreachable
+			}
 			return exitError
 		}
 		if res.Result != resultNotPublished {
