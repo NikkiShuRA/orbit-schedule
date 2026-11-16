@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-16T07:14:16+05:00"
+    "retrievedAt": "2026-11-16T08:34:12+05:00"
   },
   "buildings": [
     {
@@ -8410,11 +8410,11 @@
           "groupId": "b3179a51-33ef-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "f99c907b-1533-11e1-a851-0024bed8d4e7",
+      "subjectId": "947ac594-2497-11e1-bceb-00e04d1e1a0d",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "b16788e2-1f71-11e3-b1e9-00155d009402"
+          "teacherId": "3b7fe915-84b1-11f0-b9e0-cdddda25acbf"
         }
       ],
       "rooms": [
@@ -22720,16 +22720,16 @@
           "groupId": "aac3953c-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac599-2497-11e1-bceb-00e04d1e1a0d",
-      "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
+      "subjectId": "947ac59c-2497-11e1-bceb-00e04d1e1a0d",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "1ad71663-daa9-11e9-8c33-00155d009401"
+          "teacherId": "a8992c12-9a6a-11e6-b35e-00155d009401"
         }
       ],
       "rooms": [
         {
-          "roomId": "f76f4702-5bcd-11e2-a812-000e0ca43ba5"
+          "roomId": "dd8d7dcf-1bd4-11e1-98dd-001d608894f0"
         }
       ]
     },
@@ -22764,16 +22764,16 @@
           "groupId": "cfaf2a96-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac59c-2497-11e1-bceb-00e04d1e1a0d",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "subjectId": "947ac599-2497-11e1-bceb-00e04d1e1a0d",
+      "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "a8992c12-9a6a-11e6-b35e-00155d009401"
+          "teacherId": "fb3be784-2ab7-11ed-a310-873ca62c3139"
         }
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dcf-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "f76f4702-5bcd-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -25255,16 +25255,16 @@
           "groupId": "aac3953c-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac59c-2497-11e1-bceb-00e04d1e1a0d",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "subjectId": "947ac599-2497-11e1-bceb-00e04d1e1a0d",
+      "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "a8992c12-9a6a-11e6-b35e-00155d009401"
+          "teacherId": "1ad71663-daa9-11e9-8c33-00155d009401"
         }
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dcf-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "f76f4702-5bcd-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -25299,16 +25299,16 @@
           "groupId": "cfaf2a96-33f1-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac599-2497-11e1-bceb-00e04d1e1a0d",
-      "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
+      "subjectId": "947ac59c-2497-11e1-bceb-00e04d1e1a0d",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "fb3be784-2ab7-11ed-a310-873ca62c3139"
+          "teacherId": "a8992c12-9a6a-11e6-b35e-00155d009401"
         }
       ],
       "rooms": [
         {
-          "roomId": "f76f4702-5bcd-11e2-a812-000e0ca43ba5"
+          "roomId": "dd8d7dcf-1bd4-11e1-98dd-001d608894f0"
         }
       ]
     },
@@ -64151,16 +64151,16 @@
           "groupId": "b3179a51-33ef-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac594-2497-11e1-bceb-00e04d1e1a0d",
+      "subjectId": "f99c907b-1533-11e1-a851-0024bed8d4e7",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "3b7fe915-84b1-11f0-b9e0-cdddda25acbf"
+          "teacherId": "b16788e2-1f71-11e3-b1e9-00155d009402"
         }
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc9-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "a72bdee0-1bcc-11e1-98dd-001d608894f0"
         }
       ]
     },
