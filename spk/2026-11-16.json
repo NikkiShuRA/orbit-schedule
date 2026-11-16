@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-16T14:04:24+05:00"
+    "retrievedAt": "2026-11-16T14:14:21+05:00"
   },
   "buildings": [
     {
@@ -16537,6 +16537,52 @@
       "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
+          "groupId": "cb48b33d-0551-11f0-b9db-9ad6c0e2f389",
+          "subgroup": 1
+        }
+      ],
+      "subjectId": "9101cdca-fbc6-11ea-a2bf-ac1f6bba5384",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "teachers": [
+        {
+          "teacherId": "fe567798-1b1b-11e1-80be-00167641f657"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "3a6aeca0-1bef-11e1-801c-001d608894f0"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "period": 1,
+      "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
+      "groups": [
+        {
+          "groupId": "cb48b33d-0551-11f0-b9db-9ad6c0e2f389",
+          "subgroup": 2
+        }
+      ],
+      "subjectId": "9101cdca-fbc6-11ea-a2bf-ac1f6bba5384",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "teachers": [
+        {
+          "teacherId": "271848a3-819d-11f0-b9e0-cdddda25acbf"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "3a6aeca9-1bef-11e1-801c-001d608894f0"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-17",
+      "period": 1,
+      "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
+      "groups": [
+        {
           "groupId": "d768d4f7-0551-11f0-b9db-9ad6c0e2f389"
         }
       ],
@@ -26556,52 +26602,6 @@
       "rooms": [
         {
           "roomId": "3a6aecac-1bef-11e1-801c-001d608894f0"
-        }
-      ]
-    },
-    {
-      "date": "2026-11-17",
-      "period": 5,
-      "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
-      "groups": [
-        {
-          "groupId": "cb48b33d-0551-11f0-b9db-9ad6c0e2f389",
-          "subgroup": 1
-        }
-      ],
-      "subjectId": "9101cdca-fbc6-11ea-a2bf-ac1f6bba5384",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
-      "teachers": [
-        {
-          "teacherId": "fe567798-1b1b-11e1-80be-00167641f657"
-        }
-      ],
-      "rooms": [
-        {
-          "roomId": "3a6aeca0-1bef-11e1-801c-001d608894f0"
-        }
-      ]
-    },
-    {
-      "date": "2026-11-17",
-      "period": 5,
-      "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
-      "groups": [
-        {
-          "groupId": "cb48b33d-0551-11f0-b9db-9ad6c0e2f389",
-          "subgroup": 2
-        }
-      ],
-      "subjectId": "9101cdca-fbc6-11ea-a2bf-ac1f6bba5384",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
-      "teachers": [
-        {
-          "teacherId": "271848a3-819d-11f0-b9e0-cdddda25acbf"
-        }
-      ],
-      "rooms": [
-        {
-          "roomId": "3a6aeca9-1bef-11e1-801c-001d608894f0"
         }
       ]
     },
@@ -65813,7 +65813,7 @@
       "groups": [
         {
           "groupId": "86502da9-e75a-11ee-b9ad-929b492a72f2",
-          "subgroup": 1
+          "subgroup": 2
         }
       ],
       "subjectId": "672c41c4-5b47-11f1-b9f3-9e77c87516ae",
@@ -66532,7 +66532,7 @@
       "groups": [
         {
           "groupId": "86502da9-e75a-11ee-b9ad-929b492a72f2",
-          "subgroup": 1
+          "subgroup": 2
         }
       ],
       "subjectId": "672c41c4-5b47-11f1-b9f3-9e77c87516ae",
@@ -67229,7 +67229,7 @@
       "groups": [
         {
           "groupId": "86502da9-e75a-11ee-b9ad-929b492a72f2",
-          "subgroup": 1
+          "subgroup": 2
         }
       ],
       "subjectId": "672c41c4-5b47-11f1-b9f3-9e77c87516ae",
@@ -67863,7 +67863,7 @@
       "groups": [
         {
           "groupId": "86502da9-e75a-11ee-b9ad-929b492a72f2",
-          "subgroup": 2
+          "subgroup": 1
         }
       ],
       "subjectId": "672c41c4-5b47-11f1-b9f3-9e77c87516ae",
@@ -68321,7 +68321,7 @@
       "groups": [
         {
           "groupId": "86502da9-e75a-11ee-b9ad-929b492a72f2",
-          "subgroup": 2
+          "subgroup": 1
         }
       ],
       "subjectId": "672c41c4-5b47-11f1-b9f3-9e77c87516ae",
@@ -68574,7 +68574,7 @@
       "groups": [
         {
           "groupId": "86502da9-e75a-11ee-b9ad-929b492a72f2",
-          "subgroup": 2
+          "subgroup": 1
         }
       ],
       "subjectId": "672c41c4-5b47-11f1-b9f3-9e77c87516ae",
