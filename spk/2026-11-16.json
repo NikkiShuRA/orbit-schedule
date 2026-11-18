@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-18T16:34:50+05:00"
+    "retrievedAt": "2026-11-18T16:44:25+05:00"
   },
   "buildings": [
     {
@@ -3776,6 +3776,46 @@
     {
       "id": "7fad729a-5d54-11ea-a2ad-ac1f6bba5384",
       "name": "Экзамен"
+    }
+  ],
+  "bellSchedules": [
+    {
+      "id": "site",
+      "name": "Начало пар по сайту расписания schedule.surpk.ru",
+      "periods": [
+        {
+          "period": 1,
+          "start": "08:30"
+        },
+        {
+          "period": 2,
+          "start": "10:00"
+        },
+        {
+          "period": 3,
+          "start": "12:00"
+        },
+        {
+          "period": 4,
+          "start": "13:30"
+        },
+        {
+          "period": 5,
+          "start": "15:00"
+        },
+        {
+          "period": 6,
+          "start": "16:30"
+        },
+        {
+          "period": 7,
+          "start": "18:00"
+        },
+        {
+          "period": 8,
+          "start": "19:30"
+        }
+      ]
     }
   ],
   "lessons": [
@@ -46864,16 +46904,16 @@
           "groupId": "a2cd5281-e75a-11ee-b9ad-929b492a72f2"
         }
       ],
-      "subjectId": "ee5e302b-fbe9-11ea-a2bf-ac1f6bba5384",
+      "subjectId": "8f7e5db9-fbcd-11ea-a2bf-ac1f6bba5384",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "af656426-83fa-11f0-b9e0-cdddda25acbf"
+          "teacherId": "32eacb26-4179-11ee-b991-f70bcbf7a02d"
         }
       ],
       "rooms": [
         {
-          "roomId": "a6852116-5f8b-11e2-a812-000e0ca43ba5"
+          "roomId": "3a6aecb8-1bef-11e1-801c-001d608894f0"
         }
       ]
     },
