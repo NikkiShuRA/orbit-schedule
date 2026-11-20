@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-20T09:44:20+05:00"
+    "retrievedAt": "2026-11-20T10:24:12+05:00"
   },
   "buildings": [
     {
@@ -2212,10 +2212,6 @@
     {
       "id": "afc177e2-1b18-11e1-b018-0021856c2fb8",
       "name": "Радченко Геннадий Михайлович"
-    },
-    {
-      "id": "c1d6ef22-8ff7-11ed-a317-d12e07f52209",
-      "name": "Репин Сергей Германович"
     },
     {
       "id": "ae64b9ef-5ac7-11e5-9b83-00155d009401",
@@ -29398,7 +29394,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -31962,7 +31958,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -34722,7 +34718,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -37259,7 +37255,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -39394,7 +39390,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -40480,7 +40476,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -42374,7 +42370,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -44779,7 +44775,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -47425,7 +47421,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -49912,7 +49908,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -51827,7 +51823,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -53007,7 +53003,7 @@
       "lessonTypeId": "d017aad2-330c-4419-8164-a8d71f4010fd",
       "teachers": [
         {
-          "teacherId": "c1d6ef22-8ff7-11ed-a317-d12e07f52209"
+          "teacherId": "5011d08d-b0cd-11f1-b9ff-ce200e03d037"
         }
       ],
       "rooms": [
@@ -61921,12 +61917,12 @@
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "3518fdad-70d0-11e6-8db1-00155d009401"
+          "teacherId": "ff7caf28-29ae-11ed-a310-873ca62c3139"
         }
       ],
       "rooms": [
         {
-          "roomId": "a6852127-5f8b-11e2-a812-000e0ca43ba5"
+          "roomId": "3a6aeca8-1bef-11e1-801c-001d608894f0"
         }
       ]
     },
