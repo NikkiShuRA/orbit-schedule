@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-20T09:14:29+05:00"
+    "retrievedAt": "2026-11-20T12:04:23+05:00"
   },
   "buildings": [
     {
@@ -107,11 +107,6 @@
       "id": "9cc3081e-3324-11ed-a311-ba5fdf56e295",
       "name": "307 Промышленная автоматика",
       "code": "307"
-    },
-    {
-      "id": "a37d4269-3324-11ed-a311-ba5fdf56e295",
-      "name": "310 - ДОУ",
-      "code": "310"
     },
     {
       "id": "67822ce5-3326-11ed-a311-ba5fdf56e295",
@@ -21891,7 +21886,7 @@
     {
       "date": "2026-11-26",
       "period": 1,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "7dd0b097-e759-11ee-b9ad-929b492a72f2",
@@ -21907,7 +21902,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a37d4269-3324-11ed-a311-ba5fdf56e295"
+          "roomId": "2399ddde-5e2f-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -23068,7 +23063,7 @@
     {
       "date": "2026-11-26",
       "period": 2,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "7dd0b097-e759-11ee-b9ad-929b492a72f2",
@@ -23084,7 +23079,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a37d4269-3324-11ed-a311-ba5fdf56e295"
+          "roomId": "2399ddde-5e2f-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -24313,7 +24308,7 @@
     {
       "date": "2026-11-26",
       "period": 3,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "7dd0b097-e759-11ee-b9ad-929b492a72f2",
@@ -24329,7 +24324,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a37d4269-3324-11ed-a311-ba5fdf56e295"
+          "roomId": "2399ddde-5e2f-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -25600,7 +25595,7 @@
     {
       "date": "2026-11-26",
       "period": 4,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "7dd0b097-e759-11ee-b9ad-929b492a72f2",
@@ -25616,7 +25611,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a37d4269-3324-11ed-a311-ba5fdf56e295"
+          "roomId": "2399ddde-5e2f-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -26691,7 +26686,7 @@
     {
       "date": "2026-11-26",
       "period": 5,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "7dd0b097-e759-11ee-b9ad-929b492a72f2",
@@ -26707,7 +26702,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a37d4269-3324-11ed-a311-ba5fdf56e295"
+          "roomId": "2399ddde-5e2f-11e2-a812-000e0ca43ba5"
         }
       ]
     },
@@ -27508,7 +27503,7 @@
     {
       "date": "2026-11-26",
       "period": 6,
-      "buildingId": "0ae1878e-1532-11e1-a851-0024bed8d4e7",
+      "buildingId": "0ae1878c-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
           "groupId": "7dd0b097-e759-11ee-b9ad-929b492a72f2",
@@ -27524,7 +27519,7 @@
       ],
       "rooms": [
         {
-          "roomId": "a37d4269-3324-11ed-a311-ba5fdf56e295"
+          "roomId": "2399ddde-5e2f-11e2-a812-000e0ca43ba5"
         }
       ]
     },
