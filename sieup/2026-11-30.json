@@ -1,0 +1,3360 @@
+{
+  "standardVersion": "0.2.0",
+  "institution": {
+    "id": "sieup",
+    "name": "Сургутский институт экономики, управления и права",
+    "shortName": "СИЭУиП",
+    "timeZone": "Asia/Yekaterinburg"
+  },
+  "publication": {
+    "period": {
+      "start": "2026-11-30",
+      "end": "2026-12-06"
+    },
+    "coverage": {
+      "buildingIds": [
+        "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+      ]
+    }
+  },
+  "provenance": {
+    "connector": {
+      "name": "sieup",
+      "version": "0.1.0"
+    },
+    "source": {
+      "name": "API расписания СИЭУиП",
+      "url": "https://timetable.sielom.ru/api"
+    },
+    "retrievedAt": "2026-11-23T20:04:19+05:00",
+    "sourceRevision": "1"
+  },
+  "buildings": [
+    {
+      "id": "34bd9f63-29ef-11ed-9f7d-9c38bb4ee605",
+      "name": "Пыть-Ях",
+      "shortName": "Пыть-Ях"
+    },
+    {
+      "id": "7b6c3e66-2ccf-11ec-ae94-38d547e01962",
+      "name": "№1, Маяковского 16/1",
+      "shortName": "№1,"
+    },
+    {
+      "id": "7b6c3e67-2ccf-11ec-ae94-38d547e01962",
+      "name": "№2, Рабочая 43/1",
+      "shortName": "№2,"
+    },
+    {
+      "id": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "name": "№3, Захарова, 12",
+      "shortName": "№3,"
+    },
+    {
+      "id": "7b6c3e69-2ccf-11ec-ae94-38d547e01962",
+      "name": "№5, Мелик-Карамова 18/1",
+      "shortName": "№5,"
+    },
+    {
+      "id": "7c913ff4-5aa6-11ee-9f9b-d3981511749e",
+      "name": "№6, 50 лет ВЛКСМ 3/2",
+      "shortName": "№6,"
+    },
+    {
+      "id": "2b807ff8-81a9-11f0-9fba-e029e7085e0b",
+      "name": "№7, Пролетарский,3",
+      "shortName": "№7,"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "0cba0d65-3883-11ec-bb95-3cecef1f6e0d",
+      "name": "Каб. 1 (Захарова)",
+      "code": "З-1"
+    },
+    {
+      "id": "cdc436f4-3882-11ec-bb95-3cecef1f6e0d",
+      "name": "Каб. 2 (Захарова)",
+      "code": "З-2"
+    },
+    {
+      "id": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d",
+      "name": "Каб. 4 (Захарова)",
+      "code": "З-4"
+    },
+    {
+      "id": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d",
+      "name": "Каб. 5 (Захарова)",
+      "code": "З-5"
+    },
+    {
+      "id": "edc02579-3882-11ec-bb95-3cecef1f6e0d",
+      "name": "Каб. 7 (Захарова)",
+      "code": "З-7"
+    },
+    {
+      "id": "f514a612-3882-11ec-bb95-3cecef1f6e0d",
+      "name": "Каб. 7/1 (Захарова)",
+      "code": "З-7/1"
+    },
+    {
+      "id": "fd05ef5e-3882-11ec-bb95-3cecef1f6e0d",
+      "name": "Каб. 9 (Захарова)",
+      "code": "З-9"
+    }
+  ],
+  "groups": [
+    {
+      "id": "11c9937d-52f2-11ef-9fad-c83e5018f936",
+      "name": "БД-24/9",
+      "course": 3,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    },
+    {
+      "id": "0c7bfabd-7106-11f0-9fba-e029e7085e0b",
+      "name": "БД-25/9",
+      "course": 2,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    },
+    {
+      "id": "14b96542-8dbf-11f1-9fc4-ef73f68b58da",
+      "name": "БД-26/9",
+      "course": 1,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    },
+    {
+      "id": "11bffc10-52fd-11ef-9fad-c83e5018f936",
+      "name": "БУ-24/9",
+      "course": 3,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    },
+    {
+      "id": "ba44acae-7113-11f0-9fba-e029e7085e0b",
+      "name": "БУ-25/11",
+      "course": 2,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    },
+    {
+      "id": "d1664d80-7105-11f0-9fba-e029e7085e0b",
+      "name": "БУ-25/9",
+      "course": 2,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    },
+    {
+      "id": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da",
+      "name": "БУ-26/11",
+      "course": 1,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    },
+    {
+      "id": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da",
+      "name": "БУ-26/9",
+      "course": 1,
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "ad1f4b77-3bf1-11ed-9f7d-9c38bb4ee605",
+      "name": "Бессмертный Андрей Витальевич",
+      "shortName": "Бессмертный А.В."
+    },
+    {
+      "id": "5f7d6911-2b1b-11e7-ab4f-10bef5a75610",
+      "name": "Волкова Алевтина Владимировна",
+      "shortName": "Волкова А.В."
+    },
+    {
+      "id": "122c7661-f073-11ec-bba7-3cecef1f6e0c",
+      "name": "Ворик Алена Владимировна",
+      "shortName": "Ворик А.В."
+    },
+    {
+      "id": "ff0bc6cf-87e2-11f0-9fba-e029e7085e0b",
+      "name": "Давиденко Марина Анатольевна",
+      "shortName": "Давиденко М.А."
+    },
+    {
+      "id": "fb0b9eff-ee49-11e9-abb9-10bef5a75610",
+      "name": "Зарафетдинова Эльвира Рамиловна",
+      "shortName": "Зарафетдинова Э.Р."
+    },
+    {
+      "id": "3e15cb6e-5dcd-11ee-9f9b-d3981511749e",
+      "name": "Казанцев Илья Александрович",
+      "shortName": "Казанцев И.А."
+    },
+    {
+      "id": "110ee5c9-adc0-11f1-9fc6-8ba5f098a625",
+      "name": "Каспир Ирина Сергеевна",
+      "shortName": "Каспир И.С."
+    },
+    {
+      "id": "dd8d4081-87e2-11f0-9fba-e029e7085e0b",
+      "name": "Ковальская Марина Владимировна",
+      "shortName": "Ковальская М.В."
+    },
+    {
+      "id": "5a6707ed-8fa2-11f0-9fba-e029e7085e0b",
+      "name": "Крапивкина Татьяна Сергеевна",
+      "shortName": "Крапивкина Т.С."
+    },
+    {
+      "id": "dbeb48cc-87da-11eb-ad7a-10bef5a75610",
+      "name": "Кудинов Кирилл Сергеевич",
+      "shortName": "Кудинов К.С."
+    },
+    {
+      "id": "fdf946ed-83d8-11e7-ab58-10bef5a75610",
+      "name": "Мартьянов Владимир Сергеевич",
+      "shortName": "Мартьянов В.С."
+    },
+    {
+      "id": "fdf946ef-83d8-11e7-ab58-10bef5a75610",
+      "name": "Осит Олеся Александровна",
+      "shortName": "Осит О.А."
+    },
+    {
+      "id": "9a9dbf04-2fc9-11ec-ae98-38d547e01962",
+      "name": "Пелевин Дмитрий Николаевич",
+      "shortName": "Пелевин Д.Н."
+    },
+    {
+      "id": "b0d5df4d-6a87-11ef-9faf-87666456e027",
+      "name": "Петунина Ольга Федоровна",
+      "shortName": "Петунина О.Ф."
+    },
+    {
+      "id": "e21781f2-ba1f-11eb-adce-10bef5a75610",
+      "name": "Руссо Наталья Викторовна",
+      "shortName": "Руссо Н.В."
+    },
+    {
+      "id": "a2c99c18-a536-11f1-9fc6-8ba5f098a625",
+      "name": "Таштимирова Диана Артуровна",
+      "shortName": "Таштимирова Д.А."
+    },
+    {
+      "id": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e",
+      "name": "Телушкина Дарья Михайловна",
+      "shortName": "Телушкина Д.М."
+    },
+    {
+      "id": "b824607b-ca80-11eb-adea-10bef5a75610",
+      "name": "Фролов Николай Юрьевич",
+      "shortName": "Фролов Н.Ю."
+    },
+    {
+      "id": "9a9dbf0a-2fc9-11ec-ae98-38d547e01962",
+      "name": "Фролова Анастасия Сергеевна",
+      "shortName": "Фролова А.С."
+    },
+    {
+      "id": "9706cbd6-f099-11e9-abbb-10bef5a75610",
+      "name": "Шавтикова Елена Ауесовна",
+      "shortName": "Шавтикова Е.А."
+    }
+  ],
+  "subjects": [
+    {
+      "id": "81eb9b52-3405-11ec-ae9d-38d547e01962",
+      "name": "Автоматизированные системы ведения учета и отчетности",
+      "shortName": "АСВУиО"
+    },
+    {
+      "id": "6decdad6-6156-11e7-ab52-10bef5a75610",
+      "name": "Анализ финансово-хозяйственной деятельности",
+      "shortName": "АФХД"
+    },
+    {
+      "id": "ff9817d9-60a1-11e7-ab52-10bef5a75610",
+      "name": "Безопасность жизнедеятельности",
+      "shortName": "БЖД"
+    },
+    {
+      "id": "22f16f50-9147-11e7-ab58-10bef5a75610",
+      "name": "Биология",
+      "shortName": "Биология"
+    },
+    {
+      "id": "6decdad4-6156-11e7-ab52-10bef5a75610",
+      "name": "Бухгалтерский учет",
+      "shortName": "Бух. учет"
+    },
+    {
+      "id": "ff9817ee-60a1-11e7-ab52-10bef5a75610",
+      "name": "Выполнение работ по профессии «Кассир»",
+      "shortName": "МДК.05.01"
+    },
+    {
+      "id": "bdaf43d7-57dd-11e7-ab50-10bef5a75610",
+      "name": "География",
+      "shortName": "Геогр."
+    },
+    {
+      "id": "ff9817d1-60a1-11e7-ab52-10bef5a75610",
+      "name": "Документационное обеспечение управления",
+      "shortName": "ДОУ"
+    },
+    {
+      "id": "ff9817c6-60a1-11e7-ab52-10bef5a75610",
+      "name": "Иностранный язык",
+      "shortName": "Ин.яз"
+    },
+    {
+      "id": "7671ad28-602b-11e9-aba4-10bef5a75610",
+      "name": "Иностранный язык в профессиональной деятельности",
+      "shortName": "ОГСЭ.04"
+    },
+    {
+      "id": "7f75d009-6083-11e7-ab52-10bef5a75610",
+      "name": "Информатика",
+      "shortName": "Инф-ка"
+    },
+    {
+      "id": "ff9817cb-60a1-11e7-ab52-10bef5a75610",
+      "name": "Информационные технологии в профессиональной деятельности",
+      "shortName": "ИТвПД"
+    },
+    {
+      "id": "ff9817c4-60a1-11e7-ab52-10bef5a75610",
+      "name": "История",
+      "shortName": "ОГСЭ.02"
+    },
+    {
+      "id": "ed9c57c3-44b5-11ee-9f9b-d3981511749e",
+      "name": "История России",
+      "shortName": "ИР"
+    },
+    {
+      "id": "5e55a03f-6a2f-11e9-aba5-10bef5a75610",
+      "name": "Кассовые операции банка",
+      "shortName": "МДК.01.02"
+    },
+    {
+      "id": "f474ed27-1542-11e8-ab6a-10bef5a75610",
+      "name": "Литература",
+      "shortName": "Литература"
+    },
+    {
+      "id": "ff9817ca-60a1-11e7-ab52-10bef5a75610",
+      "name": "Математика",
+      "shortName": "Математика"
+    },
+    {
+      "id": "ff9817d0-60a1-11e7-ab52-10bef5a75610",
+      "name": "Менеджмент",
+      "shortName": "Менеджмент"
+    },
+    {
+      "id": "6decdad8-6156-11e7-ab52-10bef5a75610",
+      "name": "Налоги и налогообложение",
+      "shortName": "Нал и нало"
+    },
+    {
+      "id": "bdaf43d6-57dd-11e7-ab50-10bef5a75610",
+      "name": "Обществознание",
+      "shortName": "Общество."
+    },
+    {
+      "id": "6decdadc-6156-11e7-ab52-10bef5a75610",
+      "name": "Организация безналичных расчетов",
+      "shortName": "МДК.01.01"
+    },
+    {
+      "id": "6decdae1-6156-11e7-ab52-10bef5a75610",
+      "name": "Организация кредитной работы",
+      "shortName": "МДК.02.01"
+    },
+    {
+      "id": "ff9817e5-60a1-11e7-ab52-10bef5a75610",
+      "name": "Организация расчетов с бюджетом и внебюджетными фондами",
+      "shortName": "МДК.03.01"
+    },
+    {
+      "id": "ff9817d5-60a1-11e7-ab52-10bef5a75610",
+      "name": "Основы бухгалтерского учета",
+      "shortName": "Осн.бух.уч"
+    },
+    {
+      "id": "f4cb51fb-46c1-11f0-9fb9-9686f75dd32b",
+      "name": "Основы внутреннего контроля",
+      "shortName": "ОВК"
+    },
+    {
+      "id": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "name": "Основы предпринимательской деятельности",
+      "shortName": "ОПД"
+    },
+    {
+      "id": "f7021070-1ce7-11ef-9fa3-a93b75b36047",
+      "name": "Основы проектной деятельности ( индивидуальный проект)",
+      "shortName": "ОПД"
+    },
+    {
+      "id": "7f48c661-aba2-11e9-abaa-10bef5a75610",
+      "name": "Основы финансовой грамотности",
+      "shortName": "ОГСЭ.08"
+    },
+    {
+      "id": "ff9817dc-60a1-11e7-ab52-10bef5a75610",
+      "name": "Практические основы бухгалтерского учета активов организации и источников их формирования",
+      "shortName": "МДК.01,01"
+    },
+    {
+      "id": "ff9817e0-60a1-11e7-ab52-10bef5a75610",
+      "name": "Практические основы бухгалтерского учета источников формирования активов организации",
+      "shortName": "МДК.02.01"
+    },
+    {
+      "id": "55e40329-7682-11e7-ab52-10bef5a75610",
+      "name": "Психология общения",
+      "shortName": "ПО"
+    },
+    {
+      "id": "f474ed26-1542-11e8-ab6a-10bef5a75610",
+      "name": "Русский язык",
+      "shortName": "ОУД.01"
+    },
+    {
+      "id": "2328b03e-18d8-11ef-9fa2-e18808117126",
+      "name": "Страхование",
+      "shortName": "ОП.13"
+    },
+    {
+      "id": "ff9817e9-60a1-11e7-ab52-10bef5a75610",
+      "name": "Технология составления бухгалтерской отчетности",
+      "shortName": "МДК.04.01"
+    },
+    {
+      "id": "a8f08695-4800-11ee-9f9b-d3981511749e",
+      "name": "Учебная практика (Ведение бухгалтерского учета источников формирования активов, выполнение работ по инвентаризации активов и финансовых обязательств)",
+      "shortName": "УПВБУ"
+    },
+    {
+      "id": "c70fc4af-4801-11ee-9f9b-d3981511749e",
+      "name": "Учебная практика (Документирование хозяйственных операций и ведение бухгалтерского учета активов организации)",
+      "shortName": "УПДХО"
+    },
+    {
+      "id": "22f16f4b-9147-11e7-ab58-10bef5a75610",
+      "name": "Физика",
+      "shortName": "Физика"
+    },
+    {
+      "id": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "name": "Физическая культура",
+      "shortName": "ОГСЭ.05"
+    },
+    {
+      "id": "2328b02d-18d8-11ef-9fa2-e18808117126",
+      "name": "Финансы организации",
+      "shortName": "ОП.01"
+    },
+    {
+      "id": "6decdad3-6156-11e7-ab52-10bef5a75610",
+      "name": "Финансы, денежное обращение и кредит",
+      "shortName": "Фин, д.обр"
+    },
+    {
+      "id": "ff9817ce-60a1-11e7-ab52-10bef5a75610",
+      "name": "Экономика организации",
+      "shortName": "Эк. орг."
+    }
+  ],
+  "lessons": [
+    {
+      "id": "b025666f-67ec-4d3b-9159-37441b810f8f",
+      "date": "2026-11-30",
+      "period": 1,
+      "start": "09:45",
+      "end": "10:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "2328b03e-18d8-11ef-9fa2-e18808117126",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "6e2dffa9-1099-447e-8b9f-62993592015f",
+      "date": "2026-11-30",
+      "period": 1,
+      "start": "09:45",
+      "end": "10:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "f474ed27-1542-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5a6707ed-8fa2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "127de843-5e33-4276-b0cd-f572244b15b2",
+      "date": "2026-11-30",
+      "period": 1,
+      "start": "09:45",
+      "end": "10:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817d1-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "e1b413be-cf61-47d2-9532-917f51181dbb",
+      "date": "2026-11-30",
+      "period": 1,
+      "start": "09:45",
+      "end": "10:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "ba44acae-7113-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817dc-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "0cba0d65-3883-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "8563f4a2-d3c6-409f-b26b-e42e4c5e913c",
+      "date": "2026-11-30",
+      "period": 1,
+      "start": "09:45",
+      "end": "10:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ca-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "122c7661-f073-11ec-bba7-3cecef1f6e0c"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "0cca1f7c-82b0-4a8d-aa07-fd88be5dd64e",
+      "date": "2026-11-30",
+      "period": 2,
+      "start": "11:00",
+      "end": "12:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdad3-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "71c7dab2-83d8-49df-802d-d369ecb3bd69",
+      "date": "2026-11-30",
+      "period": 2,
+      "start": "11:00",
+      "end": "12:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ca-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "122c7661-f073-11ec-bba7-3cecef1f6e0c"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "203370f6-cd1b-463c-9e58-90fe0b036319",
+      "date": "2026-11-30",
+      "period": 2,
+      "start": "11:00",
+      "end": "12:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "a94bbd03-2722-452b-a826-f2dfc2acb4cb",
+      "date": "2026-11-30",
+      "period": 2,
+      "start": "11:00",
+      "end": "12:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "ba44acae-7113-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817dc-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "0cba0d65-3883-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "b6ce4d34-ab6c-495e-b787-d85bbe2abaaa",
+      "date": "2026-11-30",
+      "period": 2,
+      "start": "11:00",
+      "end": "12:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "f474ed26-1542-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5a6707ed-8fa2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "e4d99cc3-c3cb-41b8-a9bc-072dedfb00f5",
+      "date": "2026-11-30",
+      "period": 3,
+      "start": "12:15",
+      "end": "13:15",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "2328b03e-18d8-11ef-9fa2-e18808117126",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "b4eb9535-c659-49e2-8b30-c6d5c7d93b13",
+      "date": "2026-11-30",
+      "period": 3,
+      "start": "12:15",
+      "end": "13:15",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ca-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "122c7661-f073-11ec-bba7-3cecef1f6e0c"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "e569e4ac-b785-4f3a-9302-aeef41af639b",
+      "date": "2026-11-30",
+      "period": 3,
+      "start": "12:15",
+      "end": "13:15",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817e0-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "1c49bf22-2576-4d43-b88d-f5a7edca1e3b",
+      "date": "2026-11-30",
+      "period": 3,
+      "start": "12:15",
+      "end": "13:15",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "ba44acae-7113-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817dc-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "0cba0d65-3883-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "86ad63bc-1be5-4839-a3ae-4be26e7b49ed",
+      "date": "2026-11-30",
+      "period": 3,
+      "start": "12:15",
+      "end": "13:15",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "f474ed27-1542-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5a6707ed-8fa2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "00f2ce46-2776-4276-831d-fccf0df57799",
+      "date": "2026-11-30",
+      "period": 4,
+      "start": "14:45",
+      "end": "15:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdad3-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "ad50ca93-7747-43bc-9702-0c9fbb5f0c5a",
+      "date": "2026-11-30",
+      "period": 4,
+      "start": "14:45",
+      "end": "15:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "d71977bb-fcb1-4057-936a-c720c74d80ef",
+      "date": "2026-11-30",
+      "period": 4,
+      "start": "14:45",
+      "end": "15:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "a8f08695-4800-11ee-9f9b-d3981511749e",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "49c0c68f-d4f6-45b8-8ecb-e0945a166cbc",
+      "date": "2026-11-30",
+      "period": 4,
+      "start": "14:45",
+      "end": "15:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817ce-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "0ce4c851-ed20-40f4-ad77-1f7bc52bc3f9",
+      "date": "2026-11-30",
+      "period": 4,
+      "start": "14:45",
+      "end": "15:45",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817dc-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "7dfbe377-9fed-4c44-b44a-eba1d0789302",
+      "date": "2026-11-30",
+      "period": 5,
+      "start": "15:55",
+      "end": "16:55",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817d0-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "560f71ba-c7de-42bf-a8fe-152df9309809",
+      "date": "2026-11-30",
+      "period": 5,
+      "start": "15:55",
+      "end": "16:55",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "f4cb51fb-46c1-11f0-9fb9-9686f75dd32b",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "f754c2be-6c67-4d41-821a-f9f12b820422",
+      "date": "2026-11-30",
+      "period": 5,
+      "start": "15:55",
+      "end": "16:55",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817d5-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "c048909b-61c5-4fae-bd48-201143ab0c74",
+      "date": "2026-11-30",
+      "period": 6,
+      "start": "17:05",
+      "end": "18:05",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "6decdad4-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "d1fab925-5c95-4c62-b76e-2b1df95e7235",
+      "date": "2026-11-30",
+      "period": 6,
+      "start": "17:05",
+      "end": "18:05",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ed9c57c3-44b5-11ee-9f9b-d3981511749e",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "5797f83e-21f8-4816-98d7-2f52747e246d",
+      "date": "2026-11-30",
+      "period": 6,
+      "start": "17:05",
+      "end": "18:05",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "a8f08695-4800-11ee-9f9b-d3981511749e",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "8ed936f4-c5ed-4ed0-88c1-0ef66691fa84",
+      "date": "2026-12-01",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "7f75d009-6083-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "bc9e463f-a5dd-40b5-ba5d-f6334859f2ea",
+      "date": "2026-12-01",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "7671ad28-602b-11e9-aba4-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "996db7a2-1f5c-4de4-b635-a13282185288",
+      "date": "2026-12-01",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817d5-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "fd05ef5e-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "10ac277c-7bd7-4416-b1c8-743db84f15c2",
+      "date": "2026-12-01",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817c4-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "44f4404c-f511-4aa4-9e07-9b3881df1faf",
+      "date": "2026-12-01",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817cb-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "f46b322c-c557-4178-8f43-4392e0458acd",
+      "date": "2026-12-01",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817c6-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "1cdb403e-601e-4419-842b-69c0b35cbe09",
+      "date": "2026-12-01",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817e9-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "b824607b-ca80-11eb-adea-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "11e36fbe-eff0-4c34-a3c1-5851ce9912f3",
+      "date": "2026-12-01",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817d5-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "fd05ef5e-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "a6f698b4-89ea-4796-9db9-86e76b596027",
+      "date": "2026-12-01",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817c4-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "45b893ec-aed7-4002-8c08-68e570cae0d1",
+      "date": "2026-12-01",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "7671ad28-602b-11e9-aba4-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "cdc436f4-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "0f75ef73-61db-4c65-b11d-fc7e9a6b49d4",
+      "date": "2026-12-01",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "2328b02d-18d8-11ef-9fa2-e18808117126",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "bc46c94c-699a-463a-9f96-b8eacf53f523",
+      "date": "2026-12-01",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817e0-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "45aff2e0-b2da-4308-82af-e95ea6a4a5d6",
+      "date": "2026-12-01",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9a9dbf04-2fc9-11ec-ae98-38d547e01962"
+        }
+      ]
+    },
+    {
+      "id": "26805991-9965-4c56-b4a9-776f36d9802b",
+      "date": "2026-12-01",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "d5439792-dd6d-4c2c-999f-337fa04fc0f3",
+      "date": "2026-12-01",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "7f75d009-6083-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "6b4ccb6d-5d86-4c0f-8b37-3df34ceee67e",
+      "date": "2026-12-01",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9a9dbf04-2fc9-11ec-ae98-38d547e01962"
+        }
+      ]
+    },
+    {
+      "id": "5dd6cdfd-f79c-4ae5-a4d6-536db9bd5e38",
+      "date": "2026-12-01",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "7671ad28-602b-11e9-aba4-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "2f918017-3507-4897-b348-67b22702a4b5",
+      "date": "2026-12-01",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817e0-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "ebc6752d-047a-42a5-a315-e87d90f34407",
+      "date": "2026-12-01",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817d5-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "b0d5df4d-6a87-11ef-9faf-87666456e027"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "7a3700e5-49c5-4f3b-aab1-7cbfd3785657",
+      "date": "2026-12-01",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ce-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "ffd24dc4-38ed-4718-a9da-0a7f8c297ad3",
+      "date": "2026-12-01",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817d0-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "be3b8727-8b9c-40fe-b9cf-95b55924e945",
+      "date": "2026-12-01",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817d5-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "b0d5df4d-6a87-11ef-9faf-87666456e027"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "d521ac49-1cd5-4306-9df0-363ca3dbd861",
+      "date": "2026-12-01",
+      "period": 6,
+      "start": "16:30",
+      "end": "17:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "2328b02d-18d8-11ef-9fa2-e18808117126",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "b87b9538-2c64-42cc-b96d-f4bcf7bb7a5b",
+      "date": "2026-12-01",
+      "period": 6,
+      "start": "16:30",
+      "end": "17:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "4e272f49-eacc-436f-9a78-33449103be49",
+      "date": "2026-12-02",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "7f75d009-6083-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "1c2e03c9-ab9a-4f6b-b4e8-e87bf956da39",
+      "date": "2026-12-02",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "2328b03e-18d8-11ef-9fa2-e18808117126",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "7d04da25-d9f3-4808-9fd7-96835a5f1854",
+      "date": "2026-12-02",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "bdaf43d7-57dd-11e7-ab50-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5f7d6911-2b1b-11e7-ab4f-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "c934e110-3fb8-4b93-b5c9-99f0c7428a00",
+      "date": "2026-12-02",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817cb-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "1a292648-609a-4c23-a827-71767fc8bea4",
+      "date": "2026-12-02",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817c6-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "c4b7fcf3-fc86-46a9-80cf-cf69219a20b6",
+      "date": "2026-12-02",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "2328b03e-18d8-11ef-9fa2-e18808117126",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "cdc436f4-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "c6cfff8e-5f56-48f3-85cf-751ad9155626",
+      "date": "2026-12-02",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9a9dbf04-2fc9-11ec-ae98-38d547e01962"
+        }
+      ]
+    },
+    {
+      "id": "1666501b-8466-47e6-8daf-332a9e3eb658",
+      "date": "2026-12-02",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "7f75d009-6083-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "c8ccc0be-cd42-4e13-8c75-767bd181173d",
+      "date": "2026-12-02",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "7671ad28-602b-11e9-aba4-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "f02c07d0-ce29-450f-8391-bb21765c161f",
+      "date": "2026-12-02",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "6decdad8-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "e21781f2-ba1f-11eb-adce-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "49d9d56f-1b18-47bd-8403-6e06a4299b86",
+      "date": "2026-12-02",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "bdaf43d7-57dd-11e7-ab50-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5f7d6911-2b1b-11e7-ab4f-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "e6607da1-62f9-4752-811f-cfc8cea06c83",
+      "date": "2026-12-02",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817d0-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "42d1c20b-1250-40b0-abff-1713e9fb22f5",
+      "date": "2026-12-02",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "7f75d009-6083-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "4bb5bafe-7fa2-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "601ee65e-58d9-4c66-b056-d492c3edf138",
+      "date": "2026-12-02",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817dc-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "b0d5df4d-6a87-11ef-9faf-87666456e027"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "d39c5fa0-0f54-4ec6-9175-1a0735851d53",
+      "date": "2026-12-02",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "6decdad8-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "e21781f2-ba1f-11eb-adce-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "9540c3b0-41df-489e-ab5a-521c85419069",
+      "date": "2026-12-02",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "1af2cc68-d244-4e02-b7aa-022d234ce1e5",
+      "date": "2026-12-02",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "7671ad28-602b-11e9-aba4-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "af103aed-37cc-40e3-8e32-94a0adcb6c46",
+      "date": "2026-12-02",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "6decdad8-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "e21781f2-ba1f-11eb-adce-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "7e502a0c-120a-4d98-a2af-682d45a8b7bb",
+      "date": "2026-12-02",
+      "period": 6,
+      "start": "16:30",
+      "end": "17:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "c70fc4af-4801-11ee-9f9b-d3981511749e",
+      "teachers": [
+        {
+          "teacherId": "b0d5df4d-6a87-11ef-9faf-87666456e027"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "f22c9c5a-eebb-4c68-87fe-b81873dffda3",
+      "date": "2026-12-02",
+      "period": 6,
+      "start": "16:30",
+      "end": "17:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "7671ad28-602b-11e9-aba4-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "a2c99c18-a536-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "638e27b5-de95-441b-8787-e64b68c03e00",
+      "date": "2026-12-03",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817d9-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9a9dbf0a-2fc9-11ec-ae98-38d547e01962"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "cdc436f4-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "2fe20181-a420-4718-b50c-d52f4de309d4",
+      "date": "2026-12-03",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "f7021070-1ce7-11ef-9fa3-a93b75b36047",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "2703da6b-fbfb-4089-97e1-2a063653a835",
+      "date": "2026-12-03",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "81eb9b52-3405-11ec-ae9d-38d547e01962",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "f293172d-49a1-41d8-8913-680d48391f71",
+      "date": "2026-12-03",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ca-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "122c7661-f073-11ec-bba7-3cecef1f6e0c"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "d9045f94-0ce7-4eea-bfb4-a1308a51972f",
+      "date": "2026-12-03",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817d9-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9a9dbf0a-2fc9-11ec-ae98-38d547e01962"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "cdc436f4-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "0a43385a-73c4-4d56-bd09-6f3635886602",
+      "date": "2026-12-03",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "6decdad4-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "9e0679dc-6471-4173-9f5c-7b541daebf85",
+      "date": "2026-12-03",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "22f16f4b-9147-11e7-ab58-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "ad1f4b77-3bf1-11ed-9f7d-9c38bb4ee605"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "35955891-7469-4e2b-b3e3-a6cdf61ddbaf",
+      "date": "2026-12-03",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "81eb9b52-3405-11ec-ae9d-38d547e01962",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "209f13b9-7b03-4964-936a-e1f913440d40",
+      "date": "2026-12-03",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ca-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "122c7661-f073-11ec-bba7-3cecef1f6e0c"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "fe8f493b-04fd-45bc-815f-c9c9744bcb28",
+      "date": "2026-12-03",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdad8-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "e21781f2-ba1f-11eb-adce-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "cdc436f4-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "9d134ee1-a579-4ea7-97fe-cadd25d75d4b",
+      "date": "2026-12-03",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "2328b02d-18d8-11ef-9fa2-e18808117126",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "e7cdf748-f313-426c-b01c-5a9294372284",
+      "date": "2026-12-03",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ca-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "122c7661-f073-11ec-bba7-3cecef1f6e0c"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "6fec63ae-3dba-43a6-918e-0c363da0bb4a",
+      "date": "2026-12-03",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817e0-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dd8d4081-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "6cc2027d-4130-4612-b103-2917478c6f0e",
+      "date": "2026-12-03",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dbeb48cc-87da-11eb-ad7a-10bef5a75610"
+        }
+      ]
+    },
+    {
+      "id": "faf2e5ef-4273-4083-bcf4-d6832712473f",
+      "date": "2026-12-03",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "22f16f4b-9147-11e7-ab58-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "ad1f4b77-3bf1-11ed-9f7d-9c38bb4ee605"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "5cfb3a3c-d3bb-4116-9101-c4d3535eac92",
+      "date": "2026-12-03",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9a9dbf04-2fc9-11ec-ae98-38d547e01962"
+        }
+      ]
+    },
+    {
+      "id": "5728bd92-44cc-4c31-8d6d-2a9a759e1b97",
+      "date": "2026-12-03",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "442bf1a0-9f74-464c-b1ed-9ec02f2064ad",
+      "date": "2026-12-03",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "7f48c661-aba2-11e9-abaa-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "ddffbc2c-882e-4d88-abf2-d592139361e1",
+      "date": "2026-12-03",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "dbeb48cc-87da-11eb-ad7a-10bef5a75610"
+        }
+      ]
+    },
+    {
+      "id": "784e8eaf-49ad-43c0-8956-9a2254a1ea4f",
+      "date": "2026-12-03",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "7f48c661-aba2-11e9-abaa-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "c481c57e-ce94-4b1c-b5b8-26904bf7cddb",
+      "date": "2026-12-03",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "c9eba1ad-1bb1-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9706cbd6-f099-11e9-abbb-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "ba57d654-6ac9-4b08-bbad-b7520661d0bb",
+      "date": "2026-12-03",
+      "period": 6,
+      "start": "16:30",
+      "end": "17:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "6decdad3-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "2c31c17f-dab4-4eb0-b8ce-0f01b98aeb2a",
+      "date": "2026-12-04",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdad6-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5f7d6911-2b1b-11e7-ab4f-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "4a6ae7db-88c7-474d-8a21-0e1671552a56",
+      "date": "2026-12-04",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "bdaf43d6-57dd-11e7-ab50-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fb0b9eff-ee49-11e9-abb9-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "466e1582-c9de-4eae-a8d0-f308993c3e80",
+      "date": "2026-12-04",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "55e40329-7682-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "ff0bc6cf-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "baf74d19-a0c7-44f0-9c94-876f0c2b5c5e",
+      "date": "2026-12-04",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "ff9817ee-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "78664572-ebee-4f8a-a441-c48f4b0cc2ea",
+      "date": "2026-12-04",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdad3-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "41b18f9b-48ef-4c91-a11f-57c0db59f401",
+      "date": "2026-12-04",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "bdaf43d6-57dd-11e7-ab50-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fb0b9eff-ee49-11e9-abb9-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "b476b0f8-628f-455a-a5e0-422bffba082b",
+      "date": "2026-12-04",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817e5-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "e21781f2-ba1f-11eb-adce-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "5f7effd4-4db4-403b-acc5-5571035a203b",
+      "date": "2026-12-04",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "6decdad3-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "bf8defcf-b38b-4b1c-9151-b1d3018d155b",
+      "date": "2026-12-04",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "55e40329-7682-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "ff0bc6cf-87e2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "dde305ab-fdca-4f37-9280-e427df23f969",
+      "date": "2026-12-04",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "4a833e44-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "6decdad8-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "8d8b0ba4-f3ac-49df-a685-c1fde7604d3f",
+      "date": "2026-12-04",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "bdaf43d6-57dd-11e7-ab50-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fb0b9eff-ee49-11e9-abb9-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "bcef9f06-2475-4754-92ca-2a7e2ea00dd8",
+      "date": "2026-12-04",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "5e55a03f-6a2f-11e9-aba5-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ed-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "93f6e8c6-d1d2-41d3-b34b-d9868aa7c85f",
+      "date": "2026-12-04",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11bffc10-52fd-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "ff9817c8-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "9a9dbf04-2fc9-11ec-ae98-38d547e01962"
+        }
+      ]
+    },
+    {
+      "id": "acf1ee37-91fa-448a-9ec3-6923489cedc4",
+      "date": "2026-12-04",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "ff9817ee-60a1-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "32dee8f6-4897-436b-9c31-4f7e6a7104d7",
+      "date": "2026-12-04",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "22f16f50-9147-11e7-ab58-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "3e15cb6e-5dcd-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "c82fe270-a926-4261-bc99-16d1cad10007",
+      "date": "2026-12-04",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "6decdadc-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ed-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "200a0044-a522-4f7a-bde0-fd3123fd82c5",
+      "date": "2026-12-04",
+      "period": 5,
+      "start": "15:00",
+      "end": "16:20",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "d1664d80-7105-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "7f48c661-aba2-11e9-abaa-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ef-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "69104c33-0937-41f2-b1f9-e84ad00e20e4",
+      "date": "2026-12-05",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "6decdadc-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ed-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "481b2aa2-3670-422b-95f5-ddef9da5b177",
+      "date": "2026-12-05",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "f474ed27-1542-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5a6707ed-8fa2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "9d52464d-cba2-450b-9cb8-12f8a4472586",
+      "date": "2026-12-05",
+      "period": 1,
+      "start": "08:30",
+      "end": "09:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "22f16f50-9147-11e7-ab58-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "3e15cb6e-5dcd-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "89f87924-2ef9-4842-a445-c1fb8204aca5",
+      "date": "2026-12-05",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdae1-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "110ee5c9-adc0-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "7fdd7adf-d5c8-41e8-a442-1e9cc4f18384",
+      "date": "2026-12-05",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "6decdadc-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ed-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "182b3202-3076-4782-9f74-88e49eb42f58",
+      "date": "2026-12-05",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "f474ed26-1542-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5a6707ed-8fa2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "1e8fb644-b887-429a-91cd-c7ca097e634f",
+      "date": "2026-12-05",
+      "period": 2,
+      "start": "10:05",
+      "end": "11:25",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "22f16f50-9147-11e7-ab58-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "3e15cb6e-5dcd-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "cd2f9aa5-6eda-4692-8d24-2a441a896ff6",
+      "date": "2026-12-05",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdae1-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "110ee5c9-adc0-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "a2d27e7e-fc47-4473-a1f6-f2d7236c583c",
+      "date": "2026-12-05",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "0c7bfabd-7106-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "subjectId": "5e55a03f-6a2f-11e9-aba5-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "fdf946ed-83d8-11e7-ab58-10bef5a75610"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "e5e160dc-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "1c4396a0-5994-49d1-93df-bf8d10f9426c",
+      "date": "2026-12-05",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "22f16f50-9147-11e7-ab58-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "3e15cb6e-5dcd-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "51cbe52b-3bd6-4e5c-9ed8-a00b216be8a6",
+      "date": "2026-12-05",
+      "period": 3,
+      "start": "11:40",
+      "end": "13:00",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "2ce37782-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "f474ed27-1542-11e8-ab6a-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "5a6707ed-8fa2-11f0-9fba-e029e7085e0b"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "edc02579-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "052c91e4-14f1-4337-9c87-fe3fbde3693a",
+      "date": "2026-12-05",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "11c9937d-52f2-11ef-9fad-c83e5018f936"
+        }
+      ],
+      "subjectId": "6decdae1-6156-11e7-ab52-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "110ee5c9-adc0-11f1-9fc6-8ba5f098a625"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "deae2dc9-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    },
+    {
+      "id": "a40600ef-6651-469a-b687-a33944150d25",
+      "date": "2026-12-05",
+      "period": 4,
+      "start": "13:30",
+      "end": "14:50",
+      "buildingId": "7b6c3e68-2ccf-11ec-ae94-38d547e01962",
+      "groups": [
+        {
+          "groupId": "14b96542-8dbf-11f1-9fc4-ef73f68b58da"
+        }
+      ],
+      "subjectId": "22f16f50-9147-11e7-ab58-10bef5a75610",
+      "teachers": [
+        {
+          "teacherId": "3e15cb6e-5dcd-11ee-9f9b-d3981511749e"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "f514a612-3882-11ec-bb95-3cecef1f6e0d"
+        }
+      ]
+    }
+  ]
+}
