@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-24T12:44:21+05:00"
+    "retrievedAt": "2026-11-24T13:14:28+05:00"
   },
   "buildings": [
     {
@@ -2347,10 +2347,6 @@
       "name": "Чертухина Екатерина Сергеевна"
     },
     {
-      "id": "3518fdad-70d0-11e6-8db1-00155d009401",
-      "name": "Чувашова Оксана Владимировна"
-    },
-    {
       "id": "a59609d4-f358-11ea-a2bd-ac1f6bba5384",
       "name": "Шаисламова Нурания Дамировна"
     },
@@ -3363,10 +3359,6 @@
     {
       "id": "ad05fb94-e2d2-11ef-b9cb-9cc303fca449",
       "name": "Чтение схем"
-    },
-    {
-      "id": "de8b7949-d26a-11eb-a2d5-ac1f6bba5385",
-      "name": "Экологические основы природопользования"
     },
     {
       "id": "e3739d57-86f3-11f0-b9e0-cdddda25acbf",
@@ -40758,28 +40750,6 @@
       "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
       "groups": [
         {
-          "groupId": "3ad84973-0552-11f0-b9db-9ad6c0e2f389"
-        }
-      ],
-      "subjectId": "032c4dde-5cbc-11e8-a255-00155d009401",
-      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
-      "teachers": [
-        {
-          "teacherId": "e3790c47-1b0d-11e1-80be-00167641f657"
-        }
-      ],
-      "rooms": [
-        {
-          "roomId": "3a6aeca1-1bef-11e1-801c-001d608894f0"
-        }
-      ]
-    },
-    {
-      "date": "2026-11-26",
-      "period": 1,
-      "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
-      "groups": [
-        {
           "groupId": "d768d4f7-0551-11f0-b9db-9ad6c0e2f389",
           "subgroup": 1
         }
@@ -48193,16 +48163,16 @@
           "groupId": "3ad84973-0552-11f0-b9db-9ad6c0e2f389"
         }
       ],
-      "subjectId": "de8b7949-d26a-11eb-a2d5-ac1f6bba5385",
+      "subjectId": "032c4dde-5cbc-11e8-a255-00155d009401",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "3518fdad-70d0-11e6-8db1-00155d009401"
+          "teacherId": "e3790c47-1b0d-11e1-80be-00167641f657"
         }
       ],
       "rooms": [
         {
-          "roomId": "a6852127-5f8b-11e2-a812-000e0ca43ba5"
+          "roomId": "3a6aeca1-1bef-11e1-801c-001d608894f0"
         }
       ]
     },
@@ -50162,6 +50132,28 @@
       "rooms": [
         {
           "roomId": "63421c4f-333c-11ed-a311-ba5fdf56e295"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "period": 5,
+      "buildingId": "0ae1878d-1532-11e1-a851-0024bed8d4e7",
+      "groups": [
+        {
+          "groupId": "3ad84973-0552-11f0-b9db-9ad6c0e2f389"
+        }
+      ],
+      "subjectId": "032c4dde-5cbc-11e8-a255-00155d009401",
+      "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
+      "teachers": [
+        {
+          "teacherId": "e3790c47-1b0d-11e1-80be-00167641f657"
+        }
+      ],
+      "rooms": [
+        {
+          "roomId": "3a6aeca1-1bef-11e1-801c-001d608894f0"
         }
       ]
     },
