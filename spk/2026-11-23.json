@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-25T10:04:25+05:00"
+    "retrievedAt": "2026-11-25T13:14:14+05:00"
   },
   "buildings": [
     {
@@ -63118,11 +63118,11 @@
           "groupId": "b3179a51-33ef-11f1-b9ef-f9763b56004d"
         }
       ],
-      "subjectId": "947ac598-2497-11e1-bceb-00e04d1e1a0d",
+      "subjectId": "3dbcddb4-2d3d-11ef-b9b4-9286ea3a15e0",
       "lessonTypeId": "c07b4180-3cb4-11e9-8909-00155d009401",
       "teachers": [
         {
-          "teacherId": "56fcac81-70d0-11e6-8db1-00155d009401"
+          "teacherId": "546ae54e-38b7-11e9-b178-00155d009401"
         }
       ],
       "rooms": [
