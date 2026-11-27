@@ -24,7 +24,7 @@
       "name": "API расписания СПК",
       "url": "https://surpk.ru/api/schedule"
     },
-    "retrievedAt": "2026-11-26T15:54:35+05:00"
+    "retrievedAt": "2026-11-27T12:14:23+05:00"
   },
   "buildings": [
     {
@@ -61711,7 +61711,7 @@
       ],
       "rooms": [
         {
-          "roomId": "dd8d7dc8-1bd4-11e1-98dd-001d608894f0"
+          "roomId": "0c2661b7-5d8c-11ec-a2e3-ac1f6bba5385"
         }
       ]
     },
